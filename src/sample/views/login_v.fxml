@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.LoginCtrl">
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <AnchorPane prefHeight="290.0" prefWidth="287.0">
+         <children>
+            <TextField id="user_input" layoutX="50.0" layoutY="90.0" promptText="User" />
+            <Label id="welcome_lbl" layoutX="50.0" layoutY="55.0" text="Welcome">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Button id="sign_in_btn" layoutX="172.0" layoutY="183.0" mnemonicParsing="false" text="Sign in" />
+            <PasswordField id="password_input" layoutX="50.0" layoutY="130.0" promptText="Password" />
+            <CheckBox layoutX="21.0" layoutY="214.0" mnemonicParsing="false" text="Hablas Espanol" />
+         </children></AnchorPane>
+   </children>
+</GridPane>
