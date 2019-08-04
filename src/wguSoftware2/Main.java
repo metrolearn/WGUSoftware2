@@ -7,13 +7,27 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import wguSoftware2.models.GeoIP;
+import wguSoftware2.utils.Database;
+
 
 public class Main extends Application {
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
+        /*
+          Gets and sets location, based on geo ip lookup.
+         */
         GeoIP g = new GeoIP();
+        Database d  = new Database(
+            "52.206.157.109 ",
+            "U05mJi",
+            "U05mJi",
+            "53688547099"
+        );
+
+        d.seed_user_names_into_db();
 
 
 
@@ -26,6 +40,8 @@ public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
         launch(args);
+
+
 
 
 

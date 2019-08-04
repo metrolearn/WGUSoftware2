@@ -1,5 +1,11 @@
 package wguSoftware2.utils;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -81,9 +87,51 @@ public void send_mysql_command(String sql) throws SQLException {
     this.disconnect_from_mysql_db();
   }
 
-
 }
 
+public boolean seed_user_names_into_db(){
+
+
+  String csvFile = "src/wguSoftware2/seed_data/username_list.csv";
+  BufferedReader br = null;
+  String line = "";
+  String cvsSplitBy = ",";
+
+  try {
+
+    br = new BufferedReader(new FileReader(csvFile));
+    while ((line = br.readLine()) != null) {
+
+      // use comma as separator
+      String[] country = line.split(cvsSplitBy);
+
+      for (String s: country
+      ) {
+        System.out.print(s);
+      }
+
+
+    }
+
+  } catch (IOException e) {
+    e.printStackTrace();
+  } finally {
+    if (br != null) {
+      try {
+        br.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+
+
+
+
+
+    return true;
+}
 
 
 
