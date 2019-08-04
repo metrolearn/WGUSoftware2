@@ -5,6 +5,19 @@ import java.util.Objects;
 
 /**
  * The type City.
+ * This class is intended to to abstract the following mysql db table.
+ * TABLE `city` (
+ *   `cityId` int(10) NOT NULL,
+ *   `city` varchar(50) NOT NULL,
+ *   `countryId` int(10) NOT NULL,
+ *   `createDate` datetime NOT NULL,
+ *   `createdBy` varchar(40) NOT NULL,
+ *   `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ *   `lastUpdateBy` varchar(40) NOT NULL,
+ *   PRIMARY KEY (`cityId`),
+ *   KEY `countryId` (`countryId`),
+ *   CONSTRAINT `city_ibfk_1` FOREIGN KEY (`countryId`) REFERENCES `country` (`countryId`)
+ * ) ENGINE=InnoDB DEFAULT CHARSET=latin1
  */
 public class City {
 
@@ -162,6 +175,60 @@ public class City {
         ", last_update_time='" + last_update_time + '\'' +
         ", last_update_by='" + last_update_by + '\'' +
         '}';
+  }
+
+  /**
+   * Create city db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean create_city_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "INSERT INTO city (cityId, city, countryId, createDate, createdBy, lastUpdate, "
+        + "lastUpdateBy) VALUES (?,?,?,?,?,?,?)";
+
+    return r_val;
+  }
+
+  /**
+   * Read city db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean read_city_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "SELECT cityId, city, countryId, createDate, createdBy, lastUpdate, "
+        + "lastUpdateBy FROM city WHERE cityId = ? ";
+
+
+    return r_val;
+  }
+
+  /**
+   * Update city db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean update_city_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "UPDATE city SET  city = ?, countryId = ?, createDate = ?, createdBy = ?, "
+        + "lastUpdate = ?, lastUpdateBy = ? WHERE cityId = ? ";
+    return r_val;
+  }
+
+  /**
+   * Delete city db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean delete_city_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "DELETE FROM city WHERE cityId = ?";
+    return r_val;
   }
   
 }

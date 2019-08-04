@@ -5,6 +5,21 @@ import java.util.Objects;
 
 /**
  * The type Customer.
+ * This class is intended to to abstract the following mysql db table.
+ *  TABLE `customer` (
+ *   `customerId` int(10) NOT NULL,
+ *   `customerName` varchar(45) NOT NULL,
+ *   `addressId` int(10) NOT NULL,
+ *   `active` tinyint(1) NOT NULL,
+ *   `createDate` datetime NOT NULL,
+ *   `createdBy` varchar(40) NOT NULL,
+ *   `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ *   `lastUpdateBy` varchar(40) NOT NULL,
+ *   PRIMARY KEY (`customerId`),
+ *   KEY `addressId` (`addressId`),
+ *   CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`addressId`) REFERENCES `address` (`addressId`)
+ * ) ENGINE=InnoDB DEFAULT CHARSET=latin1
+ *
  */
 public class Customer {
 
@@ -205,5 +220,57 @@ public class Customer {
     return Objects.hash(getCustomer_id(), getCustomer_name(), getAddress_id(), getActive(),
         getCreate_date_time(), getCreated_by(), getLast_update_time(), getLast_update_by());
   }
+
+  /**
+   * Create customer db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean create_customer_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "INSERT INTO customer (customerId, customerName, addressId, active, createDate,"
+        + " createdBy, lastUpdate, lastUpdateBy) VALUES (?,?,?,?,?,?,?,?)";
+    return r_val;
+  }
+
+  /**
+   * Read customer db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean read_customer_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "SELECT customerId, customerName, addressId, active, createDate, createdBy, "
+        + "lastUpdate, lastUpdateBy FROM customer WHERE customerId = ?";
+    return r_val;
+  }
+
+  /**
+   * Update customer db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean update_customer_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "UPDATE customer SET  customerName = ?, addressId = ?, active = ?, createDate = ?,"
+        + " createdBy = ?, lastUpdate = ?, lastUpdateBy = ? WHERE customerId = ?";
+    return r_val;
+  }
+
+  /**
+   * Delete customer db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean delete_customer_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "DELETE FROM customer WHERE customerId = ?";
+    return r_val;
+  }
+
 
 }

@@ -6,6 +6,29 @@ import java.util.Objects;
 
 /**
  * The type Appointment.
+ * This class is intended to to abstract the following mysql db table.
+ * CREATE TABLE `appointment` (
+ *   `appointmentId` int(10) NOT NULL,
+ *   `customerId` int(10) NOT NULL,
+ *   `userId` int(11) NOT NULL,
+ *   `title` varchar(255) NOT NULL,
+ *   `description` text NOT NULL,
+ *   `location` text NOT NULL,
+ *   `contact` text NOT NULL,
+ *   `type` text NOT NULL,
+ *   `url` varchar(255) NOT NULL,
+ *   `start` datetime NOT NULL,
+ *   `end` datetime NOT NULL,
+ *   `createDate` datetime NOT NULL,
+ *   `createdBy` varchar(40) NOT NULL,
+ *   `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ *   `lastUpdateBy` varchar(40) NOT NULL,
+ *   PRIMARY KEY (`appointmentId`),
+ *   KEY `customerId` (`customerId`),
+ *   KEY `userId` (`userId`),
+ *   CONSTRAINT `appointment_ibfk_1` FOREIGN KEY (`customerId`) REFERENCES `customer` (`customerId`),
+ *   CONSTRAINT `appointment_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`)
+ * ) ENGINE=InnoDB DEFAULT CHARSET=latin1
  */
 public class Appointment {
 

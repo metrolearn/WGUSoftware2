@@ -6,6 +6,19 @@ import java.util.Objects;
 
 /**
  * The type User.
+ * This class is intended to to abstract the following mysql db table.
+ * TABLE `user` (
+ *   `userId` int(11) NOT NULL,
+ *   `userName` varchar(50) NOT NULL,
+ *   `password` varchar(50) NOT NULL,
+ *   `active` tinyint(4) NOT NULL,
+ *   `createDate` datetime NOT NULL,
+ *   `createdBy` varchar(40) NOT NULL,
+ *   `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ *   `lastUpdateBy` varchar(40) NOT NULL,
+ *   PRIMARY KEY (`userId`)
+ * ) ENGINE=InnoDB DEFAULT CHARSET=latin1
+ *
  */
 public class User {
 
@@ -174,6 +187,59 @@ public class User {
         .hash(getUserID(), getUsername(), getPassword(), isActive(), getCreate_date_time(),
             getLast_update_date_time());
   }
+
+  /**
+   * Create user db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean create_user_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "INSERT INTO user (userId, userName, password, active, createDate, createdBy, "
+        + "lastUpdate, lastUpdateBy) VALUES (?,?,?,?,?,?,?,?)";
+    return r_val;
+  }
+
+  /**
+   * Read user db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean read_user_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "SELECT userId, userName, password, active, createDate, createdBy, lastUpdate, "
+        + "lastUpdateBy FROM user WHERE userId = ?";
+    return r_val;
+  }
+
+  /**
+   * Update user db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean update_user_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "UPDATE user SET  userName = ?, password = ?, active = ?, createDate = ?, "
+        + "createdBy = ?, lastUpdate = ?, lastUpdateBy = ? WHERE userId = ?";
+    return r_val;
+  }
+
+  /**
+   * Delete user db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean delete_user_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "DELETE FROM user WHERE userId = ?";
+    return r_val;
+  }
+
+
 }
 
 

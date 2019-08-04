@@ -5,6 +5,16 @@ import java.util.Objects;
 
 /**
  * The type Country.
+ * This class is intended to to abstract the following mysql db table.
+ *  TABLE `country` (
+ *   `countryId` int(10) NOT NULL,
+ *   `country` varchar(50) NOT NULL,
+ *   `createDate` datetime NOT NULL,
+ *   `createdBy` varchar(40) NOT NULL,
+ *   `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ *   `lastUpdateBy` varchar(40) NOT NULL,
+ *   PRIMARY KEY (`countryId`)
+ * ) ENGINE=InnoDB DEFAULT CHARSET=latin1
  */
 public class Country {
 
@@ -164,5 +174,58 @@ public class Country {
         '}';
   }
 
-  
+  /**
+   * Create country db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean create_country_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "INSERT INTO customer (customerId, customerName, addressId, active, createDate, "
+        + "createdBy, lastUpdate, lastUpdateBy) VALUES (?,?,?,?,?,?,?,?)";
+
+    return r_val;
+  }
+
+  /**
+   * Read country db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean read_country_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "SELECT customerId, customerName, addressId, active, createDate, createdBy, "
+        + "lastUpdate, lastUpdateBy FROM customer WHERE customerId = ?";
+    return r_val;
+  }
+
+  /**
+   * Update country db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean update_country_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "UPDATE customer SET  customerName = ?, addressId = ?, active = ?, "
+        + "createDate = ?, createdBy = ?, lastUpdate = ?, lastUpdateBy = ? WHERE customerId = ?";
+    return r_val;
+  }
+
+  /**
+   * Delete country db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean delete_country_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "DELETE FROM customer WHERE customerId = ?";
+    return r_val;
+  }
+
+
+
 }
