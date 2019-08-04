@@ -328,4 +328,63 @@ public class Appointment {
             getLocation(), getContact(), getType(), getUrl(), getStart_date_time(),
             getEnd_date_time(), getCreate_date_time(), getLast_update_time(), getLast_update_by());
   }
+
+  /**
+   * Create appointment db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean create_appointment_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "INSERT INTO appointment "
+        + "(appointmentId, customerId, userId, title, description, location, contact, type, url,"
+        + " start, end, createDate, createdBy, lastUpdate, lastUpdateBy) "
+        + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+    return r_val;
+  }
+
+  /**
+   * Read appointment db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean read_appointment_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "SELECT appointmentId, customerId, userId, title, description, location, contact,"
+        + " type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy"
+        + " FROM appointment WHERE appointmentId = ? ";
+
+    return r_val;
+  }
+
+  /**
+   * Update appointment db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean update_appointment_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "UPDATE appointment SET  customerId = ?, userId = ?, title = ?, description = ?,"
+        + " location = ?, contact = ?, type = ?, url = ?, start = ?, end = ?, createDate = ?,"
+        + " createdBy = ?, lastUpdate = ?, lastUpdateBy = ? WHERE appointmentId = ?";
+
+    return r_val;
+  }
+
+  /**
+   * Delete appointment db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean delete_appointment_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "DELETE FROM appointment WHERE appointmentId = ?";
+
+    return r_val;
+  }
 }

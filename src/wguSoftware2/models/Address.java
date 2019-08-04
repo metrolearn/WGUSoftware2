@@ -8,16 +8,16 @@ import java.util.Objects;
  */
 public class Address {
 
-private Integer address_id;
-private String address;
-private String address2;
-private Integer city_id;
-private String postal_code;
-private String phone;
-private Date create_date_time;
-private String created_by;
-private String last_update_time;
-private String last_update_by;
+  private Integer address_id;
+  private String address;
+  private String address2;
+  private Integer city_id;
+  private String postal_code;
+  private String phone;
+  private Date create_date_time;
+  private String created_by;
+  private String last_update_time;
+  private String last_update_by;
 
   /**
    * Instantiates a new Address.
@@ -250,5 +250,60 @@ private String last_update_by;
         '}';
   }
 
+  /**
+   * Create address db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean create_address_db_entry(String sql_statement){
+    Boolean r_val = Boolean.FALSE;
+    String sql = "INSERT INTO address "
+        + "(addressId, address, address2, cityId, postalCode, phone, createDate,"
+        + " createdBy, lastUpdate, lastUpdateBy) VALUES (?,?,?,?,?,?,?,?,?,?)";
+
+    return r_val;
+  }
+
+  /**
+   * Read address db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean read_address_db_entry(String sql_statement){
+    Boolean r_val = new Boolean(false);
+    String sql = "SELECT addressId, address, address2, cityId, postalCode, phone,"
+        + " createDate, createdBy, lastUpdate, lastUpdateBy FROM address WHERE addressId = ?";
+
+    return r_val;
+  }
+
+  /**
+   * Update address db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean update_address_db_entry(String sql_statement){
+    Boolean r_val = new Boolean(false);
+    String sql = "UPDATE address SET  address = ?, address2 = ?, cityId = ?, postalCode = ?, "
+        + "phone = ?, createDate = ?, createdBy = ?, lastUpdate = ?, "
+        + "lastUpdateBy = ? WHERE addressId = ?";
+    return r_val;
+  }
+
+  /**
+   * Delete address db entry boolean.
+   *
+   * @param sql_statement the sql statement
+   * @return the boolean
+   */
+  public Boolean delete_address_db_entry(String sql_statement){
+    Boolean r_val = new Boolean(false);
+    String sql = "DELETE FROM address WHERE addressId = ?";
+
+    return r_val;
+  }
 
 }
