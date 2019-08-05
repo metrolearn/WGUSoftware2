@@ -14,22 +14,21 @@ public class Main extends Application {
 
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws IOException {
 
         /*
           Gets and sets location, based on geo ip lookup.
          */
         GeoIP g = new GeoIP();
         Database d  = new Database(
-            "52.206.157.109 ",
+            "52.206.157.109",
             "U05mJi",
             "U05mJi",
             "53688547099"
         );
 
-        d.seed_user_names_into_db();
-
-
+        boolean b = d.seed_user_names_into_db();
+        d.disconnect_from_mysql_db();
 
         Parent root = FXMLLoader.load(getClass().getResource("views/login_v.fxml"));
         primaryStage.setTitle("");
@@ -38,7 +37,7 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args)  {
         launch(args);
 
 

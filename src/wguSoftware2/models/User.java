@@ -239,6 +239,9 @@ public class User {
     return r_val;
   }
 
+  public String delete_user_count_from_db_sql_str(){
+    return "SELECT COUNT(userId) AS users FROM user;";
+  }
 
 }
 
