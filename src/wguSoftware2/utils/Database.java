@@ -6,10 +6,7 @@ import wguSoftware2.models.User;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 /**
@@ -25,6 +22,7 @@ public class Database {
     private String max_pool = "300"; // set your own limit
     private Connection connection;
     private Properties properties;
+    private Boolean init_users_loaded;
 
     /**
      * Instantiates a new Database.
@@ -35,17 +33,39 @@ public class Database {
      * @param password      the password
      */
     public Database(String database_ip, String database_name, String username,
-                    String password) {
-        this.database_url += database_ip;
+                    String password) throws SQLException {
         this.database_name = database_name;
+        this.database_url += database_ip+"/"+database_name;
+
         this.username = username;
         this.password = password;
-
         this.properties = new Properties();
         this.properties.setProperty("user", this.username);
         this.properties.setProperty("password", this.password);
         this.properties.setProperty("MaxPooledStatements", this.max_pool);
 
+        // check if database is loaded with init users.
+
+        // we start by assuming it is not loaded.
+        this.init_users_loaded = false;
+        this.connection = this.create_mysql_db_connection();
+        PreparedStatement statement = this.connection.prepareStatement(
+                "SELECT EXISTS (SELECT 1 FROM user) as users_exist;"
+        );
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+        // check if there is more than one record in the user data.
+        // if true, set init users loaded to true.
+        Integer count = 0;
+        while(resultSet.next()){
+            this.init_users_loaded = resultSet.getBoolean("users_exist");
+            if(this.init_users_loaded){
+                System.out.println("Default Users Loaded");
+                break;
+            }else {
+                System.out.println("Default Users Not Loaded.");
+            }
+        }
     }
 
     /**
@@ -82,12 +102,11 @@ public class Database {
     }
 
     public void send_mysql_command(String sql) throws SQLException {
-        Connection c = this.connection;
         try {
-            PreparedStatement statement = c.prepareStatement(sql);
-        } finally {
-            c.close();
-            this.disconnect_from_mysql_db();
+            PreparedStatement statement = this.connection.prepareStatement(sql);
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
     }
@@ -98,7 +117,7 @@ public class Database {
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ",";
-
+        Integer user_count = 1;
         try {
 
             br = new BufferedReader(new FileReader(csvFile));
@@ -108,7 +127,6 @@ public class Database {
                 String[] country = line.split(cvsSplitBy);
                 String password = null;
                 String user = null;
-                Integer user_count = 1;
                 Integer count = 0;
                 for (String s : country) {
                     count += 1;
@@ -116,15 +134,18 @@ public class Database {
                         user = s;
                     } else {
                         password = s;
-                        System.out.println("user-> " + user + ", password->" + password);
-                        this.create_mysql_db_connection();
-                        User u = new User(user, password);
-
+                        System.out.println("Loading Default User into db-> "
+                                + user + ", password->" + password);
+                        this.connection = this.create_mysql_db_connection();
+                        User u = new User(user_count,user, password);
+                        user_count = user_count+1;
+                        String sql_statment = u.create_user_db_entry_str();
+                        this.send_mysql_command(sql_statment);
                     }
 
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         } finally {
             if (br != null) {
@@ -138,5 +159,7 @@ public class Database {
         return true;
     }
 
-
+    public Boolean getInit_users_loaded() {
+        return init_users_loaded;
+    }
 }
