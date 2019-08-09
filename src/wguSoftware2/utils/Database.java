@@ -1,6 +1,7 @@
 package wguSoftware2.utils;
 
 
+import wguSoftware2.controllers.LoginCtrl;
 import wguSoftware2.models.User;
 
 import java.io.BufferedReader;
@@ -23,6 +24,7 @@ public class Database {
     private Connection connection;
     private Properties properties;
     private Boolean init_users_loaded;
+    private LoginCtrl lc;
 
     /**
      * Instantiates a new Database.
@@ -111,6 +113,20 @@ public class Database {
 
     }
 
+    public ResultSet get_mysql_resultSet(String sql) throws SQLException {
+        PreparedStatement statement = null;
+        try {
+            this.connection = this.create_mysql_db_connection();
+            statement = this.connection.prepareStatement(sql);
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return statement.getResultSet();
+
+    }
+
+
     public boolean seed_user_names_into_db() {
 
         String csvFile = "src/wguSoftware2/seed_data/username_list.csv";
@@ -159,7 +175,34 @@ public class Database {
         return true;
     }
 
+    /**
+     * Gets init users loaded.
+     *
+     * @return the init users loaded
+     */
     public Boolean getInit_users_loaded() {
         return init_users_loaded;
+    }
+
+    public Boolean check_cred_in_db() throws SQLException {
+
+
+
+        String login_user_name = lc.getUser_txt_fld().getText();
+        String login_user_password = lc.getPassword_txt_fld().getText();
+        User u = new User(login_user_name,login_user_password);
+        String select_str = u.get_user_password_select_db_str();
+        final ResultSet mysql_resultSet = this.get_mysql_resultSet(select_str);
+
+        while (mysql_resultSet.next()){
+            System.out.println("employee_id: " + mysql_resultSet.getString(1));
+
+        }
+
+        return true;
+    }
+
+    public void setLc(LoginCtrl lc) {
+        this.lc = lc;
     }
 }

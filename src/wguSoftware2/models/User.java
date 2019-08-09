@@ -48,6 +48,13 @@ public class User {
 
     }
 
+    public User(String name, String password) {
+
+        this.username = name;
+        this.password = password;
+
+    }
+
     @Override
     @FXML
     public String toString() {
@@ -221,14 +228,13 @@ public class User {
     /**
      * Read user db entry boolean.
      *
-     * @param sql_statement the sql statement
      * @return the boolean
      */
-    public Boolean read_user_db_entry(String sql_statement) {
-        Boolean r_val = Boolean.FALSE;
-        String sql = "SELECT userId, userName, password, active, createDate, createdBy, lastUpdate, "
-                + "lastUpdateBy FROM user WHERE userId = ?";
-        return r_val;
+    public String get_user_password_select_db_str() {
+        String user_name = this.username;
+        String user_password = this.password;
+        String sql = "SELECT * from user where userName ='" + user_name + "' and password = '" + user_password + "';";
+        return sql;
     }
 
     /**

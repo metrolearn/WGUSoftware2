@@ -31,7 +31,13 @@ public class GeoIP {
   public GeoIP() throws IOException {
 
     URL url = new URL("https://freegeoip.app/csv");
-    BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+    BufferedReader br = null;
+    try {
+      br = new BufferedReader(new InputStreamReader(url.openStream()));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    assert br != null;
     String s = br.lines().collect(Collectors.joining());
     String[] as = s.split(",");
 
