@@ -194,9 +194,14 @@ public class Database {
         String select_str = u.get_user_password_select_db_str();
         final ResultSet mysql_resultSet = this.get_mysql_resultSet(select_str);
 
-        while (mysql_resultSet.next()){
-            System.out.println("employee_id: " + mysql_resultSet.getString(1));
+        if (mysql_resultSet.isBeforeFirst()) {
+            while (mysql_resultSet.next()) {
+                String user_id = mysql_resultSet.getString(1);
+                System.out.println("employee_id: " + user_id);
+            }
 
+        }else {
+            System.out.println("User not found");
         }
 
         return true;
