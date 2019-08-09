@@ -1,6 +1,10 @@
 package wguSoftware2.utils;
 
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Dialog;
 import wguSoftware2.controllers.LoginCtrl;
 import wguSoftware2.models.User;
 
@@ -202,6 +206,22 @@ public class Database {
 
         }else {
             System.out.println("User not found");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            String headerText = "User Not found.";
+            String login_error = "Login Error.";
+            String please_try_again = "Please try again";
+
+            if(lc.getLang_chk_bx_selected()){
+                headerText = "Usuario no encontrado.";
+                login_error  = "Error de inicio de sesión.";
+                please_try_again = "Inténtalo de nuevo.";
+            }
+
+            alert.setTitle(login_error);
+            alert.setHeaderText(headerText);
+            alert.setContentText(please_try_again);
+            alert.showAndWait()
+                    .filter(response -> response == ButtonType.OK);
         }
 
         return true;

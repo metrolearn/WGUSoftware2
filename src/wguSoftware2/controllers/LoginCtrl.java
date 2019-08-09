@@ -129,4 +129,8 @@ public class LoginCtrl {
     public PasswordField getPassword_txt_fld() {
         return password_txt_fld;
     }
+
+    public Boolean getLang_chk_bx_selected() {
+        return lang_chk_bx.isSelected();
+    }
 }
