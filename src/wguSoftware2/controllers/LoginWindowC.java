@@ -6,20 +6,33 @@ package wguSoftware2.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import wguSoftware2.models.GeoIP;
+import wguSoftware2.utils.Converters;
 import wguSoftware2.utils.Database;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class LoginCtrl {
+public class LoginWindowC {
     @FXML
     private GeoIP g;
 
     @FXML
-    private LoginCtrl lc;
+    private URL main_window_url;
+
+    @FXML
+    private Converters c;
+
+    @FXML
+    private LoginWindowC lc;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -48,9 +61,11 @@ public class LoginCtrl {
     @FXML
     private Database curr_db;
 
-    public LoginCtrl() {
+    public LoginWindowC() {
 
         curr_db = null;
+        this.c = new Converters();
+
 
     }
 
@@ -80,9 +95,7 @@ public class LoginCtrl {
     }
 
     @FXML
-    void sign_in(ActionEvent event) throws SQLException {
-
-        System.out.println("Attempting Sign in using this event" + event.toString());
+    void sign_in() throws SQLException, IOException {
         try {
             try {
                 String username_input = this.password_txt_fld.getText();
@@ -96,19 +109,31 @@ public class LoginCtrl {
             }
         } finally {
             System.out.println("Checking provided user and password in database.");
-            curr_db.check_cred_in_db();
+            Integer user_id = curr_db.check_cred_in_db();
+            System.out.println(user_id);
+            FXMLLoader loader = new FXMLLoader(this.main_window_url);
+            Parent root = loader.load();
+            MainWindowC mwc = loader.getController();
+            Stage addPartStage = new Stage();
+            addPartStage.setTitle("Main Window");
+            Scene addPartScene = new Scene(root);
+            addPartStage.setScene(addPartScene);
+            addPartStage.showAndWait();
 
         }
+
+
 
     }
 
     @FXML
     public
         // This method is called by the FXMLLoader when initialization is complete
-    void initialize(Database d, GeoIP g) throws IOException {
+    void initialize(Database d, GeoIP g, URL main_resource) throws IOException {
 
         this.g = g;
         this.curr_db = d;
+        this.main_window_url = main_resource;
 
 
 
@@ -133,4 +158,9 @@ public class LoginCtrl {
     public Boolean getLang_chk_bx_selected() {
         return lang_chk_bx.isSelected();
     }
+
+    @FXML
+    public void handleEnterPressed(KeyEvent event) throws IOException, SQLException {
+    if (event.getCode() == KeyCode.ENTER) this.sign_in();
+}
 }

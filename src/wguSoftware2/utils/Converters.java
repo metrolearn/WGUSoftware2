@@ -1,5 +1,6 @@
 package wguSoftware2.utils;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -15,6 +16,20 @@ public class Converters {
         String ldt_str =  ldt.format(formatter);
 
         return ldt_str;
+    }
+
+    public String get_fxml_file_name(URL url){
+        String s = null;
+        String r_val = null;
+        try {
+            s = url.toString();
+            r_val = "Loading file: "+ s.substring(s.lastIndexOf('/') + 1).trim();
+        } catch (NullPointerException e) {
+            r_val = "Loading file: File not found";
+            e.printStackTrace();
+        }
+        return r_val;
+
     }
 
 }

@@ -5,9 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import wguSoftware2.controllers.LoginCtrl;
+import wguSoftware2.controllers.LoginWindowC;
 import wguSoftware2.models.GeoIP;
+import wguSoftware2.utils.Converters;
 import wguSoftware2.utils.Database;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -18,22 +20,27 @@ public class Main extends Application {
 
     private Database d;
     private GeoIP g;
+    private Converters c;
 
     @Override
     public void start(Stage primaryStage) throws IOException, Exception {
 
         g = new GeoIP();
         d = this.init_database();
+        c = new Converters();
 
         load_users(d);
 
-        URL resource = getClass().getResource("views/login_v.fxml");
-        FXMLLoader loader = new FXMLLoader(resource);
+        URL login_resource = getClass().getResource("views/login_v.fxml");
+        System.out.println(c.get_fxml_file_name(login_resource));
+        URL main_resource = getClass().getResource("views/main_v.fxml");
+        System.out.println(c.get_fxml_file_name(main_resource));
+        FXMLLoader loader = new FXMLLoader(login_resource);
         Parent root = loader.load();
-        LoginCtrl lc = loader.getController();
+        LoginWindowC lc = loader.getController();
         d.setLc(lc);
-        lc.initialize(d,g);
-        primaryStage.setTitle("Hello World");
+        lc.initialize(d, g, main_resource);
+        primaryStage.setTitle("");
         Scene mainScene = new Scene(root);
         primaryStage.setScene(mainScene);
         primaryStage.show();
@@ -49,16 +56,6 @@ public class Main extends Application {
                 "53688547099"
         );
     }
-
-//    private void start_login_window(Stage primaryStage) throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/login_v.fxml"));
-//        Parent root = loader.load();
-//        LoginCtrl lc = loader.getController();
-//        lc.initialize(this.d);
-//        primaryStage.setTitle("");
-//        primaryStage.setScene(new Scene(root, 300, 275));
-//        primaryStage.show();
-//    }
 
     private void load_users(Database d) {
         if (!d.getInit_users_loaded()) {

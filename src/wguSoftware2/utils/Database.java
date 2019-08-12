@@ -3,9 +3,7 @@ package wguSoftware2.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Dialog;
-import wguSoftware2.controllers.LoginCtrl;
+import wguSoftware2.controllers.LoginWindowC;
 import wguSoftware2.models.User;
 
 import java.io.BufferedReader;
@@ -28,7 +26,7 @@ public class Database {
     private Connection connection;
     private Properties properties;
     private Boolean init_users_loaded;
-    private LoginCtrl lc;
+    private LoginWindowC lc;
 
     /**
      * Instantiates a new Database.
@@ -188,9 +186,9 @@ public class Database {
         return init_users_loaded;
     }
 
-    public Boolean check_cred_in_db() throws SQLException {
+    public Integer check_cred_in_db() throws SQLException {
 
-
+        Integer r_val = null;
 
         String login_user_name = lc.getUser_txt_fld().getText();
         String login_user_password = lc.getPassword_txt_fld().getText();
@@ -202,6 +200,7 @@ public class Database {
             while (mysql_resultSet.next()) {
                 String user_id = mysql_resultSet.getString(1);
                 System.out.println("employee_id: " + user_id);
+                r_val = Integer.valueOf(user_id);
             }
 
         }else {
@@ -224,10 +223,10 @@ public class Database {
                     .filter(response -> response == ButtonType.OK);
         }
 
-        return true;
+        return r_val;
     }
 
-    public void setLc(LoginCtrl lc) {
+    public void setLc(LoginWindowC lc) {
         this.lc = lc;
     }
 }
