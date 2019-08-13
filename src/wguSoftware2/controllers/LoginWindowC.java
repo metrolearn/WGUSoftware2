@@ -25,7 +25,6 @@ public class LoginWindowC {
     @FXML
     private GeoIP g;
 
-    @FXML
     private URL main_window_url;
 
     @FXML
@@ -111,12 +110,15 @@ public class LoginWindowC {
             System.out.println("Checking provided user and password in database.");
             Integer user_id = curr_db.check_cred_in_db();
             System.out.println(user_id);
+            System.out.println(System.getProperty("user.dir"));
             FXMLLoader loader = new FXMLLoader(this.main_window_url);
-            Parent root = loader.load();
+            Parent main_root;
+            main_root = loader.load();
             MainWindowC mwc = loader.getController();
+            mwc.initialize(curr_db);
             Stage addPartStage = new Stage();
             addPartStage.setTitle("Main Window");
-            Scene addPartScene = new Scene(root);
+            Scene addPartScene = new Scene(main_root);
             addPartStage.setScene(addPartScene);
             addPartStage.showAndWait();
 

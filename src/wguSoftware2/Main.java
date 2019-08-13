@@ -45,7 +45,7 @@ public class Main extends Application {
         primaryStage.setScene(mainScene);
         primaryStage.show();
 
-        d.disconnect_from_mysql_db();
+
     }
 
     private Database init_database() throws SQLException {

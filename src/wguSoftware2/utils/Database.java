@@ -4,12 +4,15 @@ package wguSoftware2.utils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import wguSoftware2.controllers.LoginWindowC;
+import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.models.User;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -228,5 +231,45 @@ public class Database {
 
     public void setLc(LoginWindowC lc) {
         this.lc = lc;
+    }
+
+    /*
+    CREATE TABLE `customer` (
+          `customerId` int(10) NOT NULL,
+          `customerName` varchar(45) NOT NULL,
+          `addressId` int(10) NOT NULL,
+          `active` tinyint(1) NOT NULL,
+          `createDate` datetime NOT NULL,
+          `createdBy` varchar(40) NOT NULL,
+          `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          `lastUpdateBy` varchar(40) NOT NULL,
+          PRIMARY KEY (`customerId`),
+          KEY `addressId` (`addressId`),
+          CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`addressId`) REFERENCES `address` (`addressId`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+     */
+
+    public List<Customer_view_main> getAllCustomersFromDB() throws SQLException {
+        String sql = "SELECT customer.customerId, customer.customerName, address.address, address.phone " +
+                "FROM customer INNER JOIN address on customer.addressId =  address.addressId";
+        ResultSet rs = this.get_mysql_resultSet(sql);
+        List<Customer_view_main> cvm_list = new ArrayList<>();
+
+        while(rs.next()){
+             Integer customer_id = rs.getInt(1);
+             String customer_name = rs.getString(2);
+             String address = rs.getString(3);
+             String phone= rs.getString(4);
+             Customer_view_main cvm = new Customer_view_main(customer_id,customer_name,address,phone);
+             cvm_list.add(cvm);
+
+        }
+
+
+
+        System.out.println("test");
+        return cvm_list;
+
     }
 }

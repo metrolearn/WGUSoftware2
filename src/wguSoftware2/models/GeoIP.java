@@ -28,14 +28,33 @@ public class GeoIP {
    *
    * @throws IOException the io exception
    */
-  public GeoIP() throws IOException {
+  public GeoIP() throws IOException, InterruptedException {
 
-    URL url = new URL("https://freegeoip.app/csv");
+    String geoIPURL = "https://freegeoip.app/csv";
+    URL url = new URL(geoIPURL);
     BufferedReader br = null;
     try {
       br = new BufferedReader(new InputStreamReader(url.openStream()));
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.println("Getting location from "+geoIPURL);
+      Thread.sleep(4000);
+
+      try {
+        br = new BufferedReader(new InputStreamReader(url.openStream()));
+      } catch (IOException ex) {
+        System.out.println("Cannot connect to "+geoIPURL+", waiting another 10 seconds then will try again!");
+        Thread.sleep(10000);
+
+        try {
+          br = new BufferedReader(new InputStreamReader(url.openStream()));
+        } catch (IOException exc) {
+          System.out.println("Cannot connect to "+geoIPURL+", check your internet connection!");
+          exc.printStackTrace();
+        }
+
+      }
+
+
     }
     assert br != null;
     String s = br.lines().collect(Collectors.joining());

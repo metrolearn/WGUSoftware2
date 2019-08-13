@@ -32,7 +32,7 @@ public class Address {
   private String phone;
   private Date create_date_time;
   private String created_by;
-  private String last_update_time;
+  private Date last_update_time;
   private String last_update_by;
 
   /**
@@ -190,7 +190,7 @@ public class Address {
    *
    * @return the last update time
    */
-  public String getLast_update_time() {
+  public Date getLast_update_time() {
     return last_update_time;
   }
 
@@ -199,7 +199,7 @@ public class Address {
    *
    * @param last_update_time the last update time
    */
-  public void setLast_update_time(String last_update_time) {
+  public void setLast_update_time(Date last_update_time) {
     this.last_update_time = last_update_time;
   }
 
