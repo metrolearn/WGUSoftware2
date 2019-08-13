@@ -24,16 +24,16 @@ import java.util.Objects;
  */
 public class Address {
 
-  private Integer address_id;
-  private String address;
-  private String address2;
-  private Integer city_id;
-  private String postal_code;
-  private String phone;
-  private Date create_date_time;
-  private String created_by;
-  private Date last_update_time;
-  private String last_update_by;
+    private Integer address_id;
+    private String address;
+    private String address2;
+    private Integer city_id;
+    private String postal_code;
+    private String phone;
+    private Date create_date_time;
+    private String created_by;
+    private Date last_update_time;
+    private String last_update_by;
 
   /**
    * Instantiates a new Address.

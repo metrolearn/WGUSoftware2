@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="291.0" prefWidth="454.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wguSoftware2.controllers.AddCustomerC">
+   <children>
+      <Label layoutX="38.0" layoutY="14.0" text="Add Customer">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <TextField layoutX="38.0" layoutY="58.0" promptText="NAME" />
+      <TextField layoutX="38.0" layoutY="104.0" prefHeight="31.0" prefWidth="388.0" promptText="ADDRESS" />
+      <TextField layoutX="38.0" layoutY="147.0" prefHeight="31.0" prefWidth="187.0" promptText="APT / ADDRESS ALT" />
+      <TextField layoutX="38.0" layoutY="190.0" promptText="ZIP" />
+      <TextField layoutX="38.0" layoutY="237.0" promptText="PHONE" />
+      <TextField layoutX="242.0" layoutY="147.0" promptText="CITY" />
+      <TextField layoutX="242.0" layoutY="190.0" promptText="COUNTRY" />
+      <Button layoutX="242.0" layoutY="237.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="187.0" text="Add" />
+   </children>
+</AnchorPane>

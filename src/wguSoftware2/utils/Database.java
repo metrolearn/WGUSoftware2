@@ -268,7 +268,6 @@ public class Database {
 
 
 
-        System.out.println("test");
         return cvm_list;
 
     }

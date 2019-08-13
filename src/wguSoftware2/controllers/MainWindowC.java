@@ -4,17 +4,23 @@ package wguSoftware2.controllers;
         import javafx.collections.ObservableArray;
         import javafx.collections.ObservableList;
         import javafx.fxml.FXML;
+        import javafx.fxml.FXMLLoader;
+        import javafx.scene.Parent;
+        import javafx.scene.Scene;
         import javafx.scene.control.Button;
         import javafx.scene.control.SelectionMode;
         import javafx.scene.control.TableColumn;
         import javafx.scene.control.TableView;
         import javafx.scene.control.cell.PropertyValueFactory;
         import javafx.scene.layout.AnchorPane;
+        import javafx.stage.Stage;
         import wguSoftware2.models.Address;
         import wguSoftware2.models.Customer;
         import wguSoftware2.models.Customer_view_main;
         import wguSoftware2.utils.Database;
 
+        import java.io.IOException;
+        import java.net.URL;
         import java.sql.SQLException;
         import java.util.List;
 
@@ -49,7 +55,21 @@ public class MainWindowC {
     private Button CRT_Update_Btn;
 
     @FXML
-    void CRT_ADD() {
+    void CRT_ADD() throws IOException {
+        URL add_customer_window = getClass().getClassLoader().getResource("wguSoftware2/views/add_customer.fxml");
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(add_customer_window);
+        Parent main_root;
+        main_root = loader.load();
+        AddCustomerC addcc = loader.getController();
+        addcc.initialize();
+        Stage addCustomerStage = new Stage();
+        addCustomerStage.setTitle("Add Customer");
+        Scene addPartScene = new Scene(main_root);
+        addCustomerStage.setScene(addPartScene);
+        addCustomerStage.showAndWait();
+
+
 
 
 
