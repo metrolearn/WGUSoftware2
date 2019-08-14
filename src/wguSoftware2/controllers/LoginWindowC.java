@@ -16,12 +16,14 @@ import javafx.stage.Stage;
 import wguSoftware2.models.GeoIP;
 import wguSoftware2.utils.Converters;
 import wguSoftware2.utils.Database;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class LoginWindowC {
+    private static final boolean TESTING = true;
     @FXML
     private GeoIP g;
 
@@ -64,9 +66,8 @@ public class LoginWindowC {
 
         curr_db = null;
         this.c = new Converters();
-
-
     }
+
 
     @FXML
     void lang_chk_bx_clicked(ActionEvent event) throws IOException {
@@ -110,7 +111,6 @@ public class LoginWindowC {
             System.out.println("Checking provided user and password in database.");
             Integer user_id = curr_db.check_cred_in_db();
             System.out.println(user_id);
-            System.out.println(System.getProperty("user.dir"));
             FXMLLoader loader = new FXMLLoader(this.main_window_url);
             Parent main_root;
             main_root = loader.load();
@@ -125,7 +125,6 @@ public class LoginWindowC {
         }
 
 
-
     }
 
     @FXML
@@ -138,7 +137,6 @@ public class LoginWindowC {
         this.main_window_url = main_resource;
 
 
-
         assert user_txt_fld != null : "fx:id=\"user_txt_fld\" was not injected: check your FXML file 'login_v.fxml'.";
         assert sign_in_btn != null : "fx:id=\"sign_in_btn\" was not injected: check your FXML file 'login_v.fxml'.";
         assert password_txt_fld != null : "fx:id=\"password_txt_fld\" was not injected: check your FXML file 'login_v.fxml'.";
@@ -146,7 +144,9 @@ public class LoginWindowC {
         assert current_location_lbl != null : "fx:id=\"current_location_lbl\" was not injected: check your FXML file 'login_v.fxml'.";
 
         this.current_location_lbl.setText(g.getLoginLocationString());
-
+        if(TESTING){
+            this.testing();
+        }
     }
 
     public TextField getUser_txt_fld() {
@@ -163,6 +163,14 @@ public class LoginWindowC {
 
     @FXML
     public void handleEnterPressed(KeyEvent event) throws IOException, SQLException {
-    if (event.getCode() == KeyCode.ENTER) this.sign_in();
-}
+        if (event.getCode() == KeyCode.ENTER) this.sign_in();
+    }
+
+    @FXML
+    public void testing(){
+
+        this.user_txt_fld.setText("test");
+        this.password_txt_fld.setText("test");
+
+    }
 }

@@ -31,7 +31,13 @@ public class Country {
   public Country() {
   }
 
-  /**
+    public Country(String country_str) {
+
+      this.country_str = country_str;
+
+    }
+
+    /**
    * Gets country id.
    *
    * @return the country id

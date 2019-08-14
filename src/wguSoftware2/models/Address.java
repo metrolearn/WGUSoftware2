@@ -28,7 +28,7 @@ public class Address {
     private String address;
     private String address2;
     private Integer city_id;
-    private String postal_code;
+    private String zip_code;
     private String phone;
     private Date create_date_time;
     private String created_by;
@@ -39,6 +39,14 @@ public class Address {
    * Instantiates a new Address.
    */
   public Address() {
+  }
+
+  public Address(String address, String alt_address, String zip_code, String phone) {
+    this.address = address;
+    this.address2 = alt_address;
+    this.zip_code = zip_code;
+    this.phone =phone;
+
   }
 
   /**
@@ -118,17 +126,17 @@ public class Address {
    *
    * @return the postal code
    */
-  public String getPostal_code() {
-    return postal_code;
+  public String getZip_code() {
+    return zip_code;
   }
 
   /**
    * Sets postal code.
    *
-   * @param postal_code the postal code
+   * @param zip_code the postal code
    */
-  public void setPostal_code(String postal_code) {
-    this.postal_code = postal_code;
+  public void setZip_code(String zip_code) {
+    this.zip_code = zip_code;
   }
 
   /**
@@ -234,7 +242,7 @@ public class Address {
         Objects.equals(getAddress(), address1.getAddress()) &&
         Objects.equals(getAddress2(), address1.getAddress2()) &&
         Objects.equals(getCity_id(), address1.getCity_id()) &&
-        Objects.equals(getPostal_code(), address1.getPostal_code()) &&
+        Objects.equals(getZip_code(), address1.getZip_code()) &&
         Objects.equals(getPhone(), address1.getPhone()) &&
         Objects.equals(getCreate_date_time(), address1.getCreate_date_time()) &&
         Objects.equals(getCreated_by(), address1.getCreated_by()) &&
@@ -245,7 +253,7 @@ public class Address {
   @Override
   public int hashCode() {
     return Objects
-        .hash(getAddress_id(), getAddress(), getAddress2(), getCity_id(), getPostal_code(),
+        .hash(getAddress_id(), getAddress(), getAddress2(), getCity_id(), getZip_code(),
             getPhone(), getCreate_date_time(), getCreated_by(), getLast_update_time(),
             getLast_update_by());
   }
@@ -257,7 +265,7 @@ public class Address {
         ", address='" + address + '\'' +
         ", address2='" + address2 + '\'' +
         ", city_id=" + city_id +
-        ", postal_code='" + postal_code + '\'' +
+        ", postal_code='" + zip_code + '\'' +
         ", phone='" + phone + '\'' +
         ", create_date_time=" + create_date_time +
         ", created_by='" + created_by + '\'' +

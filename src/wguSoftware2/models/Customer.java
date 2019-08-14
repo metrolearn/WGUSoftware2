@@ -38,6 +38,10 @@ public class Customer {
   public Customer() {
   }
 
+  public Customer(String customer_name) {
+    this.customer_name = customer_name;
+  }
+
   /**
    * Gets customer id.
    *

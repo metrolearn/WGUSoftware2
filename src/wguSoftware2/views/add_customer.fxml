@@ -7,7 +7,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane prefHeight="291.0" prefWidth="454.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wguSoftware2.controllers.AddCustomerC">
    <children>
       <Label layoutX="38.0" layoutY="14.0" text="Add Customer">
@@ -15,13 +14,13 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <TextField layoutX="38.0" layoutY="58.0" promptText="NAME" />
-      <TextField layoutX="38.0" layoutY="104.0" prefHeight="31.0" prefWidth="388.0" promptText="ADDRESS" />
-      <TextField layoutX="38.0" layoutY="147.0" prefHeight="31.0" prefWidth="187.0" promptText="APT / ADDRESS ALT" />
-      <TextField layoutX="38.0" layoutY="190.0" promptText="ZIP" />
-      <TextField layoutX="38.0" layoutY="237.0" promptText="PHONE" />
-      <TextField layoutX="242.0" layoutY="147.0" promptText="CITY" />
-      <TextField layoutX="242.0" layoutY="190.0" promptText="COUNTRY" />
-      <Button layoutX="242.0" layoutY="237.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="187.0" text="Add" />
+      <TextField fx:id="name_txt" layoutX="38.0" layoutY="58.0" promptText="NAME" />
+      <TextField fx:id="address_txt" layoutX="38.0" layoutY="104.0" prefHeight="31.0" prefWidth="388.0" promptText="ADDRESS" />
+      <TextField fx:id="alt_address_txt" layoutX="38.0" layoutY="147.0" prefHeight="31.0" prefWidth="187.0" promptText="APT / ADDRESS ALT" />
+      <TextField fx:id="zip_txt" layoutX="38.0" layoutY="190.0" promptText="ZIP" />
+      <TextField fx:id="phone_txt" layoutX="38.0" layoutY="237.0" promptText="PHONE" />
+      <TextField fx:id="city_txt" layoutX="242.0" layoutY="147.0" promptText="CITY" />
+      <TextField fx:id="country_txt" layoutX="242.0" layoutY="190.0" promptText="COUNTRY" />
+      <Button fx:id="add_customer_btn" layoutX="242.0" layoutY="237.0" mnemonicParsing="false" onAction="#add_customer" prefHeight="31.0" prefWidth="187.0" text="Add" />
    </children>
 </AnchorPane>

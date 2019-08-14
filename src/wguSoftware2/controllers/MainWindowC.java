@@ -26,6 +26,7 @@ package wguSoftware2.controllers;
 
 public class MainWindowC {
 
+    private static final boolean TESTING = true;
     @FXML
     private TableView<Customer_view_main> customer_tbl;
 
@@ -63,6 +64,8 @@ public class MainWindowC {
         main_root = loader.load();
         AddCustomerC addcc = loader.getController();
         addcc.initialize();
+        if(TESTING)
+            addcc.testing();
         Stage addCustomerStage = new Stage();
         addCustomerStage.setTitle("Add Customer");
         Scene addPartScene = new Scene(main_root);
