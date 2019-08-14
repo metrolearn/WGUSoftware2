@@ -401,3 +401,11 @@ INSERT INTO `customer` (`customerId`, `customerName`, `addressId`, `active`, `cr
 INSERT INTO `customer` (`customerId`, `customerName`, `addressId`, `active`, `createDate`, `createdBy`, `lastUpdate`, `lastUpdateBy`) VALUES (99, 'non', 77, 0, '1976-03-26 11:51:40', 'Lilyan', '1983-04-13 16:07:13', 'Orpha');
 INSERT INTO `customer` (`customerId`, `customerName`, `addressId`, `active`, `createDate`, `createdBy`, `lastUpdate`, `lastUpdateBy`) VALUES (100, 'odit', 42, 1, '1974-01-03 00:57:37', 'Winifred', '1990-09-11 09:07:26', 'Carolina');
 INSERT INTO `customer` (`customerId`, `customerName`, `addressId`, `active`, `createDate`, `createdBy`, `lastUpdate`, `lastUpdateBy`) VALUES (101, 'quis', 9, 0, '1994-07-20 10:20:55', 'Rashad', '1999-06-23 12:13:15', 'Santina');
+
+
+ALTER TABLE address MODIFY addressId INTEGER NOT NULL AUTO_INCREMENT;
+ALTER TABLE appointment MODIFY appointmentId INTEGER NOT NULL AUTO_INCREMENT;
+ALTER TABLE city MODIFY cityId INTEGER NOT NULL AUTO_INCREMENT;
+ALTER TABLE country MODIFY countryId INTEGER NOT NULL AUTO_INCREMENT;
+ALTER TABLE customer MODIFY customerId INTEGER NOT NULL AUTO_INCREMENT;
+ALTER TABLE user MODIFY userId INTEGER NOT NULL AUTO_INCREMENT;
