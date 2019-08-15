@@ -1,5 +1,10 @@
 package wguSoftware2.models;
 
+import com.sun.xml.internal.ws.commons.xmlutil.Converter;
+import wguSoftware2.utils.Converters;
+
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -24,17 +29,26 @@ public class City {
   private Integer city_id;
   private String city_str;
   private Integer country_id;
-  private Date create_date_time;
+  private ZonedDateTime create_date_time;
   private String last_update_time;
-  private String last_update_by;
+  private String created_by;
+  private String update_by;
+  private Converters converter;
 
   /**
    * Instantiates a new City.
+   * @param city_str
+   * @param active_user_name
    */
-  public City() {
+  public City(String city_str, String active_user_name,Integer country_id) {
+    this.city_str = city_str;
+    this.created_by = active_user_name;
+    this.update_by = active_user_name;
+    this.country_id = country_id;
+    this.converter = new Converters();
   }
 
-  /**
+    /**
    * Gets city id.
    *
    * @return the city id
@@ -93,7 +107,7 @@ public class City {
    *
    * @return the create date time
    */
-  public Date getCreate_date_time() {
+  public ZonedDateTime getCreate_date_time() {
     return create_date_time;
   }
 
@@ -102,7 +116,7 @@ public class City {
    *
    * @param create_date_time the create date time
    */
-  public void setCreate_date_time(Date create_date_time) {
+  public void setCreate_date_time(ZonedDateTime create_date_time) {
     this.create_date_time = create_date_time;
   }
 
@@ -129,66 +143,39 @@ public class City {
    *
    * @return the last update by
    */
-  public String getLast_update_by() {
-    return last_update_by;
+  public String getCreated_by() {
+    return created_by;
   }
 
   /**
    * Sets last update by.
    *
-   * @param last_update_by the last update by
+   * @param created_by the last update by
    */
-  public void setLast_update_by(String last_update_by) {
-    this.last_update_by = last_update_by;
+  public void setCreated_by(String created_by) {
+    this.created_by = created_by;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof City)) {
-      return false;
-    }
-    City city = (City) o;
-    return Objects.equals(getCity_id(), city.getCity_id()) &&
-        Objects.equals(getCity_str(), city.getCity_str()) &&
-        Objects.equals(getCountry_id(), city.getCountry_id()) &&
-        Objects.equals(getCreate_date_time(), city.getCreate_date_time()) &&
-        Objects.equals(getLast_update_time(), city.getLast_update_time()) &&
-        Objects.equals(getLast_update_by(), city.getLast_update_by());
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(getCity_id(), getCity_str(), getCountry_id(), getCreate_date_time(),
-        getLast_update_time(), getLast_update_by());
-  }
-
-  @Override
-  public String toString() {
-    return "City{" +
-        "city_id=" + city_id +
-        ", city_str='" + city_str + '\'' +
-        ", country_id=" + country_id +
-        ", create_date_time=" + create_date_time +
-        ", last_update_time='" + last_update_time + '\'' +
-        ", last_update_by='" + last_update_by + '\'' +
-        '}';
-  }
 
   /**
    * Create city db entry boolean.
    *
-   * @param sql_statement the sql statement
    * @return the boolean
    */
-  public Boolean create_city_db_entry(String sql_statement){
-    Boolean r_val = Boolean.FALSE;
-    String sql = "INSERT INTO city (cityId, city, countryId, createDate, createdBy, lastUpdate, "
-        + "lastUpdateBy) VALUES (?,?,?,?,?,?,?)";
+  public String  get_city_db_create_str(Integer country_id_parm){
 
-    return r_val;
+    String city = this.city_str;
+    String country_id = String.valueOf(country_id_parm);
+    String create_date = this.converter.ldt_to_mysql_dt_str(ZonedDateTime.now());
+    String created_by = "Carter";
+    String last_update = "1987-10-21 21:15:35";
+    String last_update_by = "Casimer Jones";
+    String sql_str = "INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+            "VALUES ('" + city + "', " + country_id + ", '" + create_date + "', '" + created_by + "'," +
+            " '" + last_update + "', '" + last_update_by + "');";
+
+    return sql_str;
   }
 
   /**
@@ -230,5 +217,40 @@ public class City {
     String sql = "DELETE FROM city WHERE cityId = ?";
     return r_val;
   }
-  
+
+  public String getUpdate_by() {
+    return update_by;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof City)) return false;
+    City city = (City) o;
+    return Objects.equals(getCity_id(), city.getCity_id()) &&
+            Objects.equals(getCity_str(), city.getCity_str()) &&
+            Objects.equals(getCountry_id(), city.getCountry_id()) &&
+            Objects.equals(getCreate_date_time(), city.getCreate_date_time()) &&
+            Objects.equals(getLast_update_time(), city.getLast_update_time()) &&
+            Objects.equals(getCreated_by(), city.getCreated_by()) &&
+            Objects.equals(getUpdate_by(), city.getUpdate_by());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getCity_id(), getCity_str(), getCountry_id(), getCreate_date_time(), getLast_update_time(), getCreated_by(), getUpdate_by());
+  }
+
+  @Override
+  public String toString() {
+    return "City{" +
+            "city_id=" + city_id +
+            ", city_str='" + city_str + '\'' +
+            ", country_id=" + country_id +
+            ", create_date_time=" + create_date_time +
+            ", last_update_time='" + last_update_time + '\'' +
+            ", created_by='" + created_by + '\'' +
+            ", update_by='" + update_by + '\'' +
+            '}';
+  }
 }

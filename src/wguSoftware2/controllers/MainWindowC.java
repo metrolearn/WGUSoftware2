@@ -1,7 +1,6 @@
 package wguSoftware2.controllers;
 
         import javafx.collections.FXCollections;
-        import javafx.collections.ObservableArray;
         import javafx.collections.ObservableList;
         import javafx.fxml.FXML;
         import javafx.fxml.FXMLLoader;
@@ -14,7 +13,7 @@ package wguSoftware2.controllers;
         import javafx.scene.control.cell.PropertyValueFactory;
         import javafx.scene.layout.AnchorPane;
         import javafx.stage.Stage;
-        import wguSoftware2.models.Address;
+        import wguSoftware2.models.Active_User;
         import wguSoftware2.models.Customer;
         import wguSoftware2.models.Customer_view_main;
         import wguSoftware2.utils.Database;
@@ -55,6 +54,11 @@ public class MainWindowC {
     @FXML
     private Button CRT_Update_Btn;
 
+    private ObservableList<Customer_view_main> obv_customer_list = null;
+    private List<Customer_view_main> all_customers;
+    private Database curr_db;
+    private Active_User active_user;
+
     @FXML
     void CRT_ADD() throws IOException {
         URL add_customer_window = getClass().getClassLoader().getResource("wguSoftware2/views/add_customer.fxml");
@@ -63,14 +67,17 @@ public class MainWindowC {
         Parent main_root;
         main_root = loader.load();
         AddCustomerC addcc = loader.getController();
-        addcc.initialize();
+        addcc.initialize(this.curr_db, this.active_user,obv_customer_list);
         if(TESTING)
             addcc.testing();
         Stage addCustomerStage = new Stage();
         addCustomerStage.setTitle("Add Customer");
         Scene addPartScene = new Scene(main_root);
         addCustomerStage.setScene(addPartScene);
+        addcc.setStage(addCustomerStage);
         addCustomerStage.showAndWait();
+        customer_tbl.setItems(obv_customer_list);
+        customer_tbl.refresh();
 
 
 
@@ -88,15 +95,14 @@ public class MainWindowC {
 
     }
 
-    private ObservableList<Customer_view_main> obv_customer_list = null;
-    private List<Customer_view_main> all_customers;
-    private Database d;
+
     
 
     @FXML
-    void initialize(Database curr_db) throws SQLException {
-        this.d = curr_db;
-        this.all_customers = d.getAllCustomersFromDB();
+    void initialize(Database curr_db, Active_User active_user) throws SQLException {
+        this.curr_db = curr_db;
+        this.active_user = active_user;
+        this.all_customers = this.curr_db.getAllCustomersFromDB();
         //get all customers //this.all_customers
         // add to obv_list //this.obv_customer_list FXCollections.observableArrayList(this.allParts);
         this.obv_customer_list = FXCollections.observableArrayList(this.all_customers);

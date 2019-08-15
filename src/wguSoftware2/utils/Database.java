@@ -4,6 +4,7 @@ package wguSoftware2.utils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import wguSoftware2.controllers.LoginWindowC;
+import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.models.User;
 
@@ -130,7 +131,18 @@ public class Database {
         return statement.getResultSet();
 
     }
+    public ResultSet get_mysql_resultSet_and_pk(String sql) throws SQLException {
+        PreparedStatement statement = null;
+        try {
+            this.connection = this.create_mysql_db_connection();
+            statement = this.connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return statement.getGeneratedKeys();
 
+    }
 
     public boolean seed_user_names_into_db() {
 
@@ -189,9 +201,9 @@ public class Database {
         return init_users_loaded;
     }
 
-    public Integer check_cred_in_db() throws SQLException {
+    public Active_User check_cred_in_db() throws SQLException {
 
-        Integer r_val = null;
+        Active_User r_val = null;
 
         String login_user_name = lc.getUser_txt_fld().getText();
         String login_user_password = lc.getPassword_txt_fld().getText();
@@ -201,9 +213,9 @@ public class Database {
 
         if (mysql_resultSet.isBeforeFirst()) {
             while (mysql_resultSet.next()) {
-                String user_id = mysql_resultSet.getString(1);
-                System.out.println("employee_id: " + user_id);
-                r_val = Integer.valueOf(user_id);
+                Integer active_user_id = mysql_resultSet.getInt(1);
+                String active_user_name = mysql_resultSet.getString(2);
+                r_val = new Active_User(active_user_id,active_user_name);
             }
 
         }else {

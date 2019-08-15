@@ -2,12 +2,13 @@ package wguSoftware2.utils;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Converters {
 
 
-    public String local_date_time_to_mysql_date_time_string(LocalDateTime ldt){
+    public String ldt_to_mysql_dt_str(ZonedDateTime ldt){
         /*
          * Mysql example of datetime : "2019-08-06 23:45:23"
          */

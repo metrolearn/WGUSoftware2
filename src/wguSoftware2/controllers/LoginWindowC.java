@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import wguSoftware2.models.Active_User;
 import wguSoftware2.models.GeoIP;
 import wguSoftware2.utils.Converters;
 import wguSoftware2.utils.Database;
@@ -62,6 +63,8 @@ public class LoginWindowC {
     @FXML
     private Database curr_db;
 
+    private Active_User ac;
+
     public LoginWindowC() {
 
         curr_db = null;
@@ -109,13 +112,13 @@ public class LoginWindowC {
             }
         } finally {
             System.out.println("Checking provided user and password in database.");
-            Integer user_id = curr_db.check_cred_in_db();
-            System.out.println(user_id);
+            Active_User active_user = curr_db.check_cred_in_db();
+            System.out.println("Currently logging in: "+active_user);
             FXMLLoader loader = new FXMLLoader(this.main_window_url);
             Parent main_root;
             main_root = loader.load();
             MainWindowC mwc = loader.getController();
-            mwc.initialize(curr_db);
+            mwc.initialize(curr_db,active_user);
             Stage addPartStage = new Stage();
             addPartStage.setTitle("Main Window");
             Scene addPartScene = new Scene(main_root);

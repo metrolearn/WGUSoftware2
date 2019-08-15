@@ -1,5 +1,10 @@
 package wguSoftware2.models;
 
+import wguSoftware2.utils.Converters;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -20,22 +25,22 @@ public class Country {
 
   private Integer country_id;
   private String country_str;
-  private Date create_date_time;
+  private ZonedDateTime create_date_time;
   private String create_by;
   private String last_update_time;
   private String last_update_by;
+  private Converters converter;
 
   /**
    * Instantiates a new Country.
+   * @param country_str
+   * @param active_user_name
    */
-  public Country() {
+  public Country(String country_str, String active_user_name) {
+    this.country_str = country_str;
+    this.create_by = active_user_name;
+    this.converter = new Converters();
   }
-
-    public Country(String country_str) {
-
-      this.country_str = country_str;
-
-    }
 
     /**
    * Gets country id.
@@ -78,7 +83,7 @@ public class Country {
    *
    * @return the create date time
    */
-  public Date getCreate_date_time() {
+  public ZonedDateTime getCreate_date_time() {
     return create_date_time;
   }
 
@@ -87,7 +92,7 @@ public class Country {
    *
    * @param create_date_time the create date time
    */
-  public void setCreate_date_time(Date create_date_time) {
+  public void setCreate_date_time(ZonedDateTime create_date_time) {
     this.create_date_time = create_date_time;
   }
 
@@ -180,18 +185,17 @@ public class Country {
         '}';
   }
 
-  /**
-   * Create country db entry boolean.
-   *
-   * @param sql_statement the sql statement
-   * @return the boolean
-   */
-  public Boolean create_country_db_entry(String sql_statement){
-    Boolean r_val = Boolean.FALSE;
-    String sql = "INSERT INTO customer (customerId, customerName, addressId, active, createDate, "
-        + "createdBy, lastUpdate, lastUpdateBy) VALUES (?,?,?,?,?,?,?,?)";
+  public String get_country_db_create_str(){
+    String country_str = this.country_str;
+    String create_date = this.converter.ldt_to_mysql_dt_str(ZonedDateTime.now());
+    String created_by = this.create_by;
+    String lastupdate = create_date;
+    String lastupate_by = this.create_by;
+    String sql_str = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+            "VALUES ('" + country_str + "', '" + create_date + "', '" + created_by + "'," +
+            " '" + lastupdate + "', '" + lastupate_by + "')";
 
-    return r_val;
+    return sql_str;
   }
 
   /**

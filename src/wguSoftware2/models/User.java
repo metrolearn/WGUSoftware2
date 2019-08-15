@@ -3,6 +3,7 @@ package wguSoftware2.models;
 import javafx.fxml.FXML;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import wguSoftware2.utils.Converters;
 
@@ -27,8 +28,8 @@ public class User {
     private String username;
     private String password;
     boolean active;
-    private LocalDateTime create_date_time;
-    private LocalDateTime last_update_date_time;
+    private ZonedDateTime create_date_time;
+    private ZonedDateTime last_update_date_time;
     private Converters c = new Converters();
 
     /**
@@ -43,7 +44,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.active = true;
-        this.create_date_time = LocalDateTime.now();
+        this.create_date_time = ZonedDateTime.now();
         this.last_update_date_time = this.create_date_time;
 
     }
@@ -145,7 +146,7 @@ public class User {
      *
      * @return the create date time
      */
-    public LocalDateTime getCreate_date_time() {
+    public ZonedDateTime getCreate_date_time() {
         return create_date_time;
     }
 
@@ -154,7 +155,7 @@ public class User {
      *
      * @param create_date_time the create date time
      */
-    public void setCreate_date_time(LocalDateTime create_date_time) {
+    public void setCreate_date_time(ZonedDateTime create_date_time) {
         this.create_date_time = create_date_time;
     }
 
@@ -163,7 +164,7 @@ public class User {
      *
      * @return the last update date time
      */
-    public LocalDateTime getLast_update_date_time() {
+    public ZonedDateTime getLast_update_date_time() {
         return last_update_date_time;
     }
 
@@ -172,7 +173,7 @@ public class User {
      *
      * @param last_update_date_time the last update date time
      */
-    public void setLast_update_date_time(LocalDateTime last_update_date_time) {
+    public void setLast_update_date_time(ZonedDateTime last_update_date_time) {
         this.last_update_date_time = last_update_date_time;
     }
 
@@ -277,7 +278,7 @@ public class User {
         String username_ = this.username;
         String password_ = this.password;
         Integer active_ = this.active ? 1 : 0;
-        String createdate_ = c.local_date_time_to_mysql_date_time_string(this.create_date_time);
+        String createdate_ = c.ldt_to_mysql_dt_str(this.create_date_time);
         String system_init_str = "SYSTEM_INIT";
         String createdby_ = system_init_str;
         String lastupdate_ = createdate_;

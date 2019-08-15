@@ -1,5 +1,9 @@
 package wguSoftware2.models;
 
+import wguSoftware2.utils.Converters;
+
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -25,22 +29,32 @@ public class Customer {
 
   private Integer customer_id;
   private String customer_name;
-  private String address_id;
+  private Integer address_id;
   private Boolean active;
-  private Date create_date_time;
+  private ZonedDateTime create_date_time;
   private String created_by;
-  private String last_update_time;
+  private ZonedDateTime last_update_time;
   private String last_update_by;
-
+  private Converters converter;
   /**
    * Instantiates a new Customer.
+   * @param customer_name_str
+   * @param active_user_name
    */
-  public Customer() {
+  public Customer(String customer_name_str, String active_user_name, Integer address_id) {
+    this.converter = new Converters();
+    this.customer_name = customer_name_str;
+    this.created_by = active_user_name;
+    this.address_id = address_id;
+    this.create_date_time = ZonedDateTime.now();
+    this.last_update_time = create_date_time;
+    this.last_update_by = created_by;
+
+
+
   }
 
-  public Customer(String customer_name) {
-    this.customer_name = customer_name;
-  }
+
 
   /**
    * Gets customer id.
@@ -83,7 +97,7 @@ public class Customer {
    *
    * @return the address id
    */
-  public String getAddress_id() {
+  public Integer getAddress_id() {
     return address_id;
   }
 
@@ -92,7 +106,7 @@ public class Customer {
    *
    * @param address_id the address id
    */
-  public void setAddress_id(String address_id) {
+  public void setAddress_id(Integer address_id) {
     this.address_id = address_id;
   }
 
@@ -119,7 +133,7 @@ public class Customer {
    *
    * @return the create date time
    */
-  public Date getCreate_date_time() {
+  public ZonedDateTime getCreate_date_time() {
     return create_date_time;
   }
 
@@ -128,7 +142,7 @@ public class Customer {
    *
    * @param create_date_time the create date time
    */
-  public void setCreate_date_time(Date create_date_time) {
+  public void setCreate_date_time(ZonedDateTime create_date_time) {
     this.create_date_time = create_date_time;
   }
 
@@ -155,7 +169,7 @@ public class Customer {
    *
    * @return the last update time
    */
-  public String getLast_update_time() {
+  public ZonedDateTime getLast_update_time() {
     return last_update_time;
   }
 
@@ -164,7 +178,7 @@ public class Customer {
    *
    * @param last_update_time the last update time
    */
-  public void setLast_update_time(String last_update_time) {
+  public void setLast_update_time(ZonedDateTime last_update_time) {
     this.last_update_time = last_update_time;
   }
 
