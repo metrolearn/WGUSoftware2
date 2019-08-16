@@ -1,6 +1,7 @@
 
 package wguSoftware2.controllers;
 
+import javafx.beans.binding.When;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -68,6 +69,7 @@ public class AddCustomerC {
         Integer country_id = null;
         Integer city_id = null;
         Integer address_id = null;
+        Integer customer_id = null;
         Country country = new Country(country_str, active_user_name);
         System.out.println(country.get_country_db_create_str());
 
@@ -86,10 +88,14 @@ public class AddCustomerC {
         ResultSet address_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
         while (address_pk.next())
             address_id = address_pk.getInt(1);
-        System.out.println("test");
         Customer customer = new Customer(customer_name_str,active_user_name,address_id);
+        ResultSet customer_rs = curr_db.get_mysql_resultSet(customer.get_address_db_create_str());
+        ResultSet customer_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
+        while (customer_pk.next()){
+            customer_id = customer_pk.getInt(1);
+        }
         Customer_view_main cvm = new Customer_view_main(
-                customer.getCustomer_id(),
+                customer_id,
                 customer.getCustomer_name(),
                 address.getAddress() +", "
                         +address.getAlt_address(),
@@ -121,7 +127,7 @@ public class AddCustomerC {
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
-    void initialize(Database curr_db, Active_User active_user, List<Customer_view_main> all_customers) {
+    void initialize(Database curr_db, Active_User active_user, List<Customer_view_main> obv_customer_list) {
         this.active_user = active_user;
         this.curr_db = curr_db;
         this.obv_customer_list = obv_customer_list;

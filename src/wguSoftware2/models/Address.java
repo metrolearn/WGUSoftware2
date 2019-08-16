@@ -313,7 +313,7 @@ public class Address {
      *
      * @return the boolean
      */
-    public String get_address_db_create_str() {
+    public String  get_address_db_create_str() {
         String address = this.address;
         String alt_address = this.address;
         String city_id = String.valueOf(this.city_id);
