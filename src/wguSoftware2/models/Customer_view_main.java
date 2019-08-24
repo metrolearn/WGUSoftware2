@@ -32,6 +32,18 @@ public class Customer_view_main {
         return phone;
     }
 
+    public String get_cvm_db_create_str(){
+
+        String customer_id = String.valueOf(this.id);
+        String sql = "SELECT * from customer " +
+                "JOIN address a on customer.addressId = a.addressId " +
+                "JOIN city c on a.cityId = c.cityId " +
+                "JOIN country c2 on c.countryId = c2.countryId " +
+                "WHERE customerId = " + customer_id;
+
+        return sql;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

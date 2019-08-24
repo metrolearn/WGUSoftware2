@@ -1,7 +1,6 @@
 
 package wguSoftware2.controllers;
 
-import javafx.beans.binding.When;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -14,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.WeakHashMap;
+
 
 public class AddCustomerC {
 
@@ -54,10 +53,47 @@ public class AddCustomerC {
     private Active_User active_user;
     private Database curr_db;
     private List<Customer_view_main> obv_customer_list;
+    private Boolean update;
+    private Integer cvmIndex;
+
+    @FXML
+        // This method is called by the FXMLLoader when initialization is complete
+    void initialize(Database curr_db, Active_User active_user, List<Customer_view_main> obv_customer_list) {
+        this.active_user = active_user;
+        this.curr_db = curr_db;
+        this.obv_customer_list = obv_customer_list;
+        this.update = false;
+        assert phone_txt != null : "fx:id=\"phone_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
+        assert alt_address_txt != null : "fx:id=\"alt_address_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
+        assert add_customer_btn != null : "fx:id=\"add_customer_btn\" was not injected: check your FXML file 'add_customer.fxml'.";
+        assert country_txt != null : "fx:id=\"country_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
+        assert name_txt != null : "fx:id=\"name_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
+        assert city_txt != null : "fx:id=\"city_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
+        assert address_txt != null : "fx:id=\"address_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
+        assert zip_txt != null : "fx:id=\"zip_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
+
+    }
 
     @FXML
     void add_customer() throws SQLException {
 
+
+        Customer_view_main cvm;
+        cvm = getCustomer_view_main_sql(false);
+        int index;
+        if (!update) {
+            obv_customer_list.add(cvm);
+
+        } else {
+
+            obv_customer_list.set(this.cvmIndex, cvm);
+        }
+
+        this.stage.close();
+    }
+
+    Customer_view_main getCustomer_view_main_sql(Boolean up) throws SQLException {
+        Boolean update = up;
         String customer_name_str = this.name_txt.getText();
         String address_str = this.address_txt.getText();
         String alt_address_str = this.alt_address_txt.getText();
@@ -70,80 +106,115 @@ public class AddCustomerC {
         Integer city_id = null;
         Integer address_id = null;
         Integer customer_id = null;
-        Country country = new Country(country_str, active_user_name);
-        System.out.println(country.get_country_db_create_str());
+        return getCustomer_view_main_sql(customer_name_str, address_str, alt_address_str, zip_code_str,
+                phone_str, city_str, country_str, active_user_name, country_id, city_id, address_id,
+                customer_id);
+    }
 
-        ResultSet country_rs = curr_db.get_mysql_resultSet(country.get_country_db_create_str());
-        ResultSet country_rs_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
-        while (country_rs_pk.next())
-            country_id = country_rs_pk.getInt(1);
-        City city = new City(city_str, active_user_name, country_id);
-        ResultSet city_rs = curr_db.get_mysql_resultSet(city.get_city_db_create_str(country_id));
-        ResultSet city_rs_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
-        while (city_rs_pk.next())
-            city_id = city_rs_pk.getInt(1);
-        Address address = new Address(address_str, alt_address_str, city_id, zip_code_str, phone_str,
-                active_user);
-        ResultSet address_rs = curr_db.get_mysql_resultSet(address.get_address_db_create_str());
-        ResultSet address_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
-        while (address_pk.next())
-            address_id = address_pk.getInt(1);
-        Customer customer = new Customer(customer_name_str,active_user_name,address_id);
-        ResultSet customer_rs = curr_db.get_mysql_resultSet(customer.get_address_db_create_str());
-        ResultSet customer_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
-        while (customer_pk.next()){
-            customer_id = customer_pk.getInt(1);
+    private Customer_view_main getCustomer_view_main_sql(String customer_name_str, String address_str, String alt_address_str, String zip_code_str, String phone_str, String city_str, String country_str, String active_user_name, Integer country_id, Integer city_id, Integer address_id, Integer customer_id) throws SQLException {
+        Country country = new Country(country_str, active_user_name);
+
+        ResultSet country_rs_pk = null;
+        ResultSet city_rs_pk = null;
+        ResultSet address_pk = null;
+        ResultSet customer_pk;
+
+        Customer customer = null;
+        City city = null;
+        Address address  = null;
+
+                Integer selected_customer_id = null;
+
+
+        if (update) {
+
+
+            String addressID = String.valueOf(address_id);
+            String cityID = String.valueOf(city_id);
+            String countryID = String.valueOf(country_id);
+            customer_pk = curr_db.get_mysql_resultSet("SELECT c.countryId FROM customer" +
+                    "    INNER JOIN address a on customer.addressId = a.addressId" +
+                    "    INNER JOIN city c on a.cityId = c.cityId" +
+                    "    INNER JOIN country c2 on c.countryId = c2.countryId" +
+                    "WHERE a.addressId = " + addressID +
+                    "AND  c.cityId =  " + cityID +
+                    "AND  c2.countryId = " + countryID);
+
+            while (customer_pk.next())
+                selected_customer_id = customer_pk.getInt(1);
+
+            System.out.println(selected_customer_id);
+
+
+        } else {
+            ResultSet country_rs = curr_db.get_mysql_resultSet(country.get_country_db_create_str());
+            country_rs_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
+            while (country_rs_pk.next())
+                country_id = country_rs_pk.getInt(1);
+             city = new City(city_str, active_user_name, country_id);
+            ResultSet city_rs = curr_db.get_mysql_resultSet(city.get_city_db_create_str(country_id));
+            city_rs_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
+            while (city_rs_pk.next())
+                city_id = city_rs_pk.getInt(1);
+             address = new Address(address_str, alt_address_str, city_id, zip_code_str, phone_str,
+                    active_user);
+            ResultSet address_rs = curr_db.get_mysql_resultSet(address.get_address_db_create_str());
+             address_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
+            while (address_pk.next())
+                address_id = address_pk.getInt(1);
+             customer = new Customer(customer_name_str,active_user_name,address_id);
+            ResultSet customer_rs = curr_db.get_mysql_resultSet(customer.get_address_db_create_str());
+             customer_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
+            while (customer_pk.next()) {
+                customer_id = customer_pk.getInt(1);
+
+            }
+
         }
-        Customer_view_main cvm = new Customer_view_main(
+        final Customer_view_main customer_view_main = new Customer_view_main(
                 customer_id,
                 customer.getCustomer_name(),
-                address.getAddress() +", "
-                        +address.getAlt_address(),
-                        address.getPhone());
-        obv_customer_list.add(cvm);
-        this.stage.close();
-
-
-
-
-
+                address.getAddress() + ", "
+                        + address.getAlt_address(),
+                address.getPhone());
+        return customer_view_main;
     }
 
-
-
-
-    @FXML
-    void testing() {
-
-        this.name_txt.setText("Some Name");
-        this.address_txt.setText("Some Address");
-        this.alt_address_txt.setText("Some Alt Address txt");
-        this.city_txt.setText("Some City Txt");
-        this.zip_txt.setText("12345");
-        this.country_txt.setText("Some Country Txt");
-        this.phone_txt.setText("Some Phone Txt");
-
-    }
-
-    @FXML
-        // This method is called by the FXMLLoader when initialization is complete
-    void initialize(Database curr_db, Active_User active_user, List<Customer_view_main> obv_customer_list) {
-        this.active_user = active_user;
-        this.curr_db = curr_db;
-        this.obv_customer_list = obv_customer_list;
-        assert phone_txt != null : "fx:id=\"phone_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert alt_address_txt != null : "fx:id=\"alt_address_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert add_customer_btn != null : "fx:id=\"add_customer_btn\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert country_txt != null : "fx:id=\"country_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert name_txt != null : "fx:id=\"name_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert city_txt != null : "fx:id=\"city_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert address_txt != null : "fx:id=\"address_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert zip_txt != null : "fx:id=\"zip_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-
-    }
 
     public void setStage(Stage addCustomerStage) {
         this.stage = addCustomerStage;
 
     }
+
+    public void set_fields(Customer_view_main cmv) throws SQLException {
+
+        ResultSet cvm_pk = curr_db.get_mysql_resultSet(cmv.get_cvm_db_create_str());
+        this.update = true;
+        this.cvmIndex = obv_customer_list.indexOf(cmv);
+
+        String alt_add = "";
+        String city = "";
+        String zip = "";
+        String country = "";
+
+        while (cvm_pk.next()) {
+            alt_add = cvm_pk.getString("address2");
+            city = cvm_pk.getString("city");
+            zip = cvm_pk.getString("postalCode");
+            country = cvm_pk.getString("country");
+
+        }
+
+        this.name_txt.setText(cmv.getName());
+        this.address_txt.setText(cmv.getAddress());
+        this.alt_address_txt.setText(alt_add);
+        this.city_txt.setText(city);
+        this.zip_txt.setText(zip);
+        this.country_txt.setText(country);
+        this.phone_txt.setText(cmv.getPhone());
+
+
+    }
+
+
 }

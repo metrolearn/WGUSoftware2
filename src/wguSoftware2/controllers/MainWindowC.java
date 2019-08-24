@@ -1,27 +1,27 @@
 package wguSoftware2.controllers;
 
-        import javafx.collections.FXCollections;
-        import javafx.collections.ObservableList;
-        import javafx.fxml.FXML;
-        import javafx.fxml.FXMLLoader;
-        import javafx.scene.Parent;
-        import javafx.scene.Scene;
-        import javafx.scene.control.Button;
-        import javafx.scene.control.SelectionMode;
-        import javafx.scene.control.TableColumn;
-        import javafx.scene.control.TableView;
-        import javafx.scene.control.cell.PropertyValueFactory;
-        import javafx.scene.layout.AnchorPane;
-        import javafx.stage.Stage;
-        import wguSoftware2.models.Active_User;
-        import wguSoftware2.models.Customer;
-        import wguSoftware2.models.Customer_view_main;
-        import wguSoftware2.utils.Database;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import wguSoftware2.models.Active_User;
+import wguSoftware2.models.Customer;
+import wguSoftware2.models.Customer_view_main;
+import wguSoftware2.utils.Database;
 
-        import java.io.IOException;
-        import java.net.URL;
-        import java.sql.SQLException;
-        import java.util.List;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
 
 public class MainWindowC {
 
@@ -67,9 +67,7 @@ public class MainWindowC {
         Parent main_root;
         main_root = loader.load();
         AddCustomerC addcc = loader.getController();
-        addcc.initialize(this.curr_db, this.active_user,obv_customer_list);
-        if(TESTING)
-            addcc.testing();
+        addcc.initialize(this.curr_db, this.active_user, obv_customer_list);
         Stage addCustomerStage = new Stage();
         addCustomerStage.setTitle("Add Customer");
         Scene addPartScene = new Scene(main_root);
@@ -80,23 +78,44 @@ public class MainWindowC {
         customer_tbl.refresh();
 
 
-
-
-
     }
 
     @FXML
-    void CRT_UPDATE() {
+    void CRT_UPDATE() throws IOException, SQLException {
 
+        Customer_view_main cmv = null;
+        try {
+            cmv = customer_tbl.getSelectionModel().getSelectedItem();
+            URL add_customer_window = getClass().getClassLoader().getResource("wguSoftware2/views/update_customer.fxml");
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(add_customer_window);
+            Parent main_root;
+            main_root = loader.load();
+            UpdateCustomerC updateCustomerC = loader.getController();
+            updateCustomerC.initialize(this.curr_db, this.active_user, obv_customer_list);
+            updateCustomerC.set_fields(cmv);
+            Stage addCustomerStage = new Stage();
+            addCustomerStage.setTitle("Update Customer");
+            Scene addPartScene = new Scene(main_root);
+            addCustomerStage.setScene(addPartScene);
+            updateCustomerC.setStage(addCustomerStage);
+            addCustomerStage.showAndWait();
+            customer_tbl.setItems(obv_customer_list);
+            customer_tbl.refresh();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     @FXML
     void CRT_DELETE() {
+        Customer_view_main selectedItem = customer_tbl.getSelectionModel().getSelectedItem();
+        obv_customer_list.remove(selectedItem);
+        customer_tbl.setItems(obv_customer_list);
+        customer_tbl.refresh();
 
     }
 
-
-    
 
     @FXML
     void initialize(Database curr_db, Active_User active_user) throws SQLException {

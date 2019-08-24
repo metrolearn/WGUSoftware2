@@ -27,7 +27,7 @@ public class Database {
     private String username;
     private String password;
     private String max_pool = "300"; // set your own limit
-    private Connection connection;
+    private Connection connection = null;
     private Properties properties;
     private Boolean init_users_loaded;
     private LoginWindowC lc;
