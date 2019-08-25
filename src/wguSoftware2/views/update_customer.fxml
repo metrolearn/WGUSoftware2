@@ -21,6 +21,6 @@
       <TextField fx:id="phone_txt" layoutX="38.0" layoutY="237.0" promptText="PHONE" />
       <TextField fx:id="city_txt" layoutX="242.0" layoutY="147.0" promptText="CITY" />
       <TextField fx:id="country_txt" layoutX="242.0" layoutY="190.0" promptText="COUNTRY" />
-      <Button fx:id="add_customer_btn" layoutX="242.0" layoutY="237.0" mnemonicParsing="false" onAction="#update_customer" prefHeight="31.0" prefWidth="187.0" text="Add" />
+      <Button fx:id="add_customer_btn" layoutX="242.0" layoutY="237.0" mnemonicParsing="false" onAction="#update_customer" prefHeight="31.0" prefWidth="187.0" text="Update Record" />
    </children>
 </AnchorPane>

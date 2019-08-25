@@ -112,26 +112,29 @@ public class AddCustomerC {
     }
 
     private Customer_view_main getCustomer_view_main_sql(String customer_name_str, String address_str, String alt_address_str, String zip_code_str, String phone_str, String city_str, String country_str, String active_user_name, Integer country_id, Integer city_id, Integer address_id, Integer customer_id) throws SQLException {
-        Country country = new Country(country_str, active_user_name);
 
         ResultSet country_rs_pk = null;
         ResultSet city_rs_pk = null;
         ResultSet address_pk = null;
-        ResultSet customer_pk;
+        ResultSet customer_pk = null;
 
         Customer customer = null;
-        City city = null;
         Address address  = null;
+        City city = null;
+        Country country = null;
 
-                Integer selected_customer_id = null;
+
 
 
         if (update) {
 
+            country_rs_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
 
+
+
+            String countryID = String.valueOf(country_id);
             String addressID = String.valueOf(address_id);
             String cityID = String.valueOf(city_id);
-            String countryID = String.valueOf(country_id);
             customer_pk = curr_db.get_mysql_resultSet("SELECT c.countryId FROM customer" +
                     "    INNER JOIN address a on customer.addressId = a.addressId" +
                     "    INNER JOIN city c on a.cityId = c.cityId" +
@@ -140,10 +143,7 @@ public class AddCustomerC {
                     "AND  c.cityId =  " + cityID +
                     "AND  c2.countryId = " + countryID);
 
-            while (customer_pk.next())
-                selected_customer_id = customer_pk.getInt(1);
 
-            System.out.println(selected_customer_id);
 
 
         } else {

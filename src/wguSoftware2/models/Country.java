@@ -31,6 +31,7 @@ public class Country {
   private String last_update_by;
   private Converters converter;
 
+
   /**
    * Instantiates a new Country.
    * @param country_str
@@ -42,7 +43,17 @@ public class Country {
     this.converter = new Converters();
   }
 
-    /**
+  public Country(String active_user_name) {
+    this.create_by = active_user_name;
+    this.converter = new Converters();
+  }
+
+  public Country() {
+
+  }
+
+
+  /**
    * Gets country id.
    *
    * @return the country id
@@ -128,7 +139,7 @@ public class Country {
    *
    * @param last_update_time the last update time
    */
-  public void setLast_update_time(String last_update_time) {
+  public void setLast_update_time(ZonedDateTime last_update_time) {
     this.last_update_time = last_update_time;
   }
 
