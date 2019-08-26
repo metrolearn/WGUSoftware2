@@ -147,10 +147,7 @@ public class AddCustomerC {
 
 
         } else {
-            ResultSet country_rs = curr_db.get_mysql_resultSet(country.get_country_db_create_str());
-            country_rs_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
-            while (country_rs_pk.next())
-                country_id = country_rs_pk.getInt(1);
+
              city = new City(city_str, active_user_name, country_id);
             ResultSet city_rs = curr_db.get_mysql_resultSet(city.get_city_db_create_str(country_id));
             city_rs_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");

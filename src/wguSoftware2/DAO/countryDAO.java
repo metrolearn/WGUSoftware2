@@ -18,14 +18,45 @@ public class countryDAO {
         this.dbc = dbc;
     }
 
-    public Country searchCountry(String id) throws SQLException {
+
+    public Country create_country(Country c) throws SQLException {
+
+        String country_str = c.getCountry_str();
+        String create_date = c.getConverter().ldt_to_mysql_dt_str(ZonedDateTime.now());
+        String created_by = c.getCreate_by();
+        String lastupdate = create_date;
+        String lastupate_by = created_by;
+        String sql_str = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                "VALUES ('" + country_str + "', '" + create_date + "', '" + created_by + "'," +
+                " '" + lastupdate + "', '" + lastupate_by + "')";
+
+        try {
+            dbc.send_mysql_command(sql_str);
+
+            try {
+                ResultSet country_rs_pk = this.dbc.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
+                while (country_rs_pk.next())
+                    c.setCountry_id(country_rs_pk.getInt(1));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return c;
+    }
+
+
+    public Country getCountry_by_ID(String id) throws SQLException {
 
         try {
             this.sql_stm = "SELECT * from country where countryId = " + id + ";";
-            this.rs =   dbc.get_mysql_resultSet(sql_stm);
+            this.rs = dbc.get_mysql_resultSet(sql_stm);
             return getCountry(this.rs);
         } catch (SQLException e) {
             e.printStackTrace();
+            throw e;
         }
 
 
@@ -34,7 +65,7 @@ public class countryDAO {
     private Country getCountry(ResultSet rs) throws SQLException {
         this.country = new Country();
 
-        while(this.rs.next()){
+        while (this.rs.next()) {
 
             country.setCountry_id(rs.getInt("countryID"));
             country.setCountry_str(rs.getString("country"));
@@ -49,6 +80,24 @@ public class countryDAO {
         }
 
         return country;
+    }
+
+    private Country updateCountry (Country c) throws SQLException {
+
+        String country_name = c.getCountry_str();
+        String current_user = c.getActive_user();
+        String country_id = String.valueOf(c.getCountry_id());
+        this.sql_stm = "update country c\n" +
+                "set country = '" + country_name + "', lastUpdate = now(), lastUpdateBy = '" + current_user + "'\n" +
+                "where countryId = '" + country_id + "';";
+
+        try {
+            this.rs = dbc.get_mysql_resultSet(sql_stm);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return c;
     }
 
 }

@@ -2,10 +2,7 @@ package wguSoftware2.models;
 
 import wguSoftware2.utils.Converters;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -27,10 +24,14 @@ public class Country {
   private String country_str;
   private ZonedDateTime create_date_time;
   private String create_by;
-  private String last_update_time;
+  private ZonedDateTime last_update_time;
   private String last_update_by;
   private Converters converter;
+  private String active_user;
 
+  public Converters getConverter() {
+    return converter;
+  }
 
   /**
    * Instantiates a new Country.
@@ -39,12 +40,12 @@ public class Country {
    */
   public Country(String country_str, String active_user_name) {
     this.country_str = country_str;
-    this.create_by = active_user_name;
+    this.active_user = active_user_name;
     this.converter = new Converters();
   }
 
   public Country(String active_user_name) {
-    this.create_by = active_user_name;
+    this.active_user = active_user_name;
     this.converter = new Converters();
   }
 
@@ -52,6 +53,9 @@ public class Country {
 
   }
 
+  public String getActive_user() {
+    return active_user;
+  }
 
   /**
    * Gets country id.
@@ -130,7 +134,7 @@ public class Country {
    *
    * @return the last update time
    */
-  public String getLast_update_time() {
+  public ZonedDateTime getLast_update_time() {
     return last_update_time;
   }
 
@@ -196,18 +200,6 @@ public class Country {
         '}';
   }
 
-  public String get_country_db_create_str(){
-    String country_str = this.country_str;
-    String create_date = this.converter.ldt_to_mysql_dt_str(ZonedDateTime.now());
-    String created_by = this.create_by;
-    String lastupdate = create_date;
-    String lastupate_by = this.create_by;
-    String sql_str = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-            "VALUES ('" + country_str + "', '" + create_date + "', '" + created_by + "'," +
-            " '" + lastupdate + "', '" + lastupate_by + "')";
-
-    return sql_str;
-  }
 
   /**
    * Read country db entry boolean.
