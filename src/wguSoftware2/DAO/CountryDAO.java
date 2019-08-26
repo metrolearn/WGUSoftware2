@@ -7,14 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 
-public class countryDAO {
+public class CountryDAO {
 
     private String sql_stm = null;
     private ResultSet rs = null;
     private Database dbc = null;
     private Country country = null;
 
-    public countryDAO(Database dbc) {
+    public CountryDAO(Database dbc) {
         this.dbc = dbc;
     }
 
@@ -26,12 +26,12 @@ public class countryDAO {
         String created_by = c.getCreate_by();
         String lastupdate = create_date;
         String lastupate_by = created_by;
-        String sql_str = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+        this.sql_stm = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) " +
                 "VALUES ('" + country_str + "', '" + create_date + "', '" + created_by + "'," +
                 " '" + lastupdate + "', '" + lastupate_by + "')";
 
-        try {
-            dbc.send_mysql_command(sql_str);
+              execute_sql_stmt();
+
 
             try {
                 ResultSet country_rs_pk = this.dbc.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
@@ -41,23 +41,16 @@ public class countryDAO {
                 e.printStackTrace();
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return c;
     }
 
 
     public Country getCountry_by_ID(String id) throws SQLException {
+        this.sql_stm = "SELECT * from country where countryId = " + id + ";";
 
-        try {
-            this.sql_stm = "SELECT * from country where countryId = " + id + ";";
-            this.rs = dbc.get_mysql_resultSet(sql_stm);
-            return getCountry(this.rs);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
+        execute_sql_stmt();
+
+        return getCountry(this.rs);
 
 
     }
@@ -91,13 +84,27 @@ public class countryDAO {
                 "set country = '" + country_name + "', lastUpdate = now(), lastUpdateBy = '" + current_user + "'\n" +
                 "where countryId = '" + country_id + "';";
 
+        execute_sql_stmt();
+
+        return c;
+    }
+
+
+    private Country deleteCountry(Country c) throws SQLException {
+
+        this.sql_stm = "DELETE from country WHERE countryId = 'id'";
+        execute_sql_stmt();
+
+        return c;
+    }
+
+    private void execute_sql_stmt() {
         try {
             this.rs = dbc.get_mysql_resultSet(sql_stm);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return c;
     }
+
 
 }
