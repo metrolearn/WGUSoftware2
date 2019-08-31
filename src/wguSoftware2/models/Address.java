@@ -41,6 +41,15 @@ public class Address {
     private Converters converter;
     private Active_User active_user;
 
+    public Address(String address, String alt_address, Integer city_id, String zip) {
+
+        this.address = address;
+        this.alt_address = alt_address;
+        this.city_id = city_id;
+        this.zip_code = zip;
+
+    }
+
     public Active_User getActive_user() {
         return active_user;
     }

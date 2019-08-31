@@ -73,7 +73,6 @@ public class UpdateCustomerC extends AddCustomerC {
 
     @FXML
     void update_customer() throws SQLException {
-        this.cvm = super.getCustomer_view_main_sql(true);
 
         Integer id = cvm.getId();
         Integer x = 4;

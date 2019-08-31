@@ -77,104 +77,8 @@ public class AddCustomerC {
     @FXML
     void add_customer() throws SQLException {
 
+            System.out.println("test");
 
-        Customer_view_main cvm;
-        cvm = getCustomer_view_main_sql(false);
-        int index;
-        if (!update) {
-            obv_customer_list.add(cvm);
-
-        } else {
-
-            obv_customer_list.set(this.cvmIndex, cvm);
-        }
-
-        this.stage.close();
-    }
-
-    Customer_view_main getCustomer_view_main_sql(Boolean up) throws SQLException {
-        Boolean update = up;
-        String customer_name_str = this.name_txt.getText();
-        String address_str = this.address_txt.getText();
-        String alt_address_str = this.alt_address_txt.getText();
-        String zip_code_str = this.zip_txt.getText();
-        String phone_str = this.phone_txt.getText();
-        String city_str = this.city_txt.getText();
-        String country_str = this.country_txt.getText();
-        String active_user_name = active_user.getActive_user_name();
-        Integer country_id = null;
-        Integer city_id = null;
-        Integer address_id = null;
-        Integer customer_id = null;
-        return getCustomer_view_main_sql(customer_name_str, address_str, alt_address_str, zip_code_str,
-                phone_str, city_str, country_str, active_user_name, country_id, city_id, address_id,
-                customer_id);
-    }
-
-    private Customer_view_main getCustomer_view_main_sql(String customer_name_str, String address_str, String alt_address_str, String zip_code_str, String phone_str, String city_str, String country_str, String active_user_name, Integer country_id, Integer city_id, Integer address_id, Integer customer_id) throws SQLException {
-
-        ResultSet country_rs_pk = null;
-        ResultSet city_rs_pk = null;
-        ResultSet address_pk = null;
-        ResultSet customer_pk = null;
-
-        Customer customer = null;
-        Address address  = null;
-        City city = null;
-        Country country = null;
-
-
-
-
-        if (update) {
-
-            country_rs_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
-
-
-
-            String countryID = String.valueOf(country_id);
-            String addressID = String.valueOf(address_id);
-            String cityID = String.valueOf(city_id);
-            customer_pk = curr_db.get_mysql_resultSet("SELECT c.countryId FROM customer" +
-                    "    INNER JOIN address a on customer.addressId = a.addressId" +
-                    "    INNER JOIN city c on a.cityId = c.cityId" +
-                    "    INNER JOIN country c2 on c.countryId = c2.countryId" +
-                    "WHERE a.addressId = " + addressID +
-                    "AND  c.cityId =  " + cityID +
-                    "AND  c2.countryId = " + countryID);
-
-
-
-
-        } else {
-
-             city = new City(city_str, active_user_name, country_id);
-            ResultSet city_rs = curr_db.get_mysql_resultSet(city.get_city_db_create_str(country_id));
-            city_rs_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
-            while (city_rs_pk.next())
-                city_id = city_rs_pk.getInt(1);
-             address = new Address(address_str, alt_address_str, city_id, zip_code_str, phone_str,
-                    active_user);
-            ResultSet address_rs = curr_db.get_mysql_resultSet(address.get_address_db_create_str());
-             address_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
-            while (address_pk.next())
-                address_id = address_pk.getInt(1);
-             customer = new Customer(customer_name_str,active_user_name,address_id);
-            ResultSet customer_rs = curr_db.get_mysql_resultSet(customer.get_address_db_create_str());
-             customer_pk = curr_db.get_mysql_resultSet("SELECT LAST_INSERT_ID();");
-            while (customer_pk.next()) {
-                customer_id = customer_pk.getInt(1);
-
-            }
-
-        }
-        final Customer_view_main customer_view_main = new Customer_view_main(
-                customer_id,
-                customer.getCustomer_name(),
-                address.getAddress() + ", "
-                        + address.getAlt_address(),
-                address.getPhone());
-        return customer_view_main;
     }
 
 
@@ -185,7 +89,7 @@ public class AddCustomerC {
 
     public void set_fields(Customer_view_main cmv) throws SQLException {
 
-        ResultSet cvm_pk = curr_db.get_mysql_resultSet(cmv.get_cvm_db_create_str());
+        ResultSet cvm_pk = curr_db.get_mysql_resultSet("e");
         this.update = true;
         this.cvmIndex = obv_customer_list.indexOf(cmv);
 

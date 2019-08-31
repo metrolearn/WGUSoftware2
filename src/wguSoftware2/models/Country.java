@@ -44,8 +44,9 @@ public class Country {
     this.converter = new Converters();
   }
 
-  public Country(String active_user_name) {
+  public Country(Integer object_id_buffer, String active_user_name) {
     this.active_user = active_user_name;
+    this.country_id = object_id_buffer;
     this.converter = new Converters();
   }
 
