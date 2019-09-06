@@ -68,7 +68,7 @@ public class UpdateCustomerC extends AddCustomerC {
 
     @FXML
     public void set_fields(Customer_view_main cmv) throws SQLException {
-        super.set_fields(cmv);
+
     }
 
     @FXML

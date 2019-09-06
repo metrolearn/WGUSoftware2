@@ -9,6 +9,7 @@ import wguSoftware2.controllers.LoginWindowC;
 import wguSoftware2.models.GeoIP;
 import wguSoftware2.utils.Converters;
 import wguSoftware2.utils.Database;
+import wguSoftware2.utils.Database_v3;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,7 +19,7 @@ import java.sql.SQLException;
 public class Main extends Application {
 
 
-    private Database d;
+    private Database_v3 d;
     private GeoIP g;
     private Converters c;
 
@@ -26,10 +27,19 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException, Exception {
 
         g = new GeoIP();
-        d = this.init_database();
+        d = new Database_v3(
+                "52.206.157.109",
+                "U05mJi",
+                "U05mJi",
+                "53688547099"
+        );
+
+        d.dbConnect();
+        d.dbConnect();
+
         c = new Converters();
 
-        load_users(d);
+//        load_users(d);
 
         URL login_resource = getClass().getResource("views/login_v.fxml");
         System.out.println(c.get_fxml_file_name(login_resource));
@@ -38,8 +48,8 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(login_resource);
         Parent root = loader.load();
         LoginWindowC lc = loader.getController();
-        d.setLc(lc);
-        lc.initialize(d, g, main_resource);
+     //   d.setLc(lc);
+     //   lc.initialize(d, g, main_resource);
         primaryStage.setTitle("");
         Scene mainScene = new Scene(root);
         primaryStage.setScene(mainScene);

@@ -77,6 +77,18 @@ public class Customer_view_main {
 
     }
 
+    public Customer_view_main(String name_txt, String address_txt, String alt_address_txt,
+                              String city_txt, String zip_txt, String country_txt, String phone_txt) {
+        this.name = name_txt;
+        this.address = address_txt;
+        this.alt_address = alt_address_txt;
+        this.city_name = city_txt;
+        this.zip = zip_txt;
+        this.country_name = country_txt;
+        this.phone = phone_txt;
+
+    }
+
     public Integer getId() {
         return id;
     }

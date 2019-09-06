@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import wguSoftware2.DAO.CustomerViewMainDAO;
 import wguSoftware2.models.*;
 import wguSoftware2.utils.Database;
 
@@ -53,6 +54,8 @@ public class AddCustomerC {
     private Active_User active_user;
     private Database curr_db;
     private List<Customer_view_main> obv_customer_list;
+    private Customer_view_main cvm = null;
+    private CustomerViewMainDAO cvmDAO = null;
     private Boolean update;
     private Integer cvmIndex;
 
@@ -63,59 +66,47 @@ public class AddCustomerC {
         this.curr_db = curr_db;
         this.obv_customer_list = obv_customer_list;
         this.update = false;
-        assert phone_txt != null : "fx:id=\"phone_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert alt_address_txt != null : "fx:id=\"alt_address_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert add_customer_btn != null : "fx:id=\"add_customer_btn\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert country_txt != null : "fx:id=\"country_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert name_txt != null : "fx:id=\"name_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert city_txt != null : "fx:id=\"city_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert address_txt != null : "fx:id=\"address_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
-        assert zip_txt != null : "fx:id=\"zip_txt\" was not injected: check your FXML file 'add_customer.fxml'.";
+        this.cvmDAO = new CustomerViewMainDAO(curr_db,active_user.getActive_user_name());
 
     }
-
-    @FXML
-    void add_customer() throws SQLException {
-
-            System.out.println("test");
-
-    }
-
 
     public void setStage(Stage addCustomerStage) {
         this.stage = addCustomerStage;
 
     }
 
-    public void set_fields(Customer_view_main cmv) throws SQLException {
+    @FXML
+    void add_customer() throws SQLException {
 
-        ResultSet cvm_pk = curr_db.get_mysql_resultSet("e");
-        this.update = true;
-        this.cvmIndex = obv_customer_list.indexOf(cmv);
+        String name_txt = this.name_txt.getText();
+        String address_txt = this.address_txt.getText();
+        String alt_address_txt = this.alt_address_txt.getText();
+        String city_txt = this.city_txt.getText();
+        String zip_txt = this.zip_txt.getText();
+        String country_txt = this.country_txt.getText();
+        String phone_txt = this.phone_txt.getText();
 
-        String alt_add = "";
-        String city = "";
-        String zip = "";
-        String country = "";
 
-        while (cvm_pk.next()) {
-            alt_add = cvm_pk.getString("address2");
-            city = cvm_pk.getString("city");
-            zip = cvm_pk.getString("postalCode");
-            country = cvm_pk.getString("country");
+        this.cvm = new Customer_view_main(
+                name_txt,
+                address_txt,
+                alt_address_txt,
+                city_txt,
+                zip_txt,
+                country_txt,
+                phone_txt
 
-        }
+        );
 
-        this.name_txt.setText(cmv.getName());
-        this.address_txt.setText(cmv.getAddress());
-        this.alt_address_txt.setText(alt_add);
-        this.city_txt.setText(city);
-        this.zip_txt.setText(zip);
-        this.country_txt.setText(country);
-        this.phone_txt.setText(cmv.getPhone());
+        cvmDAO.create(this.cvm);
+
 
 
     }
+
+
+
+
 
 
 }

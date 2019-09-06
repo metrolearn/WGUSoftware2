@@ -1,5 +1,6 @@
 package wguSoftware2.DAO;
 
+import javafx.fxml.FXML;
 import wguSoftware2.models.Address;
 import wguSoftware2.models.City;
 import wguSoftware2.models.Country;
@@ -40,7 +41,7 @@ public class CustomerViewMainDAO {
         String zip = customer_view_main.getZip();
         String country_str = customer_view_main.getCountry_name();
         String phone = customer_view_main.getPhone();
-        String current_time_str = String.valueOf(ZonedDateTime.now());
+        String current_time_str = String.valueOf(ZonedDateTime.now().toLocalDateTime());
 
         this.sql_smt = "INSERT INTO `country` " +
                 "(`country`, `createDate`, `createdBy`, `lastUpdate`, `lastUpdateBy`) " +
@@ -51,7 +52,7 @@ public class CustomerViewMainDAO {
                 + current_time_str + "', '"
                 + this.active_user_name + "');";
 
-        exe_sql_create();
+        exe_sql_create(this.sql_smt);
 
         this.country = new Country(this.object_id_buffer, country_str);
 
@@ -67,7 +68,7 @@ public class CustomerViewMainDAO {
                 + current_time_str + "', '"
                 + this.active_user_name + "');";
 
-        exe_sql_create();
+        exe_sql_create(this.sql_smt);
 
         this.city = new City(this.object_id_buffer, city_name, this.country.getCountry_id());
 
@@ -85,7 +86,7 @@ public class CustomerViewMainDAO {
                 + current_time_str + "', '"
                 + active_user_name + "');";
 
-        exe_sql_create();
+        exe_sql_create(this.sql_smt);
 
         this.address = new Address(address, alt_address, city.getCity_id(), zip);
 
@@ -102,7 +103,7 @@ public class CustomerViewMainDAO {
                 + current_time_str + "', '"
                 + this.active_user_name + "');";
 
-        exe_sql_create();
+        exe_sql_create(this.sql_smt);
 
 
     }
@@ -125,23 +126,27 @@ public class CustomerViewMainDAO {
 
     ;
 
-    private void exe_sql_create() throws SQLException {
-        execute_sql_stmt();
+    private void exe_sql_create(String sql_smt) throws SQLException {
+        execute_sql_stmt(sql_smt);
         set_last_insert_obj_id();
     }
 
+    @FXML
     private void set_last_insert_obj_id() throws SQLException {
         this.sql_smt = "SELECT LAST_INSERT_ID()";
         while (this.rs.next())
             this.object_id_buffer = this.rs.getInt(1);
     }
 
-    private void execute_sql_stmt() {
+    @FXML
+    private void execute_sql_stmt(String sql_smt) {
+        ResultSet resultSet = null;
         try {
-            this.rs = dbc.get_mysql_resultSet(sql_stm);
+            resultSet = dbc.get_mysql_resultSet(sql_smt);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        this.rs = resultSet;
     }
 
 

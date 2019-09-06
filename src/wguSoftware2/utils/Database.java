@@ -74,6 +74,7 @@ public class Database {
                 System.out.println("Default Users Not Loaded.");
             }
         }
+        disconnect_from_mysql_db();
     }
 
     /**
@@ -124,11 +125,13 @@ public class Database {
         try {
             this.connection = this.create_mysql_db_connection();
             statement = this.connection.prepareStatement(sql);
-            statement.execute();
+            statement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return statement.getResultSet();
+        ResultSet resultSet = statement.getResultSet();
+
+        return resultSet;
 
     }
     public ResultSet get_mysql_resultSet_and_pk(String sql) throws SQLException {
@@ -174,6 +177,7 @@ public class Database {
                         user_count = user_count+1;
                         String sql_statment = u.create_user_db_entry_str();
                         this.send_mysql_command(sql_statment);
+                        this.disconnect_from_mysql_db();
                     }
 
                 }
