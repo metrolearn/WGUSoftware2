@@ -64,21 +64,17 @@ public class Database_v3 {
     }
 
     //DB Execute Query Operation
-    public  ResultSet dbExecuteQuery(String queryStmt) throws SQLException, ClassNotFoundException {
+    public  ResultSet dbExecuteQuery(PreparedStatement ps_Stmt) throws SQLException, ClassNotFoundException {
         //Declare statement, resultSet and CachedResultSet as null
         Statement stmt = null;
         ResultSet resultSet = null;
         CachedRowSetImpl crs = null;
         try {
-            //Connect to DB (Establish Oracle Connection)
-            this.dbConnect();
-            System.out.println("Select statement: " + queryStmt + "\n");
+            System.out.println("Select statement: " + ps_Stmt + "\n");
 
-            //Create statement
-            stmt = con.createStatement();
 
             //Execute select (query) operation
-            resultSet = stmt.executeQuery(queryStmt);
+            resultSet = ps_Stmt.executeQuery();
 
             //CachedRowSet Implementation
             //In order to prevent "java.sql.SQLRecoverableException: Closed Connection: next" error
@@ -93,10 +89,6 @@ public class Database_v3 {
                 //Close resultSet
                 resultSet.close();
             }
-            if (stmt != null) {
-                //Close Statement
-                stmt.close();
-            }
             //Close connection
             dbDisconnect();
         }
@@ -105,16 +97,12 @@ public class Database_v3 {
     }
 
     //DB Execute Update (For Update/Insert/Delete) Operation
-    public  void dbExecuteUpdate(String sqlStmt) throws SQLException, ClassNotFoundException {
+    public  void dbExecuteUpdate(PreparedStatement ps_Stmt) throws SQLException, ClassNotFoundException {
         //Declare statement as null
         Statement stmt = null;
         try {
-            //Connect to DB (Establish Oracle Connection)
-            dbConnect();
-            //Create Statement
-            stmt = this.con.createStatement();
-            //Run executeUpdate operation with given sql statement
-            stmt.executeUpdate(sqlStmt);
+
+            ps_Stmt.execute();
         } catch (SQLException e) {
             System.out.println("Problem occurred at executeUpdate operation : " + e);
             throw e;
@@ -126,5 +114,9 @@ public class Database_v3 {
             //Close connection
             dbDisconnect();
         }
+    }
+
+    public Connection getCon() {
+        return con;
     }
 }

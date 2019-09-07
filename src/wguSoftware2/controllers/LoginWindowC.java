@@ -4,6 +4,7 @@
 
 package wguSoftware2.controllers;
 
+import com.sun.rowset.CachedRowSetImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,9 +18,13 @@ import wguSoftware2.models.Active_User;
 import wguSoftware2.models.GeoIP;
 import wguSoftware2.utils.Converters;
 import wguSoftware2.utils.Database;
+import wguSoftware2.utils.Database_v3;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
@@ -61,7 +66,7 @@ public class LoginWindowC {
     private Label welcome_lbl;
 
     @FXML
-    private Database curr_db;
+    private Database_v3 curr_db;
 
     private Active_User ac;
 
@@ -98,7 +103,7 @@ public class LoginWindowC {
     }
 
     @FXML
-    void sign_in() throws SQLException, IOException {
+    void sign_in() throws SQLException, IOException, ClassNotFoundException {
         try {
             try {
                 String username_input = this.password_txt_fld.getText();
@@ -112,18 +117,27 @@ public class LoginWindowC {
             }
         } finally {
             System.out.println("Checking provided user and password in database.");
-            Active_User active_user = curr_db.check_cred_in_db();
-            System.out.println("Currently logging in: "+active_user);
-            FXMLLoader loader = new FXMLLoader(this.main_window_url);
-            Parent main_root;
-            main_root = loader.load();
-            MainWindowC mwc = loader.getController();
-            mwc.initialize(curr_db,active_user);
-            Stage addPartStage = new Stage();
-            addPartStage.setTitle("Main Window");
-            Scene addPartScene = new Scene(main_root);
-            addPartStage.setScene(addPartScene);
-            addPartStage.showAndWait();
+//            Active_User active_user = curr_db.check_cred_in_db();
+
+              curr_db.dbConnect();
+              Connection con = curr_db.getCon();
+              PreparedStatement ps = con.prepareStatement("SELECT * FROM user WHERE userName = ?");
+              ps.setString(1, this.user_txt_fld.getText());
+              ResultSet rs = curr_db.dbExecuteQuery(ps);
+              System.out.println("test");
+
+
+//            System.out.println("Currently logging in: "+active_user);
+//            FXMLLoader loader = new FXMLLoader(this.main_window_url);
+//            Parent main_root;
+//            main_root = loader.load();
+//            MainWindowC mwc = loader.getController();
+//            mwc.initialize(curr_db,active_user);
+//            Stage addPartStage = new Stage();
+//            addPartStage.setTitle("Main Window");
+//            Scene addPartScene = new Scene(main_root);
+//            addPartStage.setScene(addPartScene);
+//            addPartStage.showAndWait();
 
         }
 
@@ -133,7 +147,7 @@ public class LoginWindowC {
     @FXML
     public
         // This method is called by the FXMLLoader when initialization is complete
-    void initialize(Database d, GeoIP g, URL main_resource) throws IOException {
+    void initialize(Database_v3 d, GeoIP g, URL main_resource) throws IOException {
 
         this.g = g;
         this.curr_db = d;
@@ -165,7 +179,7 @@ public class LoginWindowC {
     }
 
     @FXML
-    public void handleEnterPressed(KeyEvent event) throws IOException, SQLException {
+    public void handleEnterPressed(KeyEvent event) throws IOException, SQLException, ClassNotFoundException {
         if (event.getCode() == KeyCode.ENTER) this.sign_in();
     }
 

@@ -34,8 +34,7 @@ public class Main extends Application {
                 "53688547099"
         );
 
-        d.dbConnect();
-        d.dbConnect();
+
 
         c = new Converters();
 
@@ -48,8 +47,8 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(login_resource);
         Parent root = loader.load();
         LoginWindowC lc = loader.getController();
-     //   d.setLc(lc);
-     //   lc.initialize(d, g, main_resource);
+//        d.setLc(lc);
+        lc.initialize(d, g, main_resource);
         primaryStage.setTitle("");
         Scene mainScene = new Scene(root);
         primaryStage.setScene(mainScene);
