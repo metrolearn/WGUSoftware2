@@ -121,10 +121,17 @@ public class LoginWindowC {
 
               curr_db.dbConnect();
               Connection con = curr_db.getCon();
-              PreparedStatement ps = con.prepareStatement("SELECT * FROM user WHERE userName = ?");
+              PreparedStatement ps = con.prepareStatement(
+                      "SELECT * FROM user WHERE userName = ? AND password = ?;");
               ps.setString(1, this.user_txt_fld.getText());
+              ps.setString(2,this.password_txt_fld.getText());
               ResultSet rs = curr_db.dbExecuteQuery(ps);
-              System.out.println("test");
+
+            if (rs.next()) {
+                System.out.println("Logging in "+this.user_txt_fld.getText());
+            }else {
+                System.out.println("Bad username or password.");
+            }
 
 
 //            System.out.println("Currently logging in: "+active_user);
