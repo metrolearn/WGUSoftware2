@@ -128,23 +128,31 @@ public class LoginWindowC {
               ResultSet rs = curr_db.dbExecuteQuery(ps);
 
             if (rs.next()) {
-                System.out.println("Logging in "+this.user_txt_fld.getText());
+
+                // good login.
+                this.ac = new Active_User(rs.getInt(1),this.user_txt_fld.getText());
+                System.out.println("Logging in "+ this.ac);
+                FXMLLoader loader = new FXMLLoader(this.main_window_url);
+                Parent main_root;
+                main_root = loader.load();
+                MainWindowC mwc = loader.getController();
+                mwc.initialize(this.curr_db,this.ac);
+                Stage addPartStage = new Stage();
+                addPartStage.setTitle("Main Window");
+                Scene addPartScene = new Scene(main_root);
+                addPartStage.setScene(addPartScene);
+                addPartStage.showAndWait();
+
+
             }else {
+
+                // bad login.
+
                 System.out.println("Bad username or password.");
             }
 
 
-//            System.out.println("Currently logging in: "+active_user);
-//            FXMLLoader loader = new FXMLLoader(this.main_window_url);
-//            Parent main_root;
-//            main_root = loader.load();
-//            MainWindowC mwc = loader.getController();
-//            mwc.initialize(curr_db,active_user);
-//            Stage addPartStage = new Stage();
-//            addPartStage.setTitle("Main Window");
-//            Scene addPartScene = new Scene(main_root);
-//            addPartStage.setScene(addPartScene);
-//            addPartStage.showAndWait();
+
 
         }
 

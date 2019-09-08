@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 import wguSoftware2.DAO.CustomerViewMainDAO;
 import wguSoftware2.models.*;
 import wguSoftware2.utils.Database;
+import wguSoftware2.utils.Database_v2;
+import wguSoftware2.utils.Database_v3;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -52,7 +54,7 @@ public class AddCustomerC {
     private Stage stage;
 
     private Active_User active_user;
-    private Database curr_db;
+    private Database_v3 curr_db;
     private List<Customer_view_main> obv_customer_list;
     private Customer_view_main cvm = null;
     private CustomerViewMainDAO cvmDAO = null;
@@ -61,7 +63,7 @@ public class AddCustomerC {
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
-    void initialize(Database curr_db, Active_User active_user, List<Customer_view_main> obv_customer_list) {
+    void initialize(Database_v3 curr_db, Active_User active_user, List<Customer_view_main> obv_customer_list) {
         this.active_user = active_user;
         this.curr_db = curr_db;
         this.obv_customer_list = obv_customer_list;
@@ -76,7 +78,7 @@ public class AddCustomerC {
     }
 
     @FXML
-    void add_customer() throws SQLException {
+    void add_customer() throws SQLException, ClassNotFoundException {
 
         String name_txt = this.name_txt.getText();
         String address_txt = this.address_txt.getText();

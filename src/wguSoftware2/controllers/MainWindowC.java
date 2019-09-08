@@ -16,11 +16,15 @@ import javafx.stage.Stage;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Customer;
 import wguSoftware2.models.Customer_view_main;
-import wguSoftware2.utils.Database;
+import wguSoftware2.utils.Database_v3;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainWindowC {
@@ -56,7 +60,7 @@ public class MainWindowC {
 
     private ObservableList<Customer_view_main> obv_customer_list = null;
     private List<Customer_view_main> all_customers;
-    private Database curr_db;
+    private Database_v3 curr_db;
     private Active_User active_user;
 
     @FXML
@@ -118,12 +122,30 @@ public class MainWindowC {
 
 
     @FXML
-    void initialize(Database curr_db, Active_User active_user) throws SQLException {
+    void initialize(Database_v3 curr_db, Active_User active_user) throws SQLException, ClassNotFoundException {
         this.curr_db = curr_db;
         this.active_user = active_user;
-        this.all_customers = this.curr_db.getAllCustomersFromDB();
-        //get all customers //this.all_customers
-        // add to obv_list //this.obv_customer_list FXCollections.observableArrayList(this.allParts);
+
+        String sql_stm = "SELECT customer.customerId, customer.customerName, address.address, address.phone " +
+                "FROM customer INNER JOIN address on customer.addressId =  address.addressId";
+        this.curr_db.dbConnect();
+        Connection con = this.curr_db.getCon();
+        PreparedStatement ps = con.prepareStatement(sql_stm);
+        ResultSet rs = this.curr_db.dbExecuteQuery(ps);
+
+        List<Customer_view_main> cvm_list = new ArrayList<>();
+
+        while(rs.next()) {
+            Integer customer_id = rs.getInt(1);
+            String customer_name = rs.getString(2);
+            String address = rs.getString(3);
+            String phone = rs.getString(4);
+            Customer_view_main cvm = new Customer_view_main(customer_id, customer_name, address, phone);
+            cvm_list.add(cvm);
+
+        }
+
+        this.all_customers = cvm_list;
         this.obv_customer_list = FXCollections.observableArrayList(this.all_customers);
         TableView.TableViewSelectionModel<Customer_view_main> selectionModel = this.customer_tbl.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.MULTIPLE);

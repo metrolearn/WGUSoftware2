@@ -21,7 +21,7 @@ import java.util.Objects;
 public class Country {
 
   private Integer country_id;
-  private String country_str;
+  private String country_name;
   private ZonedDateTime create_date_time;
   private String create_by;
   private ZonedDateTime last_update_time;
@@ -29,7 +29,13 @@ public class Country {
   private Converters converter;
   private String active_user;
 
-  public Converters getConverter() {
+    public Country(String country_name) {
+
+      this.country_name = country_name;
+
+    }
+
+    public Converters getConverter() {
     return converter;
   }
 
@@ -39,7 +45,7 @@ public class Country {
    * @param active_user_name
    */
   public Country(String country_str, String active_user_name) {
-    this.country_str = country_str;
+    this.country_name = country_str;
     this.active_user = active_user_name;
     this.converter = new Converters();
   }
@@ -81,17 +87,17 @@ public class Country {
    *
    * @return the country str
    */
-  public String getCountry_str() {
-    return country_str;
+  public String getCountry_name() {
+    return country_name;
   }
 
   /**
    * Sets country str.
    *
-   * @param country_str the country str
+   * @param country_name the country str
    */
-  public void setCountry_str(String country_str) {
-    this.country_str = country_str;
+  public void setCountry_name(String country_name) {
+    this.country_name = country_name;
   }
 
   /**
@@ -176,7 +182,7 @@ public class Country {
     }
     Country country = (Country) o;
     return Objects.equals(getCountry_id(), country.getCountry_id()) &&
-        Objects.equals(getCountry_str(), country.getCountry_str()) &&
+        Objects.equals(getCountry_name(), country.getCountry_name()) &&
         Objects.equals(getCreate_date_time(), country.getCreate_date_time()) &&
         Objects.equals(getCreate_by(), country.getCreate_by()) &&
         Objects.equals(getLast_update_time(), country.getLast_update_time()) &&
@@ -185,7 +191,7 @@ public class Country {
 
   @Override
   public int hashCode() {
-    return Objects.hash(getCountry_id(), getCountry_str(), getCreate_date_time(), getCreate_by(),
+    return Objects.hash(getCountry_id(), getCountry_name(), getCreate_date_time(), getCreate_by(),
         getLast_update_time(), getLast_update_by());
   }
 
@@ -193,7 +199,7 @@ public class Country {
   public String toString() {
     return "Country{" +
         "country_id=" + country_id +
-        ", country_str='" + country_str + '\'' +
+        ", country_str='" + country_name + '\'' +
         ", create_date_time=" + create_date_time +
         ", create_by='" + create_by + '\'' +
         ", last_update_time='" + last_update_time + '\'' +

@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import wguSoftware2.models.*;
 import wguSoftware2.utils.Database;
+import wguSoftware2.utils.Database_v3;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -53,7 +54,7 @@ public class UpdateCustomerC extends AddCustomerC {
     private Stage stage;
 
     private Active_User active_user;
-    private Database curr_db;
+    private Database_v3 curr_db;
     private Customer_view_main cvm;
     private List<Customer_view_main> obv_customer_list;
     private Boolean update;
@@ -62,7 +63,7 @@ public class UpdateCustomerC extends AddCustomerC {
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
-    void initialize(Database curr_db, Active_User active_user, List<Customer_view_main> obv_customer_list) {
+    void initialize(Database_v3 curr_db, Active_User active_user, List<Customer_view_main> obv_customer_list) {
         super.initialize(curr_db, active_user, obv_customer_list);
     }
 

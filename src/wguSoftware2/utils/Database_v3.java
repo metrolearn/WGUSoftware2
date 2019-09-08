@@ -63,10 +63,7 @@ public class Database_v3 {
         }
     }
 
-    //DB Execute Query Operation
     public  ResultSet dbExecuteQuery(PreparedStatement ps_Stmt) throws SQLException, ClassNotFoundException {
-        //Declare statement, resultSet and CachedResultSet as null
-        Statement stmt = null;
         ResultSet resultSet = null;
         CachedRowSetImpl crs = null;
         try {
@@ -97,23 +94,19 @@ public class Database_v3 {
     }
 
     //DB Execute Update (For Update/Insert/Delete) Operation
-    public  void dbExecuteUpdate(PreparedStatement ps_Stmt) throws SQLException, ClassNotFoundException {
-        //Declare statement as null
-        Statement stmt = null;
+    public Integer dbExecuteUpdate(PreparedStatement ps_Stmt) throws SQLException {
+        Integer r_val = null;
         try {
+          r_val =  ps_Stmt.executeUpdate();
 
-            ps_Stmt.execute();
         } catch (SQLException e) {
             System.out.println("Problem occurred at executeUpdate operation : " + e);
             throw e;
         } finally {
-            if (stmt != null) {
-                //Close statement
-                stmt.close();
-            }
             //Close connection
             dbDisconnect();
         }
+        return r_val;
     }
 
     public Connection getCon() {
