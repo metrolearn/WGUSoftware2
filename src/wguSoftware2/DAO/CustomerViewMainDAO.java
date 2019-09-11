@@ -20,11 +20,15 @@ public class CustomerViewMainDAO {
     private Customer_view_main cvm = null;
     private String active_user_name = null;
     private String sql_smt = null;
-    private Integer object_id_buffer = null;
 
+    private Integer country_id;
     private Country country = null;
+    private Integer city_id;
     private City city = null;
     private Address address = null;
+
+    private Timestamp sql_create_now_ts = null;
+
 
     public CustomerViewMainDAO(Database_v3 curr_db, String active_user_name) {
         this.curr_db = curr_db;
@@ -42,36 +46,85 @@ public class CustomerViewMainDAO {
         String country_name = customer_view_main.getCountry_name();
         String phone = customer_view_main.getPhone();
         LocalDateTime current_time_ldt = ZonedDateTime.now().toLocalDateTime();
+        sql_create_now_ts = Timestamp.valueOf(current_time_ldt);
 
-        String sql_stmt = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy)" +
-                " VALUES (?,?,?,?,?);";
+        // check if country already exists .
 
+        String sql_country_exists = "select countryId from country where country = ?";
         this.curr_db.dbConnect();
         Connection con = this.curr_db.getCon();
-        PreparedStatement ps = con.prepareStatement(sql_stmt);
+        PreparedStatement ps = con.prepareStatement(sql_country_exists);
         ps.setString(1,country_name);
-        ps.setTimestamp(2, Timestamp.valueOf(current_time_ldt));
-        ps.setString(3,this.active_user_name);
-        ps.setTimestamp(4,Timestamp.valueOf(current_time_ldt));
-        ps.setString(5,this.active_user_name);
-
-        Integer r_val = curr_db.dbExecuteUpdate(ps);
-
-        if(r_val == 1){
-            System.out.println("Successfully added country.");
-        }
-
-        curr_db.dbConnect();
-        con = curr_db.getCon();
-        ps = con.prepareStatement("VALUES('MySQL last_insert_id');");
         ResultSet rs = curr_db.dbExecuteQuery(ps);
-        this.country = new Country(country_name);
 
-        while (rs.next()){
-          this.country.setCountry_id(rs.getInt(1));
+        if(rs.first()) {
+            // getting existing country id
+            ResultSetMetaData rsmd = rs.getMetaData();
+            String name = rsmd.getColumnName(1);
+            String type = rsmd.getColumnTypeName(1);
+            this.country_id = rs.getInt(1);
+
+
+
+        }else
+            {
+            // country not found
+            String sql_stmt = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy)" +
+                    " VALUES (?,?,?,?,?);";
+
+            this.curr_db.dbConnect();
+            con = null;
+            con = this.curr_db.getCon();
+            ps = null;
+            ps = con.prepareStatement(sql_stmt,Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1,country_name);
+            ps.setTimestamp(2, sql_create_now_ts);
+            ps.setString(3,this.active_user_name);
+            ps.setTimestamp(4, sql_create_now_ts);
+            ps.setString(5,this.active_user_name);
+            rs = curr_db.dbExecuteUpdate(ps);
+
+            if (rs.next()){
+                this.country_id = rs.getInt("GENERATED_KEY");
+                this.country = new Country(country_id);
+                this.country.setCountry_name(country_name);
+            }
+
+
         }
 
-        System.out.println("test");
+
+
+
+        this.city = new City(city_name,this.country_id);
+
+        String sql_city_stm = "INSERT INTO city " +
+                "(city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                "VALUES (?,?,?,?,?,?)";
+
+        this.curr_db.dbConnect();
+        con = this.curr_db.getCon();
+        ps = null;
+        ps = con.prepareStatement(sql_city_stm,Statement.RETURN_GENERATED_KEYS);
+
+        ps.setString(1,this.city.getCity_name());
+        ps.setInt(2,this.city.getCountry_id());
+        ps.setTimestamp(3,sql_create_now_ts);
+        ps.setString(4,active_user_name);
+        ps.setTimestamp(5,sql_create_now_ts);
+        ps.setString(6,active_user_name);
+        rs = null;
+        rs = curr_db.dbExecuteUpdate(ps);
+
+        if (rs.next()){
+            this.country = new Country(rs.getInt("GENERATED_KEY"));
+            this.country.setCountry_name(country_name);
+        }
+
+
+
+
+
 
 //        this.sql_smt = "INSERT INTO `country` " +
 //                "(`country`, `createDate`, `createdBy`, `lastUpdate`, `lastUpdateBy`) " +
@@ -156,28 +209,28 @@ public class CustomerViewMainDAO {
 
     ;
 
-    private void exe_sql_create(String sql_smt) throws SQLException {
-        execute_sql_stmt(sql_smt);
-        set_last_insert_obj_id();
-    }
-
-    @FXML
-    private void set_last_insert_obj_id() throws SQLException {
-        this.sql_smt = "SELECT LAST_INSERT_ID()";
-        while (this.rs.next())
-            this.object_id_buffer = this.rs.getInt(1);
-    }
-
-    @FXML
-    private void execute_sql_stmt(String sql_smt) {
-        ResultSet resultSet = null;
-//        try {
-//            resultSet = curr_db.get_mysql_resultSet(sql_smt);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        this.rs = resultSet;
+//    private void exe_sql_create(String sql_smt) throws SQLException {
+//        execute_sql_stmt(sql_smt);
+//        set_last_insert_obj_id();
 //    }
 
-        }
+//    @FXML
+//    private void set_last_insert_obj_id() throws SQLException {
+//        this.sql_smt = "SELECT LAST_INSERT_ID()";
+//        while (this.rs.next())
+//            this.object_id_buffer = this.rs.getInt(1);
+//    }
+
+//    @FXML
+//    private void execute_sql_stmt(String sql_smt) {
+//        ResultSet resultSet = null;
+////        try {
+////            resultSet = curr_db.get_mysql_resultSet(sql_smt);
+////        } catch (SQLException e) {
+////            e.printStackTrace();
+////        }
+////        this.rs = resultSet;
+////    }
+//
+//        }
     }

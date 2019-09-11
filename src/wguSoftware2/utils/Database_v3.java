@@ -70,12 +70,7 @@ public class Database_v3 {
             System.out.println("Select statement: " + ps_Stmt + "\n");
 
 
-            //Execute select (query) operation
             resultSet = ps_Stmt.executeQuery();
-
-            //CachedRowSet Implementation
-            //In order to prevent "java.sql.SQLRecoverableException: Closed Connection: next" error
-            //We are using CachedRowSet
             crs = new CachedRowSetImpl();
             crs.populate(resultSet);
         } catch (SQLException e) {
@@ -86,27 +81,34 @@ public class Database_v3 {
                 //Close resultSet
                 resultSet.close();
             }
-            //Close connection
             dbDisconnect();
         }
-        //Return CachedRowSet
         return crs;
     }
 
     //DB Execute Update (For Update/Insert/Delete) Operation
-    public Integer dbExecuteUpdate(PreparedStatement ps_Stmt) throws SQLException {
-        Integer r_val = null;
+    public ResultSet dbExecuteUpdate(PreparedStatement ps_Stmt) throws SQLException {
+        ResultSet resultSet = null;
+        CachedRowSetImpl crs = null;
         try {
-          r_val =  ps_Stmt.executeUpdate();
+            System.out.println("Select statement: " + ps_Stmt + "\n");
 
+
+            ps_Stmt.executeUpdate();
+            resultSet = ps_Stmt.getGeneratedKeys();
+            crs = new CachedRowSetImpl();
+            crs.populate(resultSet);
         } catch (SQLException e) {
-            System.out.println("Problem occurred at executeUpdate operation : " + e);
+            System.out.println("Problem occurred at executeQuery operation : " + e);
             throw e;
         } finally {
-            //Close connection
+            if (resultSet != null) {
+                //Close resultSet
+                resultSet.close();
+            }
             dbDisconnect();
         }
-        return r_val;
+        return crs;
     }
 
     public Connection getCon() {

@@ -35,7 +35,12 @@ public class Country {
 
     }
 
-    public Converters getConverter() {
+  public Country(int countryId) {
+      this.country_id = countryId;
+
+  }
+
+  public Converters getConverter() {
     return converter;
   }
 
