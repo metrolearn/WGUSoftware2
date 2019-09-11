@@ -93,10 +93,30 @@ public class CustomerViewMainDAO {
 
         }
 
-
-
-
         this.city = new City(city_name,this.country_id);
+
+
+        // check if city already exists .
+
+        String sql_city_exists = "select cityId from city where city = ? and city.countryId = ?";
+        this.curr_db.dbConnect();
+        con = this.curr_db.getCon();
+        ps = con.prepareStatement(sql_city_exists);
+        ps.setString(1,city_name);
+        ps.setInt(2,country_id);
+        rs = curr_db.dbExecuteQuery(ps);
+
+        if (rs.first()){
+            // found existing city
+
+        }
+        // create new city.
+
+
+
+
+
+
 
         String sql_city_stm = "INSERT INTO city " +
                 "(city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
