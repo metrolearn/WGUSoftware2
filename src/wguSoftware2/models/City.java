@@ -38,6 +38,10 @@ public class City {
 
     }
 
+    public City(Integer city_id) {
+        this.city_id = city_id;
+    }
+
     /**
      * Gets city id.
      *

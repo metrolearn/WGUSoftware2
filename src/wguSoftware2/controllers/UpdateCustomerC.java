@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class UpdateCustomerC extends AddCustomerC {
+public class UpdateCustomerC {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -64,7 +64,6 @@ public class UpdateCustomerC extends AddCustomerC {
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize(Database_v3 curr_db, Active_User active_user, List<Customer_view_main> obv_customer_list) {
-        super.initialize(curr_db, active_user, obv_customer_list);
     }
 
     @FXML

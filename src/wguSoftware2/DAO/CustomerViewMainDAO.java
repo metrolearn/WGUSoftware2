@@ -25,6 +25,7 @@ public class CustomerViewMainDAO {
     private Country country = null;
     private Integer city_id;
     private City city = null;
+    private Integer address_id = null;
     private Address address = null;
 
     private Timestamp sql_create_now_ts = null;
@@ -86,14 +87,10 @@ public class CustomerViewMainDAO {
 
             if (rs.next()){
                 this.country_id = rs.getInt("GENERATED_KEY");
-                this.country = new Country(country_id);
-                this.country.setCountry_name(country_name);
             }
 
 
         }
-
-        this.city = new City(city_name,this.country_id);
 
 
         // check if city already exists .
@@ -108,37 +105,87 @@ public class CustomerViewMainDAO {
 
         if (rs.first()){
             // found existing city
+            ResultSetMetaData rsmd = rs.getMetaData();
+            String name = rsmd.getColumnName(1);
+            String type = rsmd.getColumnTypeName(1);
+            this.city_id = rs.getInt(1);
+        }else{
+            // create new city.
+
+            String sql_stmt = "INSERT INTO city " +
+                    "(city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy)" +
+                    " VALUES (?,?,?,?,?,?);";
+
+            this.curr_db.dbConnect();
+            con = this.curr_db.getCon();
+            ps = con.prepareStatement(sql_stmt,Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1,city_name);
+            ps.setInt(1,this.country_id);
+            ps.setTimestamp(2, sql_create_now_ts);
+            ps.setString(3,this.active_user_name);
+            ps.setTimestamp(4, sql_create_now_ts);
+            ps.setString(5,this.active_user_name);
+            rs = curr_db.dbExecuteUpdate(ps);
+
+            if (rs.next()){
+                this.city_id = rs.getInt("GENERATED_KEY");
+            }
+
 
         }
-        // create new city.
 
+        // check if address already exists .
 
-
-
-
-
-
-        String sql_city_stm = "INSERT INTO city " +
-                "(city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                "VALUES (?,?,?,?,?,?)";
+        String sql_address_exists = "select addressId " +
+                "from address " +
+                "where address = ? " +
+                "  and address2 = ? " +
+                "  and postalCode = ? " +
+                "  and phone = ? " +
+                "  and cityId = ? ;";
 
         this.curr_db.dbConnect();
         con = this.curr_db.getCon();
-        ps = null;
-        ps = con.prepareStatement(sql_city_stm,Statement.RETURN_GENERATED_KEYS);
+        ps = con.prepareStatement(sql_address_exists);
+        ps.setString(1,address);
+        ps.setString(2,alt_address);
+        ps.setString(3,zip);
+        ps.setString(4, phone);
+        ps.setInt(5, this.city_id);
+        rs = curr_db.dbExecuteQuery(ps);
 
-        ps.setString(1,this.city.getCity_name());
-        ps.setInt(2,this.city.getCountry_id());
-        ps.setTimestamp(3,sql_create_now_ts);
-        ps.setString(4,active_user_name);
-        ps.setTimestamp(5,sql_create_now_ts);
-        ps.setString(6,active_user_name);
-        rs = null;
-        rs = curr_db.dbExecuteUpdate(ps);
+        if (rs.first()){
+            // found existing address
+            ResultSetMetaData rsmd = rs.getMetaData();
+            String name = rsmd.getColumnName(1);
+            String type = rsmd.getColumnTypeName(1);
+            this.address_id = rs.getInt(1);
+        }else{
+            // create new address.
 
-        if (rs.next()){
-            this.country = new Country(rs.getInt("GENERATED_KEY"));
-            this.country.setCountry_name(country_name);
+            String sql_stmt = "INSERT INTO address " +
+                    "(address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                    "VALUES (?,?,?,?,?,?,?,?,?);";
+
+            this.curr_db.dbConnect();
+            con = this.curr_db.getCon();
+            ps = con.prepareStatement(sql_stmt,Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1,address);
+            ps.setString(2,alt_address);
+            ps.setInt(3,this.city_id);
+            ps.setString(4,zip);
+            ps.setString(5,phone);
+            ps.setTimestamp(2, sql_create_now_ts);
+            ps.setString(3,this.active_user_name);
+            ps.setTimestamp(4, sql_create_now_ts);
+            ps.setString(5,this.active_user_name);
+            rs = curr_db.dbExecuteUpdate(ps);
+
+            if (rs.next()){
+                this.address_id = rs.getInt("GENERATED_KEY");
+            }
+
+
         }
 
 
@@ -146,69 +193,8 @@ public class CustomerViewMainDAO {
 
 
 
-//        this.sql_smt = "INSERT INTO `country` " +
-//                "(`country`, `createDate`, `createdBy`, `lastUpdate`, `lastUpdateBy`) " +
-//                "VALUES ('"
-//                + country_name + "', '"
-//                + current_time_ldt + "', '"
-//                + this.active_user_name + "', '"
-//                + current_time_ldt + "', '"
-//                + this.active_user_name + "');";
-//
-//        exe_sql_create(this.sql_smt);
-//
-//        this.country = new Country(this.object_id_buffer, country_name);
-//
-//        String country_id_str = String.valueOf(this.country.getCountry_id());
-//
-//        this.sql_smt = "INSERT INTO `city` " +
-//                "(`city`, `countryId`, `createDate`, `createdBy`, `lastUpdate`, `lastUpdateBy`) " +
-//                "VALUES ('"
-//                + city_name + "', "
-//                + country_id_str + ", '"
-//                + current_time_ldt + "', '"
-//                + this.active_user_name + "', '"
-//                + current_time_ldt + "', '"
-//                + this.active_user_name + "');";
-//
-//        exe_sql_create(this.sql_smt);
-//
-//        this.city = new City(this.object_id_buffer, city_name, this.country.getCountry_id());
-//
-//        this.sql_smt = "INSERT INTO `address` " +
-//                "(`address`, `address2`, `cityId`, `postalCode`, `phone`, `createDate`, `createdBy`," +
-//                " `lastUpdate`, `lastUpdateBy`) " +
-//                "VALUES ('"
-//                + address + ", '"
-//                + alt_address + "', "
-//                + this.city.getCity_id() + " , '"
-//                + zip + "', '"
-//                + phone + "', '"
-//                + current_time_ldt + "', '"
-//                + active_user_name + "', '"
-//                + current_time_ldt + "', '"
-//                + active_user_name + "');";
-//
-//        exe_sql_create(this.sql_smt);
-//
-//        this.address = new Address(address, alt_address, city.getCity_id(), zip);
-//
-//
-//        this.sql_smt = "INSERT INTO `customer` " +
-//                "(`customerName`, `addressId`, `active`, `createDate`, `createdBy`, " +
-//                "`lastUpdate`, `lastUpdateBy`) " +
-//                "VALUES ('"
-//                + customer_name + "', "
-//                + this.address.getAddress_id() + ", "
-//                + true + ", '"
-//                + current_time_ldt + "', '"
-//                + this.active_user_name + "', '"
-//                + current_time_ldt + "', '"
-//                + this.active_user_name + "');";
-//
-//        exe_sql_create(this.sql_smt);
 
-
+//        Customer_view_main cvm = new Customer_view_main()
     }
 
 

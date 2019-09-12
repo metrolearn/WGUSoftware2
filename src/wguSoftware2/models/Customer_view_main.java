@@ -24,13 +24,8 @@ public class Customer_view_main {
     private ResultSet rs = null;
 
 
-    public Customer_view_main(Database dbc) {
-        this.dbc = dbc;
-        this.country = new Country();
-    }
-
     public Customer_view_main(Integer id, String name, String address, String alt_address, String city_name,
-                              String zip, String country, String phone) throws SQLException {
+                              String zip, String country, String phone){
         this.id = id;
         this.name = name;
         this.address = address;
@@ -41,53 +36,28 @@ public class Customer_view_main {
         this.phone = phone;
 
 
-
-        this.sql_stm = "select * from country where country = '" + country_name + "'";
-        execute_sql_stmt();
-
-        if (!this.rs.next()){
-            // no country found.
-            System.out.println("No country found, we need to add this one.");
-        }else {
-            System.out.println("Country found, we need to add this one.");
-            while (rs.next()){
-                this.country.setCountry_id(rs.getInt("countryId"));
-            }
-        }
-
-        String city_id = "4";
-        String city_name_ = "New Estel";
-        this.sql_stm = "select * from city \n" +
-                "    inner join country c on city.countryId = c.countryId\n" +
-                "where cityId = " + city_id + " \n" +
-                "  and city = '" + city_name_ + "'";
-
-
-
-
-
     }
 
-    public Customer_view_main(Integer customer_id, String customer_name, String address, String phone) {
+//    public Customer_view_main(Integer customer_id, String customer_name, String address, String phone) {
+//
+//        this.id = customer_id;
+//        this.name = customer_name;
+//        this.address = address;
+//        this.phone = phone;
+//
+//    }
 
-        this.id = customer_id;
-        this.name = customer_name;
-        this.address = address;
-        this.phone = phone;
-
-    }
-
-    public Customer_view_main(String name_txt, String address_txt, String alt_address_txt,
-                              String city_txt, String zip_txt, String country_txt, String phone_txt) {
-        this.name = name_txt;
-        this.address = address_txt;
-        this.alt_address = alt_address_txt;
-        this.city_name = city_txt;
-        this.zip = zip_txt;
-        this.country_name = country_txt;
-        this.phone = phone_txt;
-
-    }
+//    public Customer_view_main(String name_txt, String address_txt, String alt_address_txt,
+//                              String city_txt, String zip_txt, String country_txt, String phone_txt) {
+//        this.name = name_txt;
+//        this.address = address_txt;
+//        this.alt_address = alt_address_txt;
+//        this.city_name = city_txt;
+//        this.zip = zip_txt;
+//        this.country_name = country_txt;
+//        this.phone = phone_txt;
+//
+//    }
 
     public Integer getId() {
         return id;
