@@ -100,15 +100,14 @@ public class AddCustomerC {
 
         );
 
-        cvmDAO.create(this.cvm);
+        this.cvm = cvmDAO.create(this.cvm);
 
 
 
     }
 
 
-
-
-
-
+    public Customer_view_main get_cvm() {
+        return this.cvm;
+    }
 }

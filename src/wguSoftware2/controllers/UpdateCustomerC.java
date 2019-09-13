@@ -110,4 +110,8 @@ public class UpdateCustomerC {
     public void setCountry(Country country) {
         this.country = country;
     }
+
+    public void setStage(Stage addCustomerStage) {
+        this.stage = addCustomerStage;
+    }
 }

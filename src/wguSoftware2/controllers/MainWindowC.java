@@ -78,6 +78,7 @@ public class MainWindowC {
         addCustomerStage.setScene(addPartScene);
         addcc.setStage(addCustomerStage);
         addCustomerStage.showAndWait();
+        obv_customer_list.add(addcc.get_cvm());
         customer_tbl.setItems(obv_customer_list);
         customer_tbl.refresh();
 

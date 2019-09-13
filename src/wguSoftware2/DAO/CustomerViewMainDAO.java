@@ -37,7 +37,7 @@ public class CustomerViewMainDAO {
     }
 
 
-    public void create(Customer_view_main customer_view_main) throws SQLException, ClassNotFoundException {
+    public Customer_view_main create(Customer_view_main customer_view_main) throws SQLException, ClassNotFoundException {
 
         String customer_name = customer_view_main.getName();
         String address = customer_view_main.getAddress();
@@ -118,11 +118,11 @@ public class CustomerViewMainDAO {
             con = this.curr_db.getCon();
             ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, city_name);
-            ps.setInt(1, this.country_id);
-            ps.setTimestamp(2, sql_create_now_ts);
-            ps.setString(3, this.active_user_name);
-            ps.setTimestamp(4, sql_create_now_ts);
-            ps.setString(5, this.active_user_name);
+            ps.setInt(2, this.country_id);
+            ps.setTimestamp(3, sql_create_now_ts);
+            ps.setString(4, this.active_user_name);
+            ps.setTimestamp(5, sql_create_now_ts);
+            ps.setString(6, this.active_user_name);
             rs = curr_db.dbExecuteUpdate(ps);
 
             if (rs.next()) {
@@ -173,10 +173,10 @@ public class CustomerViewMainDAO {
             ps.setInt(3, this.city_id);
             ps.setString(4, zip);
             ps.setString(5, phone);
-            ps.setTimestamp(2, sql_create_now_ts);
-            ps.setString(3, this.active_user_name);
-            ps.setTimestamp(4, sql_create_now_ts);
-            ps.setString(5, this.active_user_name);
+            ps.setTimestamp(6, sql_create_now_ts);
+            ps.setString(7, this.active_user_name);
+            ps.setTimestamp(8, sql_create_now_ts);
+            ps.setString(9, this.active_user_name);
             rs = curr_db.dbExecuteUpdate(ps);
 
             if (rs.next()) {
@@ -194,27 +194,15 @@ public class CustomerViewMainDAO {
             ps.setString(1, customer_name);
             ps.setInt(2, address_id);
             rs = curr_db.dbExecuteQuery(ps);
-
+            boolean activate_customer = false;
             if (rs.first()) {
                 // found existing address
                 ResultSetMetaData rsmd = rs.getMetaData();
                 String name = rsmd.getColumnName(1);
                 String type = rsmd.getColumnTypeName(1);
                 this.customer_id = rs.getInt(1);
+                activate_customer = true;
 
-                String sql_activate_customer = "UPDATE customer SET  " +
-                        "active = ?, " +
-                        "lastUpdate = ?, " +
-                        "lastUpdateBy = ? " +
-                        "WHERE customerId = ?;";
-
-                con = this.curr_db.getCon();
-                ps = con.prepareStatement(sql_activate_customer);
-                ps.setBoolean(1,true);
-                ps.setTimestamp(2,sql_create_now_ts);
-                ps.setString(3,active_user_name);
-                ps.setInt(4,this.customer_id);
-                rs = curr_db.dbExecuteUpdate(ps);
 
             } else {
                 // create new customer.
@@ -227,10 +215,10 @@ public class CustomerViewMainDAO {
                 con = this.curr_db.getCon();
                 ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, customer_name);
-                ps.setInt(2, this.customer_id);
+                ps.setInt(2, this.address_id);
                 ps.setBoolean(3,true);
                 ps.setTimestamp(4, sql_create_now_ts);
-                ps.setString(5, this.active_user_name;
+                ps.setString(5, this.active_user_name);
                 ps.setTimestamp(6, sql_create_now_ts);
                 ps.setString(7, this.active_user_name);
                 rs = curr_db.dbExecuteUpdate(ps);
@@ -240,12 +228,31 @@ public class CustomerViewMainDAO {
                 }
 
 
+
+
             }
 
+        if (activate_customer){
 
+            String sql_activate_customer = "UPDATE customer SET  " +
+                    "active = ?, " +
+                    "lastUpdate = ?, " +
+                    "lastUpdateBy = ? " +
+                    "WHERE customerId = ?;";
+            this.curr_db.dbConnect();
+            con = this.curr_db.getCon();
+            ps = con.prepareStatement(sql_activate_customer,Statement.RETURN_GENERATED_KEYS);
+            ps.setBoolean(1,true);
+            ps.setTimestamp(2,sql_create_now_ts);
+            ps.setString(3,active_user_name);
+            ps.setInt(4,this.customer_id);
+            rs = curr_db.dbExecuteUpdate(ps);
+
+        }
                 Customer_view_main cvm = new Customer_view_main(
                         customer_id,customer_name,address,alt_address,city_name,zip,country_name,phone);
-        }
+        return cvm;
+    }
 
 
         ;

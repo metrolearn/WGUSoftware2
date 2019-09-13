@@ -38,26 +38,30 @@ public class Customer_view_main {
 
     }
 
-//    public Customer_view_main(Integer customer_id, String customer_name, String address, String phone) {
-//
-//        this.id = customer_id;
-//        this.name = customer_name;
-//        this.address = address;
-//        this.phone = phone;
-//
-//    }
 
-//    public Customer_view_main(String name_txt, String address_txt, String alt_address_txt,
-//                              String city_txt, String zip_txt, String country_txt, String phone_txt) {
-//        this.name = name_txt;
-//        this.address = address_txt;
-//        this.alt_address = alt_address_txt;
-//        this.city_name = city_txt;
-//        this.zip = zip_txt;
-//        this.country_name = country_txt;
-//        this.phone = phone_txt;
-//
-//    }
+    public Customer_view_main(Integer customer_id, String customer_name, String address, String phone) {
+
+        this.id = customer_id;
+        this.name = customer_name;
+        this.address = address;
+        this.phone = phone;
+
+    }
+
+    public Customer_view_main(String name, String address, String alt_address, String city_name,
+                              String zip, String country, String phone){
+        this.name = name;
+        this.address = address;
+        this.alt_address = alt_address;
+        this.city_name = city_name;
+        this.zip = zip;
+        this.country_name = country;
+        this.phone = phone;
+
+
+    }
+
+
 
     public Integer getId() {
         return id;

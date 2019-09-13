@@ -43,7 +43,7 @@ public class Database {
     public Database(String database_ip, String database_name, String username,
                     String password) throws SQLException {
         this.database_name = database_name;
-        this.database_url += database_ip+"/"+database_name;
+        this.database_url += database_ip + "/" + database_name;
 
         this.username = username;
         this.password = password;
@@ -65,12 +65,12 @@ public class Database {
         // check if there is more than one record in the user data.
         // if true, set init users loaded to true.
         Integer count = 0;
-        while(resultSet.next()){
+        while (resultSet.next()) {
             this.init_users_loaded = resultSet.getBoolean("users_exist");
-            if(this.init_users_loaded){
+            if (this.init_users_loaded) {
                 System.out.println("Default Users Loaded");
                 break;
-            }else {
+            } else {
                 System.out.println("Default Users Not Loaded.");
             }
         }
@@ -134,11 +134,12 @@ public class Database {
         return resultSet;
 
     }
+
     public ResultSet get_mysql_resultSet_and_pk(String sql) throws SQLException {
         PreparedStatement statement = null;
         try {
             this.connection = this.create_mysql_db_connection();
-            statement = this.connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            statement = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -173,8 +174,8 @@ public class Database {
                         System.out.println("Loading Default User into db-> "
                                 + user + ", password->" + password);
                         this.connection = this.create_mysql_db_connection();
-                        User u = new User(user_count,user, password);
-                        user_count = user_count+1;
+                        User u = new User(user_count, user, password);
+                        user_count = user_count + 1;
                         String sql_statment = u.create_user_db_entry_str();
                         this.send_mysql_command(sql_statment);
                         this.disconnect_from_mysql_db();
@@ -211,7 +212,7 @@ public class Database {
 
         String login_user_name = lc.getUser_txt_fld().getText();
         String login_user_password = lc.getPassword_txt_fld().getText();
-        User u = new User(login_user_name,login_user_password);
+        User u = new User(login_user_name, login_user_password);
         String select_str = u.get_user_password_select_db_str();
         final ResultSet mysql_resultSet = this.get_mysql_resultSet(select_str);
 
@@ -219,19 +220,19 @@ public class Database {
             while (mysql_resultSet.next()) {
                 Integer active_user_id = mysql_resultSet.getInt(1);
                 String active_user_name = mysql_resultSet.getString(2);
-                r_val = new Active_User(active_user_id,active_user_name);
+                r_val = new Active_User(active_user_id, active_user_name);
             }
 
-        }else {
+        } else {
             System.out.println("User not found");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             String headerText = "User Not found.";
             String login_error = "Login Error.";
             String please_try_again = "Please try again";
 
-            if(lc.getLang_chk_bx_selected()){
+            if (lc.getLang_chk_bx_selected()) {
                 headerText = "Usuario no encontrado.";
-                login_error  = "Error de inicio de sesión.";
+                login_error = "Error de inicio de sesión.";
                 please_try_again = "Inténtalo de nuevo.";
             }
 
@@ -266,25 +267,23 @@ public class Database {
 
      */
 
-    public List<Customer_view_main> getAllCustomersFromDB() throws SQLException {
-        String sql = "SELECT customer.customerId, customer.customerName, address.address, address.phone " +
-                "FROM customer INNER JOIN address on customer.addressId =  address.addressId";
-        ResultSet rs = this.get_mysql_resultSet(sql);
-        List<Customer_view_main> cvm_list = new ArrayList<>();
+//    public List<Customer_view_main> getAllCustomersFromDB() throws SQLException {
+//        String sql = "SELECT customer.customerId, customer.customerName, address.address, address.phone " +
+//                "FROM customer INNER JOIN address on customer.addressId =  address.addressId";
+//        ResultSet rs = this.get_mysql_resultSet(sql);
+//        List<Customer_view_main> cvm_list = new ArrayList<>();
+//
+//        while(rs.next()){
+//             Integer customer_id = rs.getInt(1);
+//             String customer_name = rs.getString(2);
+//             String address = rs.getString(3);
+//             String phone= rs.getString(4);
+//             Customer_view_main cvm = new Customer_view_main(customer_id,customer_name,address,phone);
+//             cvm_list.add(cvm);
+//
+//        }
 
-        while(rs.next()){
-             Integer customer_id = rs.getInt(1);
-             String customer_name = rs.getString(2);
-             String address = rs.getString(3);
-             String phone= rs.getString(4);
-             Customer_view_main cvm = new Customer_view_main(customer_id,customer_name,address,phone);
-             cvm_list.add(cvm);
 
-        }
-
-
-
-        return cvm_list;
-
+//        return cvm_list;
+//}
     }
-}
