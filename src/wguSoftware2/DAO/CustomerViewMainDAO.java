@@ -1,6 +1,5 @@
 package wguSoftware2.DAO;
 
-import javafx.fxml.FXML;
 import wguSoftware2.models.Address;
 import wguSoftware2.models.City;
 import wguSoftware2.models.Country;
@@ -27,6 +26,7 @@ public class CustomerViewMainDAO {
     private City city = null;
     private Integer address_id = null;
     private Address address = null;
+    private Integer customer_id = null;
 
     private Timestamp sql_create_now_ts = null;
 
@@ -55,10 +55,10 @@ public class CustomerViewMainDAO {
         this.curr_db.dbConnect();
         Connection con = this.curr_db.getCon();
         PreparedStatement ps = con.prepareStatement(sql_country_exists);
-        ps.setString(1,country_name);
+        ps.setString(1, country_name);
         ResultSet rs = curr_db.dbExecuteQuery(ps);
 
-        if(rs.first()) {
+        if (rs.first()) {
             // getting existing country id
             ResultSetMetaData rsmd = rs.getMetaData();
             String name = rsmd.getColumnName(1);
@@ -66,9 +66,7 @@ public class CustomerViewMainDAO {
             this.country_id = rs.getInt(1);
 
 
-
-        }else
-            {
+        } else {
             // country not found
             String sql_stmt = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy)" +
                     " VALUES (?,?,?,?,?);";
@@ -77,15 +75,15 @@ public class CustomerViewMainDAO {
             con = null;
             con = this.curr_db.getCon();
             ps = null;
-            ps = con.prepareStatement(sql_stmt,Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,country_name);
+            ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, country_name);
             ps.setTimestamp(2, sql_create_now_ts);
-            ps.setString(3,this.active_user_name);
+            ps.setString(3, this.active_user_name);
             ps.setTimestamp(4, sql_create_now_ts);
-            ps.setString(5,this.active_user_name);
+            ps.setString(5, this.active_user_name);
             rs = curr_db.dbExecuteUpdate(ps);
 
-            if (rs.next()){
+            if (rs.next()) {
                 this.country_id = rs.getInt("GENERATED_KEY");
             }
 
@@ -99,17 +97,17 @@ public class CustomerViewMainDAO {
         this.curr_db.dbConnect();
         con = this.curr_db.getCon();
         ps = con.prepareStatement(sql_city_exists);
-        ps.setString(1,city_name);
-        ps.setInt(2,country_id);
+        ps.setString(1, city_name);
+        ps.setInt(2, country_id);
         rs = curr_db.dbExecuteQuery(ps);
 
-        if (rs.first()){
+        if (rs.first()) {
             // found existing city
             ResultSetMetaData rsmd = rs.getMetaData();
             String name = rsmd.getColumnName(1);
             String type = rsmd.getColumnTypeName(1);
             this.city_id = rs.getInt(1);
-        }else{
+        } else {
             // create new city.
 
             String sql_stmt = "INSERT INTO city " +
@@ -118,16 +116,16 @@ public class CustomerViewMainDAO {
 
             this.curr_db.dbConnect();
             con = this.curr_db.getCon();
-            ps = con.prepareStatement(sql_stmt,Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,city_name);
-            ps.setInt(1,this.country_id);
+            ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, city_name);
+            ps.setInt(1, this.country_id);
             ps.setTimestamp(2, sql_create_now_ts);
-            ps.setString(3,this.active_user_name);
+            ps.setString(3, this.active_user_name);
             ps.setTimestamp(4, sql_create_now_ts);
-            ps.setString(5,this.active_user_name);
+            ps.setString(5, this.active_user_name);
             rs = curr_db.dbExecuteUpdate(ps);
 
-            if (rs.next()){
+            if (rs.next()) {
                 this.city_id = rs.getInt("GENERATED_KEY");
             }
 
@@ -147,20 +145,20 @@ public class CustomerViewMainDAO {
         this.curr_db.dbConnect();
         con = this.curr_db.getCon();
         ps = con.prepareStatement(sql_address_exists);
-        ps.setString(1,address);
-        ps.setString(2,alt_address);
-        ps.setString(3,zip);
+        ps.setString(1, address);
+        ps.setString(2, alt_address);
+        ps.setString(3, zip);
         ps.setString(4, phone);
         ps.setInt(5, this.city_id);
         rs = curr_db.dbExecuteQuery(ps);
 
-        if (rs.first()){
+        if (rs.first()) {
             // found existing address
             ResultSetMetaData rsmd = rs.getMetaData();
             String name = rsmd.getColumnName(1);
             String type = rsmd.getColumnTypeName(1);
             this.address_id = rs.getInt(1);
-        }else{
+        } else {
             // create new address.
 
             String sql_stmt = "INSERT INTO address " +
@@ -169,51 +167,103 @@ public class CustomerViewMainDAO {
 
             this.curr_db.dbConnect();
             con = this.curr_db.getCon();
-            ps = con.prepareStatement(sql_stmt,Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,address);
-            ps.setString(2,alt_address);
-            ps.setInt(3,this.city_id);
-            ps.setString(4,zip);
-            ps.setString(5,phone);
+            ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, address);
+            ps.setString(2, alt_address);
+            ps.setInt(3, this.city_id);
+            ps.setString(4, zip);
+            ps.setString(5, phone);
             ps.setTimestamp(2, sql_create_now_ts);
-            ps.setString(3,this.active_user_name);
+            ps.setString(3, this.active_user_name);
             ps.setTimestamp(4, sql_create_now_ts);
-            ps.setString(5,this.active_user_name);
+            ps.setString(5, this.active_user_name);
             rs = curr_db.dbExecuteUpdate(ps);
 
-            if (rs.next()){
+            if (rs.next()) {
                 this.address_id = rs.getInt("GENERATED_KEY");
             }
 
+        }
+            // check if customer already exists .
 
+            String sql_customer_exists = "select customerId from customer where customerName = ? and addressId = ? ;";
+
+            this.curr_db.dbConnect();
+            con = this.curr_db.getCon();
+            ps = con.prepareStatement(sql_customer_exists);
+            ps.setString(1, customer_name);
+            ps.setInt(2, address_id);
+            rs = curr_db.dbExecuteQuery(ps);
+
+            if (rs.first()) {
+                // found existing address
+                ResultSetMetaData rsmd = rs.getMetaData();
+                String name = rsmd.getColumnName(1);
+                String type = rsmd.getColumnTypeName(1);
+                this.customer_id = rs.getInt(1);
+
+                String sql_activate_customer = "UPDATE customer SET  " +
+                        "active = ?, " +
+                        "lastUpdate = ?, " +
+                        "lastUpdateBy = ? " +
+                        "WHERE customerId = ?;";
+
+                con = this.curr_db.getCon();
+                ps = con.prepareStatement(sql_activate_customer);
+                ps.setBoolean(1,true);
+                ps.setTimestamp(2,sql_create_now_ts);
+                ps.setString(3,active_user_name);
+                ps.setInt(4,this.customer_id);
+                rs = curr_db.dbExecuteUpdate(ps);
+
+            } else {
+                // create new customer.
+
+                String sql_stmt = "INSERT INTO customer " +
+                        "(customerName, addressId, active, createDate, " +
+                        "createdBy, lastUpdate, lastUpdateBy) VALUES (?,?,?,?,?,?,?);";
+
+                this.curr_db.dbConnect();
+                con = this.curr_db.getCon();
+                ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, customer_name);
+                ps.setInt(2, this.customer_id);
+                ps.setBoolean(3,true);
+                ps.setTimestamp(4, sql_create_now_ts);
+                ps.setString(5, this.active_user_name;
+                ps.setTimestamp(6, sql_create_now_ts);
+                ps.setString(7, this.active_user_name);
+                rs = curr_db.dbExecuteUpdate(ps);
+
+                if (rs.next()) {
+                    this.customer_id = rs.getInt("GENERATED_KEY");
+                }
+
+
+            }
+
+
+                Customer_view_main cvm = new Customer_view_main(
+                        customer_id,customer_name,address,alt_address,city_name,zip,country_name,phone);
         }
 
 
+        ;
 
+        public void get () {
+        }
 
+        ;
 
+        public void update () {
+        }
 
+        ;
 
-//        Customer_view_main cvm = new Customer_view_main()
-    }
+        public void delete () {
+        }
 
-
-    ;
-
-    public void get() {
-    }
-
-    ;
-
-    public void update() {
-    }
-
-    ;
-
-    public void delete() {
-    }
-
-    ;
+        ;
 
 //    private void exe_sql_create(String sql_smt) throws SQLException {
 //        execute_sql_stmt(sql_smt);
