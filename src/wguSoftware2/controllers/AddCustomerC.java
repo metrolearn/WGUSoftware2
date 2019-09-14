@@ -101,6 +101,7 @@ public class AddCustomerC {
         );
 
         this.cvm = cvmDAO.create(this.cvm);
+        this.add_customer_btn.getScene().getWindow().hide();
 
 
 

@@ -13,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import wguSoftware2.DAO.CustomerViewMainDAO;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Customer;
 import wguSoftware2.models.Customer_view_main;
@@ -62,6 +63,7 @@ public class MainWindowC {
     private List<Customer_view_main> all_customers;
     private Database_v3 curr_db;
     private Active_User active_user;
+    private CustomerViewMainDAO cvmDAO;
 
     @FXML
     void CRT_ADD() throws IOException {
@@ -113,11 +115,14 @@ public class MainWindowC {
     }
 
     @FXML
-    void CRT_DELETE() {
+    void CRT_DELETE() throws SQLException, ClassNotFoundException {
         Customer_view_main selectedItem = customer_tbl.getSelectionModel().getSelectedItem();
-        obv_customer_list.remove(selectedItem);
-        customer_tbl.setItems(obv_customer_list);
-        customer_tbl.refresh();
+
+        cvmDAO.delete(selectedItem);
+
+//        obv_customer_list.remove(selectedItem);
+//        customer_tbl.setItems(obv_customer_list);
+//        customer_tbl.refresh();
 
     }
 
@@ -126,6 +131,7 @@ public class MainWindowC {
     void initialize(Database_v3 curr_db, Active_User active_user) throws SQLException, ClassNotFoundException {
         this.curr_db = curr_db;
         this.active_user = active_user;
+        this.cvmDAO = new CustomerViewMainDAO(curr_db,active_user.getActive_user_name());
 
         String sql_stm = "SELECT customer.customerId, customer.customerName, address.address, address.phone " +
                 "FROM customer INNER JOIN address on customer.addressId =  address.addressId";
