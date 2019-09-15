@@ -118,11 +118,10 @@ public class MainWindowC {
     void CRT_DELETE() throws SQLException, ClassNotFoundException {
         Customer_view_main selectedItem = customer_tbl.getSelectionModel().getSelectedItem();
 
-        cvmDAO.delete(selectedItem);
-
-//        obv_customer_list.remove(selectedItem);
-//        customer_tbl.setItems(obv_customer_list);
-//        customer_tbl.refresh();
+        cvmDAO.deactivate_customer(selectedItem.getId());
+        obv_customer_list.remove(selectedItem);
+        customer_tbl.setItems(obv_customer_list);
+        customer_tbl.refresh();
 
     }
 
@@ -133,8 +132,9 @@ public class MainWindowC {
         this.active_user = active_user;
         this.cvmDAO = new CustomerViewMainDAO(curr_db,active_user.getActive_user_name());
 
-        String sql_stm = "SELECT customer.customerId, customer.customerName, address.address, address.phone " +
-                "FROM customer INNER JOIN address on customer.addressId =  address.addressId";
+        String sql_stm = "SELECT customer.customerId, customer.customerName, address.address, address.phone\n" +
+                "FROM customer\n" +
+                "         INNER JOIN address on customer.addressId = address.addressId WHERE active = TRUE;";
         this.curr_db.dbConnect();
         Connection con = this.curr_db.getCon();
         PreparedStatement ps = con.prepareStatement(sql_stm);

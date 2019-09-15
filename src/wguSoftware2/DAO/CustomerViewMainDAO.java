@@ -325,6 +325,22 @@ public class CustomerViewMainDAO {
         }
     }
 
+    public boolean deactivate_customer(Integer customer_id) throws SQLException, ClassNotFoundException {
+        boolean r_val = false;
+        Connection con;
+        PreparedStatement ps;
+        ResultSet rs;
+        String sql_deactivate_customer = "UPDATE customer SET active = false WHERE customerId = ?;";
+
+        this.curr_db.dbConnect();
+        con = this.curr_db.getCon();
+        ps = con.prepareStatement(sql_deactivate_customer,Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, customer_id);
+        rs = curr_db.dbExecuteUpdate(ps);
+
+        return rs.next();
+    }
+
     public void get() {
     }
 
@@ -336,9 +352,6 @@ public class CustomerViewMainDAO {
 
     public void delete(Customer_view_main selectedItem) throws SQLException, ClassNotFoundException {
 
-        if(country_exists(selectedItem.getCountry_name())){
-            System.out.println(this.country_id);
-        }
 
 
     }
