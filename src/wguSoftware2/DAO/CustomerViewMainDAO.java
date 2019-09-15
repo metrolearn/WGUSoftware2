@@ -251,6 +251,25 @@ public class CustomerViewMainDAO {
         activate_customer();
     }
 
+    private void update_customer_to_db(Integer customer_id, String customer_name) throws SQLException, ClassNotFoundException {
+        Connection con;
+        PreparedStatement ps;
+        ResultSet rs;// check if customer already exists .
+        String sql_customer_update = "update customer\n" +
+                "set customerName = ?, addressId = ? where customerId = ?\n";
+
+        this.curr_db.dbConnect();
+        con = this.curr_db.getCon();
+        ps = con.prepareStatement(sql_customer_update,Statement.RETURN_GENERATED_KEYS);
+        ps.setString(1,customer_name);
+        ps.setInt(2,address_id);
+        ps.setInt(3,customer_id);
+        rs = curr_db.dbExecuteUpdate(ps);
+
+
+    }
+
+
     private boolean customer_exists(String customer_name) throws SQLException, ClassNotFoundException {
         boolean r_val = false;
         Connection con;
@@ -341,14 +360,31 @@ public class CustomerViewMainDAO {
         return rs.next();
     }
 
-    public void get() {
+
+    public Customer_view_main update(Customer_view_main customer_view_main) throws SQLException, ClassNotFoundException {
+
+        String customer_name = customer_view_main.getName();
+        String address = customer_view_main.getAddress();
+        String alt_address = customer_view_main.getAlt_address();
+        String city_name = customer_view_main.getCity_name();
+        String zip = customer_view_main.getZip();
+        String country_name = customer_view_main.getCountry_name();
+        String phone = customer_view_main.getPhone();
+        LocalDateTime current_time_ldt = ZonedDateTime.now().toLocalDateTime();
+        sql_create_now_ts = Timestamp.valueOf(current_time_ldt);
+
+        add_country_to_db(country_name);
+        add_city_to_db(city_name);
+        add_address_to_db(address, alt_address, zip, phone);
+        update_customer_to_db(customer_view_main.getId(),customer_name);
+
+        Customer_view_main cvm = new Customer_view_main(
+                customer_id, customer_name, address, alt_address, city_name, zip, country_name, phone);
+        return cvm;
+
+
     }
 
-    public void update() {
-    }
-
-    public void delete() {
-    }
 
     public void delete(Customer_view_main selectedItem) throws SQLException, ClassNotFoundException {
 

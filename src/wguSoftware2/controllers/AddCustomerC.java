@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-
 public class AddCustomerC {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
@@ -88,7 +87,6 @@ public class AddCustomerC {
         String country_txt = this.country_txt.getText();
         String phone_txt = this.phone_txt.getText();
 
-
         this.cvm = new Customer_view_main(
                 name_txt,
                 address_txt,
@@ -103,12 +101,10 @@ public class AddCustomerC {
         this.cvm = cvmDAO.create(this.cvm);
         this.add_customer_btn.getScene().getWindow().hide();
 
-
-
     }
-
 
     public Customer_view_main get_cvm() {
         return this.cvm;
     }
+
 }

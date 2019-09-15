@@ -52,7 +52,6 @@ public class MainWindowC {
     @FXML
     private AnchorPane customer_records_lbl;
 
-
     @FXML
     private Button Crt_Add_Btn;
 
@@ -84,7 +83,6 @@ public class MainWindowC {
         customer_tbl.setItems(obv_customer_list);
         customer_tbl.refresh();
 
-
     }
 
     @FXML
@@ -100,7 +98,9 @@ public class MainWindowC {
             main_root = loader.load();
             UpdateCustomerC updateCustomerC = loader.getController();
             updateCustomerC.initialize(this.curr_db, this.active_user, obv_customer_list);
-            updateCustomerC.set_fields(cmv);
+            Customer_view_main selectedItem = getSelectedCVM();
+
+            updateCustomerC.set_fields(selectedItem);
             Stage addCustomerStage = new Stage();
             addCustomerStage.setTitle("Update Customer");
             Scene addPartScene = new Scene(main_root);
@@ -116,7 +116,7 @@ public class MainWindowC {
 
     @FXML
     void CRT_DELETE() throws SQLException, ClassNotFoundException {
-        Customer_view_main selectedItem = customer_tbl.getSelectionModel().getSelectedItem();
+        Customer_view_main selectedItem = getSelectedCVM();
 
         cvmDAO.deactivate_customer(selectedItem.getId());
         obv_customer_list.remove(selectedItem);
@@ -125,6 +125,9 @@ public class MainWindowC {
 
     }
 
+    private Customer_view_main getSelectedCVM() {
+        return customer_tbl.getSelectionModel().getSelectedItem();
+    }
 
     @FXML
     void initialize(Database_v3 curr_db, Active_User active_user) throws SQLException, ClassNotFoundException {
@@ -163,4 +166,5 @@ public class MainWindowC {
 
         customer_tbl.setItems(obv_customer_list);
     }
+
 }

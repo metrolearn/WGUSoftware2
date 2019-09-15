@@ -1,9 +1,11 @@
 package wguSoftware2.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import wguSoftware2.DAO.CustomerViewMainDAO;
 import wguSoftware2.models.*;
 import wguSoftware2.utils.Database;
 import wguSoftware2.utils.Database_v3;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class UpdateCustomerC {
+
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -45,73 +48,110 @@ public class UpdateCustomerC {
     @FXML // fx:id="zip_txt"
     private TextField zip_txt; // Value injected by FXMLLoader
 
-    private Customer customer;
-    private Address address;
-    private City city;
-    private Country country;
-
     @FXML
     private Stage stage;
 
     private Active_User active_user;
     private Database_v3 curr_db;
-    private Customer_view_main cvm;
     private List<Customer_view_main> obv_customer_list;
+    private Customer_view_main cvm = null;
+    private CustomerViewMainDAO cvmDAO = null;
     private Boolean update;
     private Integer cvmIndex;
-
+    private Integer customer_id;
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize(Database_v3 curr_db, Active_User active_user, List<Customer_view_main> obv_customer_list) {
-    }
+        this.active_user = active_user;
+        this.curr_db = curr_db;
+        this.obv_customer_list = obv_customer_list;
+        this.update = false;
+        this.cvmDAO = new CustomerViewMainDAO(curr_db,active_user.getActive_user_name());
 
-    @FXML
-    public void set_fields(Customer_view_main cmv) throws SQLException {
 
-    }
 
-    @FXML
-    void update_customer() throws SQLException {
-
-        Integer id = cvm.getId();
-        Integer x = 4;
-
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
     }
 
     public void setStage(Stage addCustomerStage) {
         this.stage = addCustomerStage;
+
+    }
+
+    @FXML
+    void add_customer() throws SQLException, ClassNotFoundException {
+
+        String name_txt = this.name_txt.getText();
+        String address_txt = this.address_txt.getText();
+        String alt_address_txt = this.alt_address_txt.getText();
+        String city_txt = this.city_txt.getText();
+        String zip_txt = this.zip_txt.getText();
+        String country_txt = this.country_txt.getText();
+        String phone_txt = this.phone_txt.getText();
+
+        this.cvm = new Customer_view_main(
+                name_txt,
+                address_txt,
+                alt_address_txt,
+                city_txt,
+                zip_txt,
+                country_txt,
+                phone_txt
+
+        );
+
+        this.cvm = cvmDAO.create(this.cvm);
+        this.add_customer_btn.getScene().getWindow().hide();
+
+    }
+
+    public Customer_view_main get_cvm() {
+        return this.cvm;
+    }
+
+    public void set_fields(Customer_view_main selectedItem) {
+
+        this.name_txt.setText(selectedItem.getName());
+        this.address_txt.setText(selectedItem.getAddress());
+        this.alt_address_txt.setText(selectedItem.getAlt_address());
+        this.city_txt.setText(selectedItem.getCity_name());
+        this.zip_txt.setText(selectedItem.getZip());
+        this.country_txt.setText(selectedItem.getCountry_name());
+        this.phone_txt.setText(selectedItem.getPhone());
+        this.customer_id = selectedItem.getId();
+
+
+
+    }
+
+    public void update_customer(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+
+
+
+        String name_txt = this.name_txt.getText();
+        String address_txt = this.address_txt.getText();
+        String alt_address_txt = this.alt_address_txt.getText();
+        String city_txt = this.city_txt.getText();
+        String zip_txt = this.zip_txt.getText();
+        String country_txt = this.country_txt.getText();
+        String phone_txt = this.phone_txt.getText();
+
+        this.cvm = new Customer_view_main(
+                name_txt,
+                address_txt,
+                alt_address_txt,
+                city_txt,
+                zip_txt,
+                country_txt,
+                phone_txt
+
+        );
+
+        this.cvm.setId(this.customer_id);
+
+        this.cvm = cvmDAO.update(this.cvm);
+        this.add_customer_btn.getScene().getWindow().hide();
+
+
     }
 }
