@@ -17,7 +17,6 @@ import java.util.ResourceBundle;
 
 public class UpdateCustomerC {
 
-
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
@@ -69,8 +68,6 @@ public class UpdateCustomerC {
         this.update = false;
         this.cvmDAO = new CustomerViewMainDAO(curr_db,active_user.getActive_user_name());
 
-
-
     }
 
     public void setStage(Stage addCustomerStage) {
@@ -78,56 +75,27 @@ public class UpdateCustomerC {
 
     }
 
-    @FXML
-    void add_customer() throws SQLException, ClassNotFoundException {
-
-        String name_txt = this.name_txt.getText();
-        String address_txt = this.address_txt.getText();
-        String alt_address_txt = this.alt_address_txt.getText();
-        String city_txt = this.city_txt.getText();
-        String zip_txt = this.zip_txt.getText();
-        String country_txt = this.country_txt.getText();
-        String phone_txt = this.phone_txt.getText();
-
-        this.cvm = new Customer_view_main(
-                name_txt,
-                address_txt,
-                alt_address_txt,
-                city_txt,
-                zip_txt,
-                country_txt,
-                phone_txt
-
-        );
-
-        this.cvm = cvmDAO.create(this.cvm);
-        this.add_customer_btn.getScene().getWindow().hide();
-
-    }
-
     public Customer_view_main get_cvm() {
+        this.cvm.setId(this.customer_id);
         return this.cvm;
     }
 
-    public void set_fields(Customer_view_main selectedItem) {
+    public void set_fields(Customer_view_main selectedItem) throws SQLException, ClassNotFoundException {
 
-        this.name_txt.setText(selectedItem.getName());
-        this.address_txt.setText(selectedItem.getAddress());
-        this.alt_address_txt.setText(selectedItem.getAlt_address());
-        this.city_txt.setText(selectedItem.getCity_name());
-        this.zip_txt.setText(selectedItem.getZip());
-        this.country_txt.setText(selectedItem.getCountry_name());
-        this.phone_txt.setText(selectedItem.getPhone());
-        this.customer_id = selectedItem.getId();
+        this.cvm = this.cvmDAO.read(selectedItem);
 
-
+        this.name_txt.setText(this.cvm.getName());
+        this.address_txt.setText(this.cvm.getAddress());
+        this.alt_address_txt.setText(this.cvm.getAlt_address());
+        this.city_txt.setText(this.cvm.getCity_name());
+        this.zip_txt.setText(this.cvm.getZip());
+        this.country_txt.setText(this.cvm.getCountry_name());
+        this.phone_txt.setText(this.cvm.getPhone());
+        this.customer_id = this.cvm.getId();
 
     }
 
-    public void update_customer(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-
-
-
+    public Customer_view_main update_customer(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         String name_txt = this.name_txt.getText();
         String address_txt = this.address_txt.getText();
         String alt_address_txt = this.alt_address_txt.getText();
@@ -135,7 +103,6 @@ public class UpdateCustomerC {
         String zip_txt = this.zip_txt.getText();
         String country_txt = this.country_txt.getText();
         String phone_txt = this.phone_txt.getText();
-
         this.cvm = new Customer_view_main(
                 name_txt,
                 address_txt,
@@ -151,7 +118,8 @@ public class UpdateCustomerC {
 
         this.cvm = cvmDAO.update(this.cvm);
         this.add_customer_btn.getScene().getWindow().hide();
-
+        return  this.cvm;
 
     }
+
 }

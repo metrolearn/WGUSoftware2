@@ -99,7 +99,6 @@ public class MainWindowC {
             UpdateCustomerC updateCustomerC = loader.getController();
             updateCustomerC.initialize(this.curr_db, this.active_user, obv_customer_list);
             Customer_view_main selectedItem = getSelectedCVM();
-
             updateCustomerC.set_fields(selectedItem);
             Stage addCustomerStage = new Stage();
             addCustomerStage.setTitle("Update Customer");
@@ -107,6 +106,9 @@ public class MainWindowC {
             addCustomerStage.setScene(addPartScene);
             updateCustomerC.setStage(addCustomerStage);
             addCustomerStage.showAndWait();
+            obv_customer_list.remove(selectedItem);
+            selectedItem = updateCustomerC.get_cvm();
+            obv_customer_list.add(selectedItem);
             customer_tbl.setItems(obv_customer_list);
             customer_tbl.refresh();
         } catch (Exception e) {
@@ -118,7 +120,7 @@ public class MainWindowC {
     void CRT_DELETE() throws SQLException, ClassNotFoundException {
         Customer_view_main selectedItem = getSelectedCVM();
 
-        cvmDAO.deactivate_customer(selectedItem.getId());
+        cvmDAO.delete(selectedItem);
         obv_customer_list.remove(selectedItem);
         customer_tbl.setItems(obv_customer_list);
         customer_tbl.refresh();

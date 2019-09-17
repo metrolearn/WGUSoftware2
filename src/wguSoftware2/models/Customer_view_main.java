@@ -61,6 +61,9 @@ public class Customer_view_main {
 
     }
 
+    public Customer_view_main(int customerId) {
+        this.id = customerId;
+    }
 
 
     public Integer getId() {

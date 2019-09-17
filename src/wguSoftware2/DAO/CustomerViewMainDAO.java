@@ -1,9 +1,6 @@
 package wguSoftware2.DAO;
 
-import wguSoftware2.models.Address;
-import wguSoftware2.models.City;
-import wguSoftware2.models.Country;
-import wguSoftware2.models.Customer_view_main;
+import wguSoftware2.models.*;
 import wguSoftware2.utils.Database_v3;
 
 import java.sql.*;
@@ -256,14 +253,16 @@ public class CustomerViewMainDAO {
         PreparedStatement ps;
         ResultSet rs;// check if customer already exists .
         String sql_customer_update = "update customer\n" +
-                "set customerName = ?, addressId = ? where customerId = ?\n";
+                "set customerName = ?, addressId = ?, lastUpdate = ?, lastUpdateBy =? where customerId = ?\n";
 
         this.curr_db.dbConnect();
         con = this.curr_db.getCon();
         ps = con.prepareStatement(sql_customer_update,Statement.RETURN_GENERATED_KEYS);
         ps.setString(1,customer_name);
         ps.setInt(2,address_id);
-        ps.setInt(3,customer_id);
+        ps.setTimestamp(3,sql_create_now_ts);
+        ps.setString(4,active_user_name);
+        ps.setInt(5,customer_id);
         rs = curr_db.dbExecuteUpdate(ps);
 
 
@@ -386,20 +385,53 @@ public class CustomerViewMainDAO {
     }
 
 
-    public void delete(Customer_view_main selectedItem) throws SQLException, ClassNotFoundException {
+    public Boolean delete(Customer_view_main selectedItem) throws SQLException, ClassNotFoundException {
 
-
+        return deactivate_customer(selectedItem.getId());
 
     }
 
-    ;
+    public Customer_view_main read(Customer_view_main selectedItem) throws SQLException, ClassNotFoundException {
+        boolean r_val = false;
+        Connection con;
+        PreparedStatement ps;
+        ResultSet rs;
+        String sql_update_view = "select * from customer " +
+                "    inner join address a on customer.addressId = a.addressId " +
+                "inner join city c on a.cityId = c.cityId " +
+                "inner join country c2 on c.countryId = c2.countryId " +
+                "where customerId = ?;";
 
-    ;
+        this.curr_db.dbConnect();
+        con = this.curr_db.getCon();
+        ps = con.prepareStatement(sql_update_view, Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, selectedItem.getId());
 
-    ;
+        rs = ps.executeQuery();
+
+
+            if (rs.next()) {
+                this.cvm = new Customer_view_main(rs.getInt("customerId"));
+                this.cvm.setName(rs.getString("customerName"));
+                this.cvm.setAddress(rs.getString("address"));
+                this.cvm.setAlt_address(rs.getString("address2"));
+                this.cvm.setZip(rs.getString("postalCode"));
+                this.cvm.setPhone(rs.getString("phone"));
+                this.cvm.setCity_name(rs.getString("city"));
+                this.cvm.setCountry_name(rs.getString("country"));
+
+
+            }
+
+
+
+
+        return this.cvm;
+
+    }
 
 }
-;
+
 
 //    private void exe_sql_create(String sql_smt) throws SQLException {
 //        execute_sql_stmt(sql_smt);
