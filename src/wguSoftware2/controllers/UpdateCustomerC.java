@@ -76,7 +76,7 @@ public class UpdateCustomerC {
     }
 
     public Customer_view_main get_cvm() {
-        this.cvm.setId(this.customer_id);
+        this.cvm.setId(this.customer_id)    ;
         return this.cvm;
     }
 

@@ -9,19 +9,14 @@ import java.time.ZonedDateTime;
 
 public class CustomerViewMainDAO {
 
-    private String sql_stm = null;
     private ResultSet rs = null;
     private Database_v3 curr_db = null;
     private Customer_view_main cvm = null;
     private String active_user_name = null;
-    private String sql_smt = null;
 
     private Integer country_id;
-    private Country country = null;
     private Integer city_id;
-    private City city = null;
     private Integer address_id = null;
-    private Address address = null;
     private Integer customer_id = null;
     private boolean activate_customer = Boolean.parseBoolean(null);
 
