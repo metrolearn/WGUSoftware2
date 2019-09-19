@@ -33,13 +33,13 @@
             <TableColumn prefWidth="300.0" text="URL" />
         </columns>
       </TableView>
-      <Button layoutX="215.0" layoutY="284.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="51.0" text="ADD" />
-      <Button layoutX="277.0" layoutY="284.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="75.0" text="UPDATE" />
-      <Button layoutX="361.0" layoutY="284.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="69.0" text="DELETE" />
+      <Button fx:id="Art_Add_Btn" layoutX="215.0" layoutY="284.0" mnemonicParsing="false" onAction="#ADD_APR" prefHeight="31.0" prefWidth="51.0" text="ADD" />
+      <Button fx:id="Art_Update_Btn" layoutX="277.0" layoutY="284.0" mnemonicParsing="false" onAction="#UPDATE_APR" prefHeight="31.0" prefWidth="75.0" text="UPDATE" />
+      <Button fx:id="Art_Delete_Btn" layoutX="361.0" layoutY="284.0" mnemonicParsing="false" onAction="#DELETE_APR" prefHeight="31.0" prefWidth="69.0" text="DELETE" />
       <Label layoutX="27.0" layoutY="289.0" text="Appoinment Calendar View" />
-      <RadioButton layoutX="546.0" layoutY="289.0" mnemonicParsing="false" text="Month" />
-      <RadioButton layoutX="626.0" layoutY="289.0" mnemonicParsing="false" text="Week" />
-      <RadioButton layoutX="697.0" layoutY="289.0" mnemonicParsing="false" text="All" />
+      <RadioButton fx:id="Art_Mnt_filter_rad" layoutX="546.0" layoutY="289.0" mnemonicParsing="false" onAction="#FILTER_BY_MONTH" text="Month" />
+      <RadioButton fx:id="Art_Wk_filter_rad" layoutX="626.0" layoutY="289.0" mnemonicParsing="false" onAction="#FILTER_BY_WEEK" text="Week" />
+      <RadioButton fx:id="Art_All_filter_rad" layoutX="697.0" layoutY="289.0" mnemonicParsing="false" onAction="#FILTER_BY_ALL" text="All" />
       <Label layoutX="471.0" layoutY="289.0" text="Filter by:" />
     </children>
 </AnchorPane>

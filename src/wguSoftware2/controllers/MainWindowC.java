@@ -2,6 +2,7 @@ package wguSoftware2.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -169,4 +170,40 @@ public class MainWindowC {
         customer_tbl.setItems(obv_customer_list);
     }
 
+    public void ADD_APR(ActionEvent actionEvent) throws IOException {
+
+        URL add_customer_window = getClass().getClassLoader().getResource("wguSoftware2/views/add_appointment.fxml");
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(add_customer_window);
+        Parent main_root;
+        main_root = loader.load();
+        AddAppointmentC addAppointmentC = loader.getController();
+        addAppointmentC.initialize(this.curr_db, this.active_user, obv_customer_list);
+        Stage addAppointmentStage = new Stage();
+        addAppointmentStage.setTitle("Add Appointment");
+        Scene addPartScene = new Scene(main_root);
+        addAppointmentStage.setScene(addPartScene);
+        addAppointmentC.setStage(addAppointmentStage);
+        addAppointmentStage.showAndWait();
+//        obv_customer_list.add(AddAppointmentC.get_cvm());
+//        customer_tbl.setItems(obv_customer_list);
+//        customer_tbl.refresh();
+
+
+    }
+
+    public void UPDATE_APR(ActionEvent actionEvent) {
+    }
+
+    public void DELETE_APR(ActionEvent actionEvent) {
+    }
+
+    public void FILTER_BY_MONTH(ActionEvent actionEvent) {
+    }
+
+    public void FILTER_BY_WEEK(ActionEvent actionEvent) {
+    }
+
+    public void FILTER_BY_ALL(ActionEvent actionEvent) {
+    }
 }

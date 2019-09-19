@@ -6,9 +6,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="wguSoftware2.views.AddAppointment"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wguSoftware2.controllers.AddAppointmentC">
+   <children>
+      <TextField layoutX="115.0" layoutY="26.0" prefHeight="31.0" prefWidth="212.0" />
+      <Label layoutX="25.0" layoutY="31.0" text="Title" />
+      <Label layoutX="25.0" layoutY="119.0" text="Location" />
+      <TextField layoutX="115.0" layoutY="114.0" prefHeight="31.0" prefWidth="212.0" />
+      <TextField layoutX="115.0" layoutY="151.0" prefHeight="31.0" prefWidth="212.0" />
+      <Label layoutX="25.0" layoutY="156.0" text="Contact" />
+      <Label layoutX="25.0" layoutY="193.0" text="Type" />
+      <TextField layoutX="115.0" layoutY="188.0" prefHeight="31.0" prefWidth="212.0" />
+      <Label layoutX="25.0" layoutY="77.0" text="Description" />
+      <TextField layoutX="115.0" layoutY="72.0" prefHeight="31.0" prefWidth="212.0" />
+      <DatePicker layoutX="112.0" layoutY="230.0" />
+      <DatePicker layoutX="112.0" layoutY="271.0" />
+      <Label layoutX="24.0" layoutY="235.0" text="Start" />
+      <Label layoutX="26.0" layoutY="276.0" text="End" />
+   </children>
 </AnchorPane>
