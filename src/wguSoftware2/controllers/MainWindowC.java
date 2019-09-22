@@ -181,8 +181,9 @@ public class MainWindowC {
         addAppointmentC.initialize(this.curr_db, this.active_user, obv_customer_list);
         Stage addAppointmentStage = new Stage();
         addAppointmentStage.setTitle("Add Appointment");
-        Scene addPartScene = new Scene(main_root);
-        addAppointmentStage.setScene(addPartScene);
+        Scene addAptScene = new Scene(main_root);
+
+        addAppointmentStage.setScene(addAptScene);
         addAppointmentC.setStage(addAppointmentStage);
         addAppointmentStage.showAndWait();
 //        obv_customer_list.add(AddAppointmentC.get_cvm());
