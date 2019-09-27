@@ -1,9 +1,8 @@
 package wguSoftware2.controllers;
 
-import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -11,11 +10,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import wguSoftware2.DAO.CalendarViewMainDAO;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
-import java.awt.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -71,6 +70,9 @@ public class AddAppointmentC {
     @FXML
     private TextField location_txt;
 
+    @FXML
+    private CalendarViewMainDAO calendarViewMainDAO;
+
 
     public static void get_cvm() {
     }
@@ -100,6 +102,16 @@ public class AddAppointmentC {
         end_min_cb.setItems(min_items);
         start_min_cb.setItems(min_items);
 
+        ObservableList<String> apt_types = null;
+        apt_types = FXCollections.observableArrayList();
+
+        apt_types.add("Initial");
+        apt_types.add("Sales");
+        apt_types.add("Follow up");
+
+        this.apt_type_cb.setItems(apt_types);
+
+
         //unfocus pathField
         this.blank_lbl.setFocusTraversable(true);
 
@@ -118,7 +130,17 @@ public class AddAppointmentC {
         String contact = this.contact_txt.getText();
         String apt_type = this.apt_type_cb.getTypeSelector();
         StringConverter<LocalDate> converter = this.date_pkr.getConverter();
+        String start_hour_str = this.start_hour_cb.getValue();
+        String start_min_str = this.start_min_cb.getValue();
+        boolean start_pm = this.start_pm.isArmed();
+        String end_hour_str = this.start_hour_cb.getValue();
+        String end_min_str = this.start_min_cb.getValue();
+        boolean end_pm = this.end_pm.isArmed();
 
+        this. = cvmDAO.create(this.cvm);
+        this.add_customer_btn.getScene().getWindow().hide();
+
+        System.out.println("test");
 
     }
 }
