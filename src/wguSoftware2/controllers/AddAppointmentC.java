@@ -12,12 +12,18 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import wguSoftware2.DAO.CalendarViewMainDAO;
 import wguSoftware2.models.Active_User;
+import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class AddAppointmentC {
 
@@ -72,6 +78,9 @@ public class AddAppointmentC {
 
     @FXML
     private CalendarViewMainDAO calendarViewMainDAO;
+
+    @FXML
+    private Appoinment_view_main apv;
 
 
     public static void get_cvm() {
@@ -137,8 +146,41 @@ public class AddAppointmentC {
         String end_min_str = this.start_min_cb.getValue();
         boolean end_pm = this.end_pm.isArmed();
 
-        this. = cvmDAO.create(this.cvm);
-        this.add_customer_btn.getScene().getWindow().hide();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
+        TimeZone tz = TimeZone.getDefault();
+        String zoneId = tz.toZoneId().toString();
+
+        LocalDateTime ldt = LocalDateTime.parse(converter.toString());
+
+        String year = String.valueOf(ldt.getYear());
+        String month = String.valueOf(ldt.getMonth());
+        String day = String.valueOf(ldt.getMonth());
+        String start_hour = String.valueOf(ldt.getHour());
+        String start_min = String.valueOf(ldt.getMinute());
+        String start_seconds = "00";
+        String am_pm = "AM";
+
+        if (start_pm){
+            am_pm = "PM";
+        }
+
+
+        String zone_offset = String.valueOf(ZonedDateTime.now().getOffset().getTotalSeconds());
+
+        ZonedDateTime dateTime = ZonedDateTime.parse(year + "-"
+                + month + "-"
+                + day + " "
+                + start_hour
+                + ":"
+                + start_min
+                + ":"
+                + start_seconds
+                + " " + am_pm + " " + zone_offset, formatter);
+
+
+//
+//        this.apv = new Appoinment_view_main(
+//                title,description,location,contact,apt_type,converter.toString(),)
 
         System.out.println("test");
 
