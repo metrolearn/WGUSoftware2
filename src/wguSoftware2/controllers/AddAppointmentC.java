@@ -17,10 +17,7 @@ import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -44,7 +41,7 @@ public class AddAppointmentC {
     @FXML
     public Button add_apt_btn;
     @FXML
-    public ComboBox apt_type_cb;
+    public ComboBox<String> apt_type_cb;
     @FXML
     private ResourceBundle resources;
 
@@ -124,6 +121,15 @@ public class AddAppointmentC {
         //unfocus pathField
         this.blank_lbl.setFocusTraversable(true);
 
+        date_pkr.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+
+                setDisable(empty || date.compareTo(today) < 0 );
+            }
+        });
+
 
     }
 
@@ -150,38 +156,28 @@ public class AddAppointmentC {
         TimeZone tz = TimeZone.getDefault();
         String zoneId = tz.toZoneId().toString();
 
-        LocalDateTime ldt = LocalDateTime.parse(converter.toString());
-
-        String year = String.valueOf(ldt.getYear());
-        String month = String.valueOf(ldt.getMonth());
-        String day = String.valueOf(ldt.getMonth());
-        String start_hour = String.valueOf(ldt.getHour());
-        String start_min = String.valueOf(ldt.getMinute());
-        String start_seconds = "00";
-        String am_pm = "AM";
-
-        if (start_pm){
-            am_pm = "PM";
+        if (this.start_pm.isSelected()){
+            int i = 12 + Integer.parseInt(start_hour_str);
+            start_hour_str = String.valueOf(i);
         }
 
 
-        String zone_offset = String.valueOf(ZonedDateTime.now().getOffset().getTotalSeconds());
 
-        ZonedDateTime dateTime = ZonedDateTime.parse(year + "-"
-                + month + "-"
-                + day + " "
-                + start_hour
-                + ":"
-                + start_min
-                + ":"
-                + start_seconds
-                + " " + am_pm + " " + zone_offset, formatter);
+        LocalDateTime ldt =  this.date_pkr.getValue().atStartOfDay().
+                with(LocalTime.of(Integer.parseInt(start_hour_str),Integer.parseInt(start_min_str)));
+        ZoneId zone = ZonedDateTime.now().getZone();
+        ZonedDateTime ztd = ldt.atZone( zone);
+        String format = ztd.format(formatter);
+        System.out.println(format);
+
+
 
 
 //
 //        this.apv = new Appoinment_view_main(
 //                title,description,location,contact,apt_type,converter.toString(),)
 
+        System.out.println(ztd);
         System.out.println("test");
 
     }
