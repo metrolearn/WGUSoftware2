@@ -1,9 +1,12 @@
 package wguSoftware2.DAO;
 
+import sun.management.MappedMXBeanType;
+import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
 import java.sql.ResultSet;
+import java.time.ZonedDateTime;
 
 public class CalendarViewMainDAO {
 
@@ -19,5 +22,30 @@ public class CalendarViewMainDAO {
     private boolean activate_customer = Boolean.parseBoolean(null);
 
 
+    public Appoinment_view_main create(Appoinment_view_main apv) {
 
+
+        String title = apv.getTitle();
+        String description = apv.getDescription();
+        String location = apv.getLocation();
+        String contact = apv.getContact();
+        String apt_type = apv.getAppointment_type();
+        ZonedDateTime start_time_znd = apv.getStart_date_time();
+        ZonedDateTime end_time_znd = apv.getEnd_date_time();
+
+        Integer customerID = null;
+        Integer userID = null;
+        String url = null;
+        ZonedDateTime createDate = null;
+        String createdBy = null;
+        ZonedDateTime lastUpdate = null;
+        String  lastUpdateBy = null;
+
+
+
+
+
+
+        return apv;
+    }
 }

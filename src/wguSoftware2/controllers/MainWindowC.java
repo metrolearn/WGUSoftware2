@@ -182,7 +182,8 @@ public class MainWindowC {
         Stage addAppointmentStage = new Stage();
         addAppointmentStage.setTitle("Add Appointment");
         Scene addAptScene = new Scene(main_root);
-
+        Customer_view_main selectedCVM = customer_tbl.getSelectionModel().getSelectedItem();
+        addAppointmentC.setSelectedCVM(selectedCVM);
         addAppointmentStage.setScene(addAptScene);
         addAppointmentC.setStage(addAppointmentStage);
         addAppointmentStage.showAndWait();

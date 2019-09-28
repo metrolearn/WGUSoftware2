@@ -12,6 +12,13 @@ public class Appoinment_view_main {
     private String appointment_type;
     private ZonedDateTime start_date_time;
     private ZonedDateTime end_date_time;
+    private Integer customerID = null;
+    private Integer userID = null;
+    private String url = null;
+    private ZonedDateTime createDate = null;
+    private String createdBy = null;
+    private ZonedDateTime lastUpdate = null;
+    private String  lastUpdateBy = null;
 
     public Appoinment_view_main(String title, String description, String location, String contact,
                                 String appointment_type, ZonedDateTime start_date_time, ZonedDateTime end_date_time) {
@@ -21,6 +28,118 @@ public class Appoinment_view_main {
         this.contact = contact;
         this.appointment_type = appointment_type;
         this.start_date_time = start_date_time;
+        this.end_date_time = end_date_time;
+    }
+
+    public Integer getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(Integer customerID) {
+        this.customerID = customerID;
+    }
+
+    public Integer getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Integer userID) {
+        this.userID = userID;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public ZonedDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(ZonedDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public ZonedDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(ZonedDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getLastUpdateBy() {
+        return lastUpdateBy;
+    }
+
+    public void setLastUpdateBy(String lastUpdateBy) {
+        this.lastUpdateBy = lastUpdateBy;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getAppointment_type() {
+        return appointment_type;
+    }
+
+    public void setAppointment_type(String appointment_type) {
+        this.appointment_type = appointment_type;
+    }
+
+    public ZonedDateTime getStart_date_time() {
+        return start_date_time;
+    }
+
+    public void setStart_date_time(ZonedDateTime start_date_time) {
+        this.start_date_time = start_date_time;
+    }
+
+    public ZonedDateTime getEnd_date_time() {
+        return end_date_time;
+    }
+
+    public void setEnd_date_time(ZonedDateTime end_date_time) {
         this.end_date_time = end_date_time;
     }
 

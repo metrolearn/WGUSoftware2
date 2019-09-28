@@ -44,38 +44,28 @@ public class AddAppointmentC {
     public ComboBox<String> apt_type_cb;
     @FXML
     private ResourceBundle resources;
-
     @FXML
     private URL location;
-
     @FXML
     private TextField title_txt;
-
     @FXML
     private TextField contact_txt;
-
     @FXML
     private DatePicker date_pkr;
-
     @FXML
     private RadioButton start_pm;
-
     @FXML
     private MenuButton start_hour;
-
     @FXML
     private RadioButton end_pm;
-
     @FXML
     private TextField desc_txt;
-
-
     @FXML
     private TextField location_txt;
-
     @FXML
     private CalendarViewMainDAO calendarViewMainDAO;
-
+    @FXML
+    Customer_view_main selectedCVM;
     @FXML
     private Appoinment_view_main apv;
 
@@ -161,24 +151,38 @@ public class AddAppointmentC {
             start_hour_str = String.valueOf(i);
         }
 
-
-
-        LocalDateTime ldt =  this.date_pkr.getValue().atStartOfDay().
+        if (this.end_pm.isSelected()){
+            int i = 12 + Integer.parseInt(end_hour_str);
+            end_hour_str = String.valueOf(i);
+        }
+        LocalDateTime start_ldt =  this.date_pkr.getValue().atStartOfDay().
                 with(LocalTime.of(Integer.parseInt(start_hour_str),Integer.parseInt(start_min_str)));
+        LocalDateTime end_ldt = this.date_pkr.getValue().atStartOfDay().
+                with(LocalTime.of(Integer.parseInt(end_hour_str),Integer.parseInt(end_min_str)));
         ZoneId zone = ZonedDateTime.now().getZone();
-        ZonedDateTime ztd = ldt.atZone( zone);
-        String format = ztd.format(formatter);
-        System.out.println(format);
+        ZonedDateTime start_ztd = start_ldt.atZone( zone);
+        ZonedDateTime end_ztd = end_ldt.atZone(zone);
 
 
 
+        this.apv = new Appoinment_view_main(
+                title,description,location,contact,apt_type,start_ztd,end_ztd);
 
-//
-//        this.apv = new Appoinment_view_main(
-//                title,description,location,contact,apt_type,converter.toString(),)
+        this.apv.setCustomerID(selectedCVM.getId());
+        this.apv.setUserID(user);
 
-        System.out.println(ztd);
-        System.out.println("test");
+        this.apv = calendarViewMainDAO.create(this.apv);
+//        this.add_apt_btn.getScene().getWindow().hide();
+
+
 
     }
+
+    public void setSelectedCVM(Customer_view_main selectedCVM) {
+
+        this.selectedCVM = selectedCVM;
+
+    }
+
+
 }
