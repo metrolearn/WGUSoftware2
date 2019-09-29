@@ -19,8 +19,9 @@ public class Appoinment_view_main {
     private String createdBy = null;
     private ZonedDateTime lastUpdate = null;
     private String  lastUpdateBy = null;
-
+    private Integer aptID = null;
     public Appoinment_view_main(String title, String description, String location, String contact,
+
                                 String appointment_type, ZonedDateTime start_date_time, ZonedDateTime end_date_time) {
         this.title = title;
         this.description = description;
@@ -29,6 +30,15 @@ public class Appoinment_view_main {
         this.appointment_type = appointment_type;
         this.start_date_time = start_date_time;
         this.end_date_time = end_date_time;
+
+    }
+
+    public Integer getAptID() {
+        return aptID;
+    }
+
+    public void setAptID(Integer aptID) {
+        this.aptID = aptID;
     }
 
     public Integer getCustomerID() {
@@ -120,7 +130,7 @@ public class Appoinment_view_main {
     }
 
     public String getAppointment_type() {
-        return appointment_type;
+        return appointment_type.toString();
     }
 
     public void setAppointment_type(String appointment_type) {

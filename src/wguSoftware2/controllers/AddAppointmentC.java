@@ -17,6 +17,7 @@ import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -68,12 +69,20 @@ public class AddAppointmentC {
     Customer_view_main selectedCVM;
     @FXML
     private Appoinment_view_main apv;
+    @FXML
+    private Active_User active_user;
+    @FXML
+    private Database_v3 curr_db;
 
 
     public static void get_cvm() {
     }
 
     public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) {
+
+        this.active_user = active_user;
+        this.curr_db = curr_db;
+        this.calendarViewMainDAO = new CalendarViewMainDAO(curr_db);
 
         ObservableList<String> hour_items = end_hour_cb.getItems();
         ObservableList<String> end_minItems =  end_min_cb.getItems();
@@ -127,7 +136,7 @@ public class AddAppointmentC {
     public void setStage(Stage addAppointmentStage) {
     }
 
-    public void ADD_APT(ActionEvent actionEvent) {
+    public void ADD_APT(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 
         String title = this.title_txt.getText();
         String description = this.desc_txt.getText();
@@ -160,7 +169,7 @@ public class AddAppointmentC {
         LocalDateTime end_ldt = this.date_pkr.getValue().atStartOfDay().
                 with(LocalTime.of(Integer.parseInt(end_hour_str),Integer.parseInt(end_min_str)));
         ZoneId zone = ZonedDateTime.now().getZone();
-        ZonedDateTime start_ztd = start_ldt.atZone( zone);
+        ZonedDateTime start_ztd = start_ldt.atZone(zone);
         ZonedDateTime end_ztd = end_ldt.atZone(zone);
 
 
@@ -169,9 +178,14 @@ public class AddAppointmentC {
                 title,description,location,contact,apt_type,start_ztd,end_ztd);
 
         this.apv.setCustomerID(selectedCVM.getId());
-        this.apv.setUserID(user);
-
-        this.apv = calendarViewMainDAO.create(this.apv);
+        this.apv.setUserID(active_user.getActive_user_id());
+        try {
+            this.apv = calendarViewMainDAO.create(this.apv,active_user,selectedCVM);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 //        this.add_apt_btn.getScene().getWindow().hide();
 
 
