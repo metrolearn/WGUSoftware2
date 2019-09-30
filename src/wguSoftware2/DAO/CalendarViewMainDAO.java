@@ -54,27 +54,25 @@ public class CalendarViewMainDAO {
                 "(customerId, userId, title, " +
                 "description, location, contact, type, url, " +
                 "start, end, createDate, createdBy, " +
-                "lastUpdateBy) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "lastUpdateBy) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         this.curr_db.dbConnect();
         Connection con = this.curr_db.getCon();
         PreparedStatement ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1,customerID);
-        ps.setString(2,title);
-        ps.setString(3,description);
-        ps.setString(4,location);
-        ps.setString(5,contact);
-        ps.setString(6,apt_type);
-        ps.setString(7,url);
-        ps.setTimestamp(8,Timestamp.valueOf(start_time_znd.toLocalDateTime()));
-        ps.setTimestamp(9,Timestamp.valueOf(end_time_znd.toLocalDateTime()));
-        ps.setTimestamp(10,Timestamp.valueOf(createDate.toLocalDateTime()));
-        ps.setString(11,active_user.getActive_user_name());
+        ps.setInt(2,userID);
+        ps.setString(3,title);
+        ps.setString(4,description);
+        ps.setString(5,location);
+        ps.setString(6,contact);
+        ps.setString(7,apt_type);
+        ps.setString(8,url);
+        ps.setTimestamp(9,Timestamp.valueOf(start_time_znd.toLocalDateTime()));
+        ps.setTimestamp(10,Timestamp.valueOf(end_time_znd.toLocalDateTime()));
+        ps.setTimestamp(11,Timestamp.valueOf(createDate.toLocalDateTime()));
         ps.setString(12,active_user.getActive_user_name());
+        ps.setString(13,active_user.getActive_user_name());
 
-
-
-        rs = curr_db.dbExecuteUpdate(ps);
 
 
         rs = curr_db.dbExecuteUpdate(ps);
