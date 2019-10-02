@@ -22,10 +22,7 @@ import wguSoftware2.utils.Database_v3;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,8 +163,27 @@ public class MainWindowC {
         this.CRT_name_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("name"));
         this.CRT_Adress_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("address"));
         this.CRT_Phone_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("phone"));
-
         customer_tbl.setItems(obv_customer_list);
+
+        sql_stm = "select * from appointment inner join customer c on appointment.customerId = c.customerId";
+        this.curr_db.dbConnect();
+        con = this.curr_db.getCon();
+        ps = con.prepareStatement(sql_stm, Statement.RETURN_GENERATED_KEYS);
+        rs = this.curr_db.dbExecuteQuery(ps);
+        ResultSetMetaData rsmd = rs.getMetaData();
+
+       while (rs.next()){
+           Integer appointmentId = rs.getInt("appointmentId");
+           String customerName = rs.getString("customerName");
+           String title = rs.getString("title");
+           String location = rs.getString("location");
+           Timestamp start = rs.getTimestamp("start");
+           Timestamp end = rs.getTimestamp("end");
+           String url = rs.getString("url");
+
+       }
+
+
     }
 
     public void ADD_APR(ActionEvent actionEvent) throws IOException {
