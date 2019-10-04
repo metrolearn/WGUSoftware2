@@ -16,8 +16,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import wguSoftware2.DAO.CustomerViewMainDAO;
 import wguSoftware2.models.Active_User;
+import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer;
 import wguSoftware2.models.Customer_view_main;
+import wguSoftware2.models.Appointment;
 import wguSoftware2.utils.Database_v3;
 
 import java.io.IOException;
@@ -29,6 +31,26 @@ import java.util.List;
 public class MainWindowC {
 
     private static final boolean TESTING = true;
+    @FXML
+    public TableColumn<Appoinment_view_main, String> APT_ID_Tbl_Cell;
+    @FXML
+    public TableColumn<Appoinment_view_main, String> APT_DATE_Tbl_Cell;
+    @FXML
+    public TableColumn<Appoinment_view_main, String> APT_CUST_Tbl_Cell;
+    @FXML
+    public TableColumn<Appoinment_view_main, String> APT_TITLE_Tbl_Cell;
+    @FXML
+    public TableColumn<Appoinment_view_main, String> APT_LOC_Tbl_Cell;
+    @FXML
+    public TableColumn<Appoinment_view_main, String> APT_START_Tbl_Cell;
+    @FXML
+    public TableColumn<Appoinment_view_main, String> APT_END_Tbl_Cell;
+    @FXML
+    public TableColumn<Appoinment_view_main, String> APT_URL_Tbl_Cell;
+
+
+    @FXML
+    private TableView<Appoinment_view_main> apt_tbl;
     @FXML
     private TableView<Customer_view_main> customer_tbl;
 
@@ -58,9 +80,12 @@ public class MainWindowC {
 
     private ObservableList<Customer_view_main> obv_customer_list = null;
     private List<Customer_view_main> all_customers;
+    private List<Appoinment_view_main> all_apts;
+    private ObservableList<Appoinment_view_main> obv_apt_list = null;
     private Database_v3 curr_db;
     private Active_User active_user;
     private CustomerViewMainDAO cvmDAO;
+    private Appoinment_view_main avm;
 
     @FXML
     void CRT_ADD() throws IOException {
@@ -170,9 +195,11 @@ public class MainWindowC {
         con = this.curr_db.getCon();
         ps = con.prepareStatement(sql_stm, Statement.RETURN_GENERATED_KEYS);
         rs = this.curr_db.dbExecuteQuery(ps);
-        ResultSetMetaData rsmd = rs.getMetaData();
 
-       while (rs.next()){
+        List<Appoinment_view_main> avm_list = new ArrayList<>();
+
+
+        while (rs.next()){
            Integer appointmentId = rs.getInt("appointmentId");
            String customerName = rs.getString("customerName");
            String title = rs.getString("title");
@@ -181,7 +208,25 @@ public class MainWindowC {
            Timestamp end = rs.getTimestamp("end");
            String url = rs.getString("url");
 
+           this.avm = new Appoinment_view_main(appointmentId,customerName,title,location,start,end,url);
+           avm_list.add(this.avm);
+
+
+
+
        }
+
+        this.all_apts = avm_list;
+        this.obv_apt_list = FXCollections.observableArrayList(this.all_apts);
+        this.APT_ID_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("id"));
+        this.APT_DATE_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("dateViewString"));
+        this.APT_CUST_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        this.APT_TITLE_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("title"));
+        this.APT_LOC_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("location"));
+        this.APT_START_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("timeViewStringStart"));
+        this.APT_END_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("timeViewStringEnd"));
+        this.APT_URL_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("url"));
+        apt_tbl.setItems(obv_apt_list);
 
 
     }
@@ -203,6 +248,9 @@ public class MainWindowC {
         addAppointmentStage.setScene(addAptScene);
         addAppointmentC.setStage(addAppointmentStage);
         addAppointmentStage.showAndWait();
+        obv_apt_list.add(AddAppointmentC.get_avm());
+        apt_tbl.setItems(obv_apt_list);
+        apt_tbl.refresh();
 //        obv_customer_list.add(AddAppointmentC.get_cvm());
 //        customer_tbl.setItems(obv_customer_list);
 //        customer_tbl.refresh();

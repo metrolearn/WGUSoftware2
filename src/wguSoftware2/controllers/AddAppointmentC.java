@@ -74,9 +74,12 @@ public class AddAppointmentC {
     @FXML
     private Database_v3 curr_db;
 
+    private Appoinment_view_main get_avm() {
 
-    public static void get_cvm() {
+        return this.apv;
+
     }
+
 
     public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) {
 

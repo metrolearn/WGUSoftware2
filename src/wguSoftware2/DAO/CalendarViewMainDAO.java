@@ -1,6 +1,5 @@
 package wguSoftware2.DAO;
 
-import sun.management.MappedMXBeanType;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
@@ -37,7 +36,7 @@ public class CalendarViewMainDAO {
         String title = apv.getTitle();
         String description = apv.getDescription();
         String location = apv.getLocation();
-        String contact = apv.getContact();
+        String contact = apv.getCustomerName();
         String apt_type = apv.getAppointment_type();
         ZonedDateTime start_time_znd = apv.getStart_date_time();
         ZonedDateTime end_time_znd = apv.getEnd_date_time();
@@ -81,7 +80,7 @@ public class CalendarViewMainDAO {
             apt_id = rs.getInt("GENERATED_KEY");
         }
 
-        apv.setAptID(apt_id);
+        apv.setId(apt_id);
 
 
         return apv;

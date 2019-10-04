@@ -1,6 +1,9 @@
 package wguSoftware2.models;
 
+import java.sql.Timestamp;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Appoinment_view_main {
@@ -8,7 +11,7 @@ public class Appoinment_view_main {
     private String title;
     private String description;
     private String location;
-    private String contact;
+    private String customerName;
     private String appointment_type;
     private ZonedDateTime start_date_time;
     private ZonedDateTime end_date_time;
@@ -19,26 +22,50 @@ public class Appoinment_view_main {
     private String createdBy = null;
     private ZonedDateTime lastUpdate = null;
     private String  lastUpdateBy = null;
-    private Integer aptID = null;
+    private Integer id = null;
+    private ZonedDateTime start;
+    private ZonedDateTime end;
+    private String dateViewString = null;
+    private String timeViewStringStart = null;
+    private String timeViewStringEnd = null;
     public Appoinment_view_main(String title, String description, String location, String contact,
 
                                 String appointment_type, ZonedDateTime start_date_time, ZonedDateTime end_date_time) {
         this.title = title;
         this.description = description;
         this.location = location;
-        this.contact = contact;
+        this.customerName = contact;
         this.appointment_type = appointment_type;
         this.start_date_time = start_date_time;
         this.end_date_time = end_date_time;
 
     }
 
-    public Integer getAptID() {
-        return aptID;
+    public Appoinment_view_main(Integer appointmentId, String customerName, String title, String location,
+                                Timestamp start, Timestamp end, String url)
+    {
+        this.id = appointmentId;
+        this.customerName = customerName;
+        this.start = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC"));
+        this.end = ZonedDateTime.ofInstant(end.toInstant(), ZoneId.of("UTC"));
+        this.url = url;
+        this.title = title;
+        this.location = location;
+        DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        this.dateViewString = this.start.format(date_formatter);
+
+        DateTimeFormatter time_formatter = DateTimeFormatter.ofPattern("HH:mm");
+        this.timeViewStringStart = this.start.format(time_formatter);
+        this.timeViewStringEnd = this.end.format(time_formatter);
+
     }
 
-    public void setAptID(Integer aptID) {
-        this.aptID = aptID;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getCustomerID() {
@@ -121,12 +148,12 @@ public class Appoinment_view_main {
         this.location = location;
     }
 
-    public String getContact() {
-        return contact;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getAppointment_type() {
@@ -161,15 +188,55 @@ public class Appoinment_view_main {
         return Objects.equals(title, that.title) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(location, that.location) &&
-                Objects.equals(contact, that.contact) &&
+                Objects.equals(customerName, that.customerName) &&
                 Objects.equals(appointment_type, that.appointment_type) &&
                 Objects.equals(start_date_time, that.start_date_time) &&
                 Objects.equals(end_date_time, that.end_date_time);
     }
 
+    public ZonedDateTime getStart() {
+        return start;
+    }
+
+    public void setStart(ZonedDateTime start) {
+        this.start = start;
+    }
+
+    public ZonedDateTime getEnd() {
+        return end;
+    }
+
+    public void setEnd(ZonedDateTime end) {
+        this.end = end;
+    }
+
+    public String getDateViewString() {
+        return dateViewString;
+    }
+
+    public void setDateViewString(String dateViewString) {
+        this.dateViewString = dateViewString;
+    }
+
+    public String getTimeViewStringStart() {
+        return timeViewStringStart;
+    }
+
+    public void setTimeViewStringStart(String timeViewStringStart) {
+        this.timeViewStringStart = timeViewStringStart;
+    }
+
+    public String getTimeViewStringEnd() {
+        return timeViewStringEnd;
+    }
+
+    public void setTimeViewStringEnd(String timeViewStringEnd) {
+        this.timeViewStringEnd = timeViewStringEnd;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, location, contact, appointment_type, start_date_time, end_date_time);
+        return Objects.hash(title, description, location, customerName, appointment_type, start_date_time, end_date_time);
     }
 
     @Override
@@ -178,10 +245,21 @@ public class Appoinment_view_main {
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
-                ", contact='" + contact + '\'' +
+                ", contact='" + customerName + '\'' +
                 ", appointment_type='" + appointment_type + '\'' +
                 ", start_date_time=" + start_date_time +
                 ", end_date_time=" + end_date_time +
+                ", customerID=" + customerID +
+                ", userID=" + userID +
+                ", url='" + url + '\'' +
+                ", createDate=" + createDate +
+                ", createdBy='" + createdBy + '\'' +
+                ", lastUpdate=" + lastUpdate +
+                ", lastUpdateBy='" + lastUpdateBy + '\'' +
+                ", aptID=" + id +
+                ", start=" + start +
+                ", end=" + end +
+                ", dateViewString='" + dateViewString + '\'' +
                 '}';
     }
 }

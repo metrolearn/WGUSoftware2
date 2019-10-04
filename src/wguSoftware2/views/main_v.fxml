@@ -21,16 +21,16 @@
             </columns>
         </TableView>
         <Label layoutX="37.0" layoutY="28.0" text="Customer Records Table" />
-      <TableView layoutX="31.0" layoutY="334.0" prefHeight="465.0" prefWidth="1015.0">
+      <TableView fx:id="apt_tbl" layoutX="31.0" layoutY="334.0" prefHeight="465.0" prefWidth="1015.0">
         <columns>
-          <TableColumn maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="ID" />
-          <TableColumn prefWidth="150.0" text="Date" />
-            <TableColumn prefWidth="100.0" text="Customer" />
-            <TableColumn prefWidth="100.0" text="Title" />
-            <TableColumn prefWidth="100.0" text="Location" />
-            <TableColumn prefWidth="100.0" text="Start" />
-            <TableColumn prefWidth="100.0" text="End" />
-            <TableColumn prefWidth="300.0" text="URL" />
+          <TableColumn fx:id="APT_ID_Tbl_Cell" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="ID" />
+          <TableColumn fx:id="APT_DATE_Tbl_Cell" prefWidth="150.0" text="Date" />
+            <TableColumn fx:id="APT_CUST_Tbl_Cell" prefWidth="100.0" text="Customer" />
+            <TableColumn fx:id="APT_TITLE_Tbl_Cell" prefWidth="100.0" text="Title" />
+            <TableColumn fx:id="APT_LOC_Tbl_Cell" prefWidth="100.0" text="Location" />
+            <TableColumn fx:id="APT_START_Tbl_Cell" prefWidth="100.0" text="Start" />
+            <TableColumn fx:id="APT_END_Tbl_Cell" prefWidth="100.0" text="End" />
+            <TableColumn fx:id="APT_URL_Tbl_Cell" prefWidth="300.0" text="URL" />
         </columns>
       </TableView>
       <Button fx:id="Art_Add_Btn" layoutX="215.0" layoutY="284.0" mnemonicParsing="false" onAction="#ADD_APR" prefHeight="31.0" prefWidth="51.0" text="ADD" />
