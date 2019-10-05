@@ -248,12 +248,11 @@ public class MainWindowC {
         addAppointmentStage.setScene(addAptScene);
         addAppointmentC.setStage(addAppointmentStage);
         addAppointmentStage.showAndWait();
-        obv_apt_list.add(AddAppointmentC.get_avm());
+        Appoinment_view_main avm = addAppointmentC.get_avm();
+        obv_apt_list.add(avm);
         apt_tbl.setItems(obv_apt_list);
         apt_tbl.refresh();
-//        obv_customer_list.add(AddAppointmentC.get_cvm());
-//        customer_tbl.setItems(obv_customer_list);
-//        customer_tbl.refresh();
+
 
 
     }

@@ -2,6 +2,7 @@ package wguSoftware2.models;
 
 import java.sql.Timestamp;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -38,6 +39,11 @@ public class Appoinment_view_main {
         this.appointment_type = appointment_type;
         this.start_date_time = start_date_time;
         this.end_date_time = end_date_time;
+        this.url = "www.link.com";
+        Timestamp start = Timestamp.from(start_date_time.toInstant());
+        Timestamp end = Timestamp.from(start_date_time.toInstant());
+        date_time_view_convert(start,end);
+
 
     }
 
@@ -51,13 +57,17 @@ public class Appoinment_view_main {
         this.url = url;
         this.title = title;
         this.location = location;
+        date_time_view_convert(start,end);
+
+    }
+
+    private void date_time_view_convert(Timestamp start, Timestamp end) {
         DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        this.dateViewString = this.start.format(date_formatter);
+        this.dateViewString = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC")).format(date_formatter);
 
         DateTimeFormatter time_formatter = DateTimeFormatter.ofPattern("HH:mm");
-        this.timeViewStringStart = this.start.format(time_formatter);
-        this.timeViewStringEnd = this.end.format(time_formatter);
-
+        this.timeViewStringStart = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC")).format(time_formatter);
+        this.timeViewStringEnd =ZonedDateTime.ofInstant(end.toInstant(), ZoneId.of("UTC")).format(time_formatter);
     }
 
     public Integer getId() {

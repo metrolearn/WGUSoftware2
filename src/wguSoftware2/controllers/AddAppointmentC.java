@@ -64,17 +64,18 @@ public class AddAppointmentC {
     @FXML
     private TextField location_txt;
     @FXML
-    private CalendarViewMainDAO calendarViewMainDAO;
+    private CalendarViewMainDAO calendarViewMainDAO = null;
     @FXML
-    Customer_view_main selectedCVM;
+    Customer_view_main selectedCVM = null;
     @FXML
-    private Appoinment_view_main apv;
+    private Appoinment_view_main apv = null;
     @FXML
-    private Active_User active_user;
+    private Active_User active_user = null;
     @FXML
-    private Database_v3 curr_db;
+    private Database_v3 curr_db = null;
 
-    private Appoinment_view_main get_avm() {
+    @FXML
+    public Appoinment_view_main get_avm() {
 
         return this.apv;
 
@@ -189,7 +190,7 @@ public class AddAppointmentC {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-//        this.add_apt_btn.getScene().getWindow().hide();
+        this.add_apt_btn.getScene().getWindow().hide();
 
 
 
