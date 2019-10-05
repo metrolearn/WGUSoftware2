@@ -27,6 +27,12 @@ public class CalendarViewMainDAO {
         this.curr_db = curr_db;
     }
 
+    public CalendarViewMainDAO(Database_v3 curr_db,Active_User au) {
+
+        this.curr_db = curr_db;
+        this.active_user = au;
+    }
+
 
     public Appoinment_view_main create(Appoinment_view_main apv, Active_User active_user, Customer_view_main selectedCVM) throws SQLException, ClassNotFoundException {
 
@@ -84,5 +90,17 @@ public class CalendarViewMainDAO {
 
 
         return apv;
+    }
+
+    public void delete(Appoinment_view_main selectedItem) throws SQLException, ClassNotFoundException {
+
+        String sql_stmt = "DELETE FROM appointment WHERE appointmentId = ?";
+        this.curr_db.dbConnect();
+        Connection con = this.curr_db.getCon();
+        PreparedStatement ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1,selectedItem.getId());
+        rs = curr_db.dbExecuteUpdate(ps);
+
+
     }
 }

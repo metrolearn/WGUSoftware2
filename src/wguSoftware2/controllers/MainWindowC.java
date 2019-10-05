@@ -14,6 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import wguSoftware2.DAO.CalendarViewMainDAO;
 import wguSoftware2.DAO.CustomerViewMainDAO;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
@@ -85,6 +86,8 @@ public class MainWindowC {
     private Database_v3 curr_db;
     private Active_User active_user;
     private CustomerViewMainDAO cvmDAO;
+    private CalendarViewMainDAO avmDAO;
+
     private Appoinment_view_main avm;
 
     @FXML
@@ -154,11 +157,20 @@ public class MainWindowC {
         return customer_tbl.getSelectionModel().getSelectedItem();
     }
 
+    private Appoinment_view_main getSelectedAVM() {
+        return apt_tbl.getSelectionModel().getSelectedItem();
+    }
+
+
+
+
+
     @FXML
     void initialize(Database_v3 curr_db, Active_User active_user) throws SQLException, ClassNotFoundException {
         this.curr_db = curr_db;
         this.active_user = active_user;
         this.cvmDAO = new CustomerViewMainDAO(curr_db,active_user.getActive_user_name());
+        this.avmDAO = new CalendarViewMainDAO(curr_db,active_user);
 
         String sql_stm = "SELECT customer.customerId, customer.customerName, address.address, address.phone\n" +
                 "FROM customer\n" +
@@ -260,7 +272,15 @@ public class MainWindowC {
     public void UPDATE_APR(ActionEvent actionEvent) {
     }
 
-    public void DELETE_APR(ActionEvent actionEvent) {
+    public void DELETE_APR(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+
+        Appoinment_view_main selected_apt = getSelectedAVM();
+        avmDAO.delete(selected_apt);
+        obv_apt_list.remove(selected_apt);
+        apt_tbl.setItems(obv_apt_list);
+        apt_tbl.refresh();
+
+
     }
 
     public void FILTER_BY_MONTH(ActionEvent actionEvent) {
