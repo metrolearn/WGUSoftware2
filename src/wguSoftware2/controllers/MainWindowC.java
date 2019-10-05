@@ -270,6 +270,35 @@ public class MainWindowC {
     }
 
     public void UPDATE_APR(ActionEvent actionEvent) {
+
+        Appoinment_view_main avm = null;
+        try {
+            avm = apt_tbl.getSelectionModel().getSelectedItem();
+            URL update_apt_window = getClass().getClassLoader().getResource("wguSoftware2/views/update_appointment.fxml");
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(update_apt_window);
+            Parent main_root;
+            main_root = loader.load();
+            UpdateAppointmentC updateAppointmentC = loader.getController();
+            updateAppointmentC.initialize(this.curr_db, this.active_user, obv_customer_list);
+            Appoinment_view_main selectedItem = getSelectedAVM();
+            updateAppointmentC.set_fields(selectedItem);
+            Stage addCustomerStage = new Stage();
+            addCustomerStage.setTitle("Update Customer");
+            Scene addPartScene = new Scene(main_root);
+            addCustomerStage.setScene(addPartScene);
+            updateAppointmentC.setStage(addCustomerStage);
+            addCustomerStage.showAndWait();
+            obv_customer_list.remove(selectedItem);
+            selectedItem = updateAppointmentC.get_avm();
+            obv_apt_list.add(selectedItem);
+            apt_tbl.setItems(obv_apt_list);
+            apt_tbl.refresh();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+
     }
 
     public void DELETE_APR(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {

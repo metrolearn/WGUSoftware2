@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="405.0" prefWidth="388.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wguSoftware2.controllers.AddAppointmentC">
+   <children>
+      <Label fx:id="blank_lbl" layoutX="9.0" layoutY="4.0" />
+      <TextField fx:id="title_txt" layoutX="25.0" layoutY="28.0" prefHeight="31.0" prefWidth="292.0" promptText="Title" />
+      <TextField fx:id="desc_txt" layoutX="25.0" layoutY="67.0" prefHeight="31.0" prefWidth="292.0" promptText="Description" />
+      <TextField fx:id="location_txt" layoutX="25.0" layoutY="107.0" prefHeight="31.0" prefWidth="292.0" promptText="Location" />
+      <TextField fx:id="contact_txt" layoutX="25.0" layoutY="146.0" prefHeight="31.0" prefWidth="292.0" promptText="Enter Contact" />
+      <ComboBox fx:id="apt_type_cb" layoutX="25.0" layoutY="186.0" prefHeight="31.0" prefWidth="292.0" />
+      <DatePicker fx:id="date_pkr" layoutX="22.0" layoutY="225.0" prefHeight="31.0" prefWidth="298.0" promptText="Choose Date" />
+      <ComboBox fx:id="start_hour_cb" layoutX="23.0" layoutY="267.0" prefHeight="31.0" prefWidth="135.0" promptText="Start Hour" />
+      <ComboBox fx:id="start_min_cb" layoutX="171.0" layoutY="267.0" prefHeight="31.0" prefWidth="118.0" promptText="Start Min" />
+      <RadioButton fx:id="start_pm" layoutX="296.0" layoutY="272.0" mnemonicParsing="false" text="PM" />
+      <ComboBox fx:id="end_min_cb" layoutX="172.0" layoutY="307.0" prefHeight="31.0" prefWidth="112.0" promptText="End Min" />
+      <ComboBox fx:id="end_hour_cb" layoutX="22.0" layoutY="307.0" prefHeight="31.0" prefWidth="135.0" promptText="End Hour" />
+      <RadioButton fx:id="end_pm" layoutX="295.0" layoutY="309.0" mnemonicParsing="false" text="PM" />
+      <Label fx:id="start_date_time_lbl" layoutX="163.0" layoutY="272.0" text=":" />
+      <Label fx:id="end_date_time_lbl" layoutX="164.0" layoutY="309.0" text=":" />
+      <Button fx:id="add_apt_btn" layoutX="25.0" layoutY="353.0" mnemonicParsing="false" onAction="#ADD_APT" prefHeight="31.0" prefWidth="135.0" text="Add Appoinment" />
+   </children>
+</AnchorPane>
