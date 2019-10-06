@@ -3,6 +3,7 @@ package wguSoftware2.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -10,6 +11,9 @@ import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class UpdateAppointmentC {
     @FXML
@@ -27,15 +31,15 @@ public class UpdateAppointmentC {
     @FXML
     private DatePicker date_pkr;
     @FXML
-    private ComboBox start_hour_cb;
+    private ComboBox<String> start_hour_cb;
     @FXML
-    private ComboBox start_min_cb;
+    private ComboBox<String> start_min_cb;
     @FXML
     private RadioButton start_pm;
     @FXML
-    private ComboBox end_min_cb;
+    private ComboBox<String> end_min_cb;
     @FXML
-    private ComboBox end_hour_cb;
+    private ComboBox<String> end_hour_cb;
     @FXML
     private RadioButton end_pm;
     @FXML
@@ -68,7 +72,8 @@ public class UpdateAppointmentC {
         desc_txt.setText(selectedItem.getDescription());
         location_txt.setText(selectedItem.getLocation());
         contact_txt.setText(selectedItem.getCustomerName());
-
+        desc_txt.setText(selectedItem.getDescription());
+        System.out.println(desc_txt.getText());
         ObservableList<String> apt_types = null;
         apt_types = FXCollections.observableArrayList();
 
@@ -76,15 +81,11 @@ public class UpdateAppointmentC {
         apt_types.add("Sales");
         apt_types.add("Follow up");
 
-
-        this.apt_type_cb.getSelectionModel().select(selectedItem.getAppointment_type());
+        apt_type_cb.setItems(apt_types);
 
 
         ObservableList<String> hour_items = end_hour_cb.getItems();
-        ObservableList<String> end_minItems =  end_min_cb.getItems();
-
         ObservableList<String> min_items = start_hour_cb.getItems();
-        ObservableList<String> start_minItems = start_min_cb.getItems();
 
         for (int i = 1; i < 13 ; i++) {
             hour_items.add(String.valueOf(i));
@@ -103,10 +104,56 @@ public class UpdateAppointmentC {
         end_min_cb.setItems(min_items);
         start_min_cb.setItems(min_items);
 
-        end_hour_cb.getSelectionModel().select(3);
-        end_min_cb.getSelectionModel().select(3);
-        start_hour_cb.getSelectionModel().select(3);
-        end_hour_cb.getSelectionModel().select(3);
+        String timeViewStringStart = selectedItem.getTimeViewStringStart();
+        String timeViewStringEnd = selectedItem.getTimeViewStringEnd();
+
+        String start_time_values [] = timeViewStringStart.split(":");
+        String end_time_values [] = timeViewStringEnd.split(":");
+
+        Integer start_hour = Integer.valueOf(start_time_values[0]);
+        Integer end_hour = Integer.valueOf(end_time_values[0]);
+
+        if(start_hour>12){
+            start_hour-=12;
+        }
+
+        if(end_hour>12){
+            end_hour-=12;
+        }
+
+
+        String start_min_str = String.valueOf(start_time_values[1]);
+        String end_hour_str = String.valueOf(end_hour);
+        String end_min_str = String.valueOf(end_time_values[1]);
+        String  start_hour_str = String.valueOf(start_hour);
+
+        end_hour_cb.getSelectionModel().select(end_hour_str);
+        end_min_cb.getSelectionModel().select(end_min_str);
+        start_hour_cb.getSelectionModel().select(start_hour_str);
+         start_min_cb.getSelectionModel().select(start_min_str);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+
+        //convert String to LocalDate
+        LocalDate localDate = LocalDate.parse(selectedItem.getDateViewString(), formatter);
+
+         date_pkr.setValue(localDate);
+
+        date_pkr.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+
+                setDisable(empty || date.compareTo(today) < 0 );
+            }
+        });
+
+        apt_type_cb.setValue(selectedItem.getAppointment_type());
+
+
+
+
+        System.out.println("test");
 
 
 
@@ -122,5 +169,8 @@ public class UpdateAppointmentC {
 
         return this.avm;
 
+    }
+
+    public void UPDT_APT(ActionEvent actionEvent) {
     }
 }

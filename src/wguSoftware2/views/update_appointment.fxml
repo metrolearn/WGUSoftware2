@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="405.0" prefWidth="388.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wguSoftware2.controllers.AddAppointmentC">
+<AnchorPane prefHeight="405.0" prefWidth="388.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wguSoftware2.controllers.UpdateAppointmentC">
    <children>
       <Label fx:id="blank_lbl" layoutX="9.0" layoutY="4.0" />
       <TextField fx:id="title_txt" layoutX="25.0" layoutY="28.0" prefHeight="31.0" prefWidth="292.0" promptText="Title" />
@@ -24,6 +24,6 @@
       <RadioButton fx:id="end_pm" layoutX="295.0" layoutY="309.0" mnemonicParsing="false" text="PM" />
       <Label fx:id="start_date_time_lbl" layoutX="163.0" layoutY="272.0" text=":" />
       <Label fx:id="end_date_time_lbl" layoutX="164.0" layoutY="309.0" text=":" />
-      <Button fx:id="add_apt_btn" layoutX="25.0" layoutY="353.0" mnemonicParsing="false" onAction="#ADD_APT" prefHeight="31.0" prefWidth="135.0" text="Add Appoinment" />
+      <Button fx:id="updt_apt_btn" layoutX="25.0" layoutY="353.0" mnemonicParsing="false" onAction="#UPDT_APT" prefHeight="31.0" prefWidth="292.0" text="Update Appoinment" />
    </children>
 </AnchorPane>

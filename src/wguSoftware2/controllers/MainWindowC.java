@@ -215,12 +215,13 @@ public class MainWindowC {
            Integer appointmentId = rs.getInt("appointmentId");
            String customerName = rs.getString("customerName");
            String title = rs.getString("title");
+           String description = rs.getString("description");
            String location = rs.getString("location");
            Timestamp start = rs.getTimestamp("start");
            Timestamp end = rs.getTimestamp("end");
            String url = rs.getString("url");
 
-           this.avm = new Appoinment_view_main(appointmentId,customerName,title,location,start,end,url);
+           this.avm = new Appoinment_view_main(appointmentId,customerName,description,title,location,start,end,url);
            avm_list.add(this.avm);
 
 

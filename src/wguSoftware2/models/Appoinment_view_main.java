@@ -47,11 +47,12 @@ public class Appoinment_view_main {
 
     }
 
-    public Appoinment_view_main(Integer appointmentId, String customerName, String title, String location,
+    public Appoinment_view_main(Integer appointmentId, String customerName, String description, String title, String location,
                                 Timestamp start, Timestamp end, String url)
     {
         this.id = appointmentId;
         this.customerName = customerName;
+        this.description = description;
         this.start = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC"));
         this.end = ZonedDateTime.ofInstant(end.toInstant(), ZoneId.of("UTC"));
         this.url = url;

@@ -149,13 +149,13 @@ public class AddAppointmentC {
         String description = this.desc_txt.getText();
         String location = this.location_txt.getText();
         String contact = this.contact_txt.getText();
-        String apt_type = this.apt_type_cb.getTypeSelector();
+        String apt_type = this.apt_type_cb.getValue();
         StringConverter<LocalDate> converter = this.date_pkr.getConverter();
         String start_hour_str = this.start_hour_cb.getValue();
         String start_min_str = this.start_min_cb.getValue();
         boolean start_pm = this.start_pm.isArmed();
-        String end_hour_str = this.start_hour_cb.getValue();
-        String end_min_str = this.start_min_cb.getValue();
+        String end_hour_str = this.end_hour_cb.getValue();
+        String end_min_str = this.end_min_cb.getValue();
         boolean end_pm = this.end_pm.isArmed();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
