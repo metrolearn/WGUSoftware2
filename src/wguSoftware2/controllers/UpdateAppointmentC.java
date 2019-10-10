@@ -1,18 +1,21 @@
 package wguSoftware2.controllers;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import wguSoftware2.DAO.CalendarViewMainDAO;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class UpdateAppointmentC {
@@ -56,17 +59,19 @@ public class UpdateAppointmentC {
     private ObservableList<Customer_view_main> obv_customer_list;
     private Appoinment_view_main avm = null;
     private Stage curr_stage = null;
+    private CalendarViewMainDAO calendarViewMainDAO = null;
+    private Integer apt_id = null;
 
     public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) {
 
         this.curr_db = curr_db;
         this.obv_customer_list = obv_customer_list;
         this.active_user = active_user;
+        this.calendarViewMainDAO = new CalendarViewMainDAO(this.curr_db);
 
     }
 
-    public void set_fields(Appoinment_view_main selectedItem) {
-
+    public void set_fields(Appoinment_view_main selectedItem) throws SQLException, ClassNotFoundException {
 
         title_txt.setText(selectedItem.getTitle());
         desc_txt.setText(selectedItem.getDescription());
@@ -82,7 +87,6 @@ public class UpdateAppointmentC {
         apt_types.add("Follow up");
 
         apt_type_cb.setItems(apt_types);
-
 
         ObservableList<String> hour_items = end_hour_cb.getItems();
         ObservableList<String> min_items = start_hour_cb.getItems();
@@ -121,7 +125,6 @@ public class UpdateAppointmentC {
             end_hour-=12;
         }
 
-
         String start_min_str = String.valueOf(start_time_values[1]);
         String end_hour_str = String.valueOf(end_hour);
         String end_min_str = String.valueOf(end_time_values[1]);
@@ -148,14 +151,9 @@ public class UpdateAppointmentC {
             }
         });
 
-        apt_type_cb.setValue(selectedItem.getAppointment_type());
+        apt_type_cb.setValue(this.calendarViewMainDAO.getAppointmentType(selectedItem.getId()));
 
-
-
-
-        System.out.println("test");
-
-
+        this.apt_id = selectedItem.getId();
 
     }
 
@@ -172,5 +170,43 @@ public class UpdateAppointmentC {
     }
 
     public void UPDT_APT(ActionEvent actionEvent) {
+
+//        Integer apt_id = this.apt_id;
+        String title = title_txt.getText();
+        String description = desc_txt.getText();
+        String location = location_txt.getText();
+        String contact = contact_txt.getText();
+        String apt_type = apt_type_cb.getValue();
+        String date = date_pkr.getValue().toString();
+        String start_hour = start_hour_cb.getValue();
+        String start_min = start_min_cb.getValue();
+        String end_hour = end_hour_cb.getValue();
+        String end_min = end_min_cb.getValue();
+        Boolean s_pm = start_pm.isSelected();
+        Boolean e_pm = end_pm.isSelected();
+
+
+
+        if (s_pm){
+            Integer start_val = Integer.valueOf(start_hour);
+            start_val+=12;
+            start_hour = String.valueOf(start_val);
+        }
+
+        if (e_pm){
+            Integer end_val = Integer.valueOf(end_hour);
+            end_val+=12;
+            start_hour = String.valueOf(end_val);
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+
+        //convert String to LocalDate
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        Timestamp start_date = Timestamp.valueOf(String.valueOf(localDate));
+        Appoinment_view_main avm = new Appoinment_view_main(title,location,contact,apt_type,description,start_date,)
+        calendarViewMainDAO.update()
+
     }
+
 }
