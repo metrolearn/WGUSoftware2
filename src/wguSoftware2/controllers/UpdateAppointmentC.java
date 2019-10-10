@@ -13,6 +13,7 @@ import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
 import java.sql.SQLException;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -185,27 +186,41 @@ public class UpdateAppointmentC {
         Boolean s_pm = start_pm.isSelected();
         Boolean e_pm = end_pm.isSelected();
 
-
+        String start_am_pm_str = "AM";
 
         if (s_pm){
             Integer start_val = Integer.valueOf(start_hour);
             start_val+=12;
             start_hour = String.valueOf(start_val);
+            start_am_pm_str = "PM";
         }
+
+        String end_am_pm_str = "AM";
 
         if (e_pm){
             Integer end_val = Integer.valueOf(end_hour);
             end_val+=12;
             start_hour = String.valueOf(end_val);
+            end_am_pm_str = "PM";
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy-h-mm-a");
+
+        String start_date_time = date+"-"+start_hour+"-"+start_min+"-"+start_am_pm_str;
+        String end_date_time = date+"-"+end_hour+"-"+end_min+"-"+end_am_pm_str;
+
 
         //convert String to LocalDate
-        LocalDate localDate = LocalDate.parse(date, formatter);
-        Timestamp start_date = Timestamp.valueOf(String.valueOf(localDate));
-        Appoinment_view_main avm = new Appoinment_view_main(title,location,contact,apt_type,description,start_date,)
-        calendarViewMainDAO.update()
+        LocalDate local_start_date = LocalDate.parse(date, formatter);
+        LocalDate local_end_date = LocalDate.parse(date, formatter);
+
+        Timestamp start_date = Timestamp.valueOf(String.valueOf(local_start_date));
+        Timestamp end_date = Timestamp.valueOf(String.valueOf(local_end_date));
+
+        Appoinment_view_main avm = new Appoinment_view_main(apt_id,contact,description,title,location,start_date,end_date,"www.link.com");
+        calendarViewMainDAO.update(avm,active_user);
 
     }
 

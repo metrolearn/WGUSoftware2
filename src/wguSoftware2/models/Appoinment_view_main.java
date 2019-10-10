@@ -62,6 +62,13 @@ public class Appoinment_view_main {
 
     }
 
+    public Appoinment_view_main(String title, String location, String contact, String apt_type, String description, Timestamp start_date, Timestamp end_date) {
+
+
+
+
+    }
+
     private void date_time_view_convert(Timestamp start, Timestamp end) {
         DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         this.dateViewString = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC")).format(date_formatter);

@@ -186,4 +186,41 @@ public class CalendarViewMainDAO {
         return apv;
     }
 
+    public void update(Appoinment_view_main apv, Active_User active_user) {
+
+        this.active_user = active_user;
+
+        String title = apv.getTitle();
+        String description = apv.getDescription();
+        String location = apv.getLocation();
+        String contact = apv.getCustomerName();
+        String apt_type = apv.getAppointment_type();
+        ZonedDateTime start_time_znd = apv.getStart_date_time();
+        ZonedDateTime end_time_znd = apv.getEnd_date_time();
+
+        Integer customerID = active_user.getActive_user_id();
+        Integer userID = customer_view_main.getId();
+        String url = "www.link.com";
+
+        ZonedDateTime lastUpdate =  ZonedDateTime.now();;
+        String  lastUpdateBy = active_user.getActive_user_name();
+
+
+        String sql_stmt = "UPDATE appointment SET  " +
+                "customerId = ?, userId = ?, title = ?, description = ?, location = ?, " +
+                "contact = ?, type = ?, url = ?, start = ?, end = ?, createDate = ?, " +
+                "createdBy = ?, lastUpdate = ?, lastUpdateBy = ? WHERE appointmentId = ?";
+
+        rs = curr_db.dbExecuteUpdate(ps);
+        Integer apt_id = null;
+        if (rs.next()) {
+            apt_id = rs.getInt("GENERATED_KEY");
+        }
+
+        apv.setId(apt_id);
+
+
+        return apv;
+
+    }
 }
