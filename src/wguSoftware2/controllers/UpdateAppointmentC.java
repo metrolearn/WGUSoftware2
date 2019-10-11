@@ -13,9 +13,7 @@ import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -52,7 +50,7 @@ public class UpdateAppointmentC {
     @FXML
     private Label end_date_time_lbl;
     @FXML
-    private Button add_apt_btn;
+    private Button add_apt_btn = null;
     @FXML
     private Database_v3 curr_db;
     @FXML
@@ -63,6 +61,7 @@ public class UpdateAppointmentC {
     private Stage curr_stage = null;
     private CalendarViewMainDAO calendarViewMainDAO = null;
     private Integer apt_id = null;
+    private String org_contact_name = null;
 
     public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) {
 
@@ -74,7 +73,7 @@ public class UpdateAppointmentC {
     }
 
     public void set_fields(Appoinment_view_main selectedItem) throws SQLException, ClassNotFoundException {
-
+        this.org_contact_name = selectedItem.getCustomerName();
         title_txt.setText(selectedItem.getTitle());
         desc_txt.setText(selectedItem.getDescription());
         location_txt.setText(selectedItem.getLocation());
@@ -171,7 +170,7 @@ public class UpdateAppointmentC {
 
     }
 
-    public void UPDT_APT(ActionEvent actionEvent) {
+    public Appoinment_view_main UPDT_APT(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 
 //        Integer apt_id = this.apt_id;
         String title = title_txt.getText();
@@ -205,13 +204,10 @@ public class UpdateAppointmentC {
             end_am_pm_str = "PM";
         }
 
-
-
         DateTimeFormatter ts_format = DateTimeFormatter.ofPattern("yyyy-MM-d-h-mm-a");
 
         String start_date_time = date+"-"+start_hour+"-"+start_min+"-"+start_am_pm_str;
         String end_date_time = date+"-"+end_hour+"-"+end_min+"-"+end_am_pm_str;
-
 
         //convert String to LocalDate
         LocalDateTime local_start_date_time = LocalDateTime.parse(start_date_time, ts_format);
@@ -220,10 +216,34 @@ public class UpdateAppointmentC {
         Timestamp start_timestamp = Timestamp.valueOf(local_start_date_time);
         Timestamp end_timestamp = Timestamp.valueOf(local_end_date_time);
 
+        Appoinment_view_main avm = null;
 
+        if(!contact.equals(org_contact_name)){
+            on_contact_change();
+            this.contact_txt.setText(org_contact_name);
+        }else {
+            try {
+                avm = new Appoinment_view_main(apt_id, contact, description, title, location, start_timestamp, end_timestamp, "www.link.com", apt_type);
+                this.avm = calendarViewMainDAO.update(avm, active_user);
+            } catch (SQLException | ClassNotFoundException | NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
 
-        Appoinment_view_main avm = new Appoinment_view_main(apt_id,contact,description,title,location,start_timestamp,end_timestamp,"www.link.com",apt_type);
-        calendarViewMainDAO.update(avm,active_user);
+        this.add_apt_btn.getScene().getWindow().hide();
+        return avm;
+
+        }
+
+    public void on_contact_change(){
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText("Please note: Per management");
+        alert.setContentText("If you want to edit the customer name please delete this appointment. " +
+                "Create a new customer and a new appointment!");
+
+        alert.showAndWait();
 
     }
 

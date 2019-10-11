@@ -137,11 +137,11 @@ public class LoginWindowC {
                 main_root = loader.load();
                 MainWindowC mwc = loader.getController();
                 mwc.initialize(this.curr_db,this.ac);
-                Stage addPartStage = new Stage();
-                addPartStage.setTitle("Main Window");
-                Scene addPartScene = new Scene(main_root);
-                addPartStage.setScene(addPartScene);
-                addPartStage.showAndWait();
+                Stage mainWindowStage = new Stage();
+                mainWindowStage.setTitle("Main Window");
+                Scene mainWindowScene = new Scene(main_root);
+                mainWindowStage.setScene(mainWindowScene);
+                mainWindowStage.showAndWait();
 
 
             }else {

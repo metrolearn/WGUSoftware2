@@ -186,7 +186,7 @@ public class CalendarViewMainDAO {
         return apv;
     }
 
-    public void update(Appoinment_view_main apv, Active_User active_user) {
+    public Appoinment_view_main update(Appoinment_view_main apv, Active_User active_user) throws SQLException, ClassNotFoundException {
 
         this.active_user = active_user;
 
@@ -198,31 +198,36 @@ public class CalendarViewMainDAO {
         Timestamp start_time_znd = apv.getStart();
         Timestamp end_time_znd = apv.getEnd();
 
-        // if I cannot find customer prompt to  create new customer.
-
-        Integer customerID = active_user.getActive_user_id();
-        Integer userID = customer_view_main.getId();
         String url = "www.link.com";
 
-        ZonedDateTime lastUpdate =  ZonedDateTime.now();;
+        Timestamp lastUpdate =  Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime());
         String  lastUpdateBy = active_user.getActive_user_name();
 
 
-        String sql_stmt = "UPDATE appointment SET  " +
-                "customerId = ?, userId = ?, title = ?, description = ?, location = ?, " +
-                "contact = ?, type = ?, url = ?, start = ?, end = ?, createDate = ?, " +
-                "createdBy = ?, lastUpdate = ?, lastUpdateBy = ? WHERE appointmentId = ?";
+        String sql_stmt = "UPDATE appointment SET " +
+                "userId = ?, title = ?, description = ?, location = ?," +
+                " type = ?, start = ?, end = ?, lastUpdate = ?," +
+                " lastUpdateBy = ? WHERE appointmentId = ?";
 
-//        rs = curr_db.dbExecuteUpdate(ps);
-//        Integer apt_id = null;
-//        if (rs.next()) {
-//            apt_id = rs.getInt("GENERATED_KEY");
-//        }
-//
-//        apv.setId(apt_id);
-//
-//
-//        return apv;
+        this.curr_db.dbConnect();
+        Connection con = this.curr_db.getCon();
+        PreparedStatement ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1,active_user.getActive_user_id());
+        ps.setString(2,title);
+        ps.setString(3,description);
+        ps.setString(4,location);
+        ps.setString(5,apt_type);
+        ps.setTimestamp(6,end_time_znd);
+        ps.setTimestamp(7,start_time_znd);
+        ps.setTimestamp(8,lastUpdate);
+        ps.setString(9,active_user.getActive_user_name());
+        ps.setInt(10,apv.getId());
+
+        ps.execute();
+
+        return apv;
 
     }
+
+
 }

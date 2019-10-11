@@ -291,14 +291,17 @@ public class MainWindowC {
             addCustomerStage.setScene(addPartScene);
             updateAppointmentC.setStage(addCustomerStage);
             addCustomerStage.showAndWait();
-            obv_customer_list.remove(selectedItem);
+            obv_apt_list.remove(selectedItem);
             selectedItem = updateAppointmentC.get_avm();
             obv_apt_list.add(selectedItem);
             apt_tbl.setItems(obv_apt_list);
             apt_tbl.refresh();
+
+
         } catch (Exception e) {
             System.out.println(e);
         }
+
 
 
     }
