@@ -211,16 +211,16 @@ public class CalendarViewMainDAO {
                 "contact = ?, type = ?, url = ?, start = ?, end = ?, createDate = ?, " +
                 "createdBy = ?, lastUpdate = ?, lastUpdateBy = ? WHERE appointmentId = ?";
 
-        rs = curr_db.dbExecuteUpdate(ps);
-        Integer apt_id = null;
-        if (rs.next()) {
-            apt_id = rs.getInt("GENERATED_KEY");
-        }
-
-        apv.setId(apt_id);
-
-
-        return apv;
+//        rs = curr_db.dbExecuteUpdate(ps);
+//        Integer apt_id = null;
+//        if (rs.next()) {
+//            apt_id = rs.getInt("GENERATED_KEY");
+//        }
+//
+//        apv.setId(apt_id);
+//
+//
+//        return apv;
 
     }
 }

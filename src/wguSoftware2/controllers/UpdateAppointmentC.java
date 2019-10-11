@@ -15,6 +15,7 @@ import wguSoftware2.utils.Database_v3;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -206,20 +207,22 @@ public class UpdateAppointmentC {
 
 
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy-h-mm-a");
+        DateTimeFormatter ts_format = DateTimeFormatter.ofPattern("yyyy-MM-d-h-mm-a");
 
         String start_date_time = date+"-"+start_hour+"-"+start_min+"-"+start_am_pm_str;
         String end_date_time = date+"-"+end_hour+"-"+end_min+"-"+end_am_pm_str;
 
 
         //convert String to LocalDate
-        LocalDate local_start_date = LocalDate.parse(date, formatter);
-        LocalDate local_end_date = LocalDate.parse(date, formatter);
+        LocalDateTime local_start_date_time = LocalDateTime.parse(start_date_time, ts_format);
+        LocalDateTime local_end_date_time = LocalDateTime.parse(end_date_time, ts_format);
 
-        Timestamp start_date = Timestamp.valueOf(String.valueOf(local_start_date));
-        Timestamp end_date = Timestamp.valueOf(String.valueOf(local_end_date));
+        Timestamp start_timestamp = Timestamp.valueOf(local_start_date_time);
+        Timestamp end_timestamp = Timestamp.valueOf(local_end_date_time);
 
-        Appoinment_view_main avm = new Appoinment_view_main(apt_id,contact,description,title,location,start_date,end_date,"www.link.com");
+
+
+        Appoinment_view_main avm = new Appoinment_view_main(apt_id,contact,description,title,location,start_timestamp,end_timestamp,"www.link.com");
         calendarViewMainDAO.update(avm,active_user);
 
     }
