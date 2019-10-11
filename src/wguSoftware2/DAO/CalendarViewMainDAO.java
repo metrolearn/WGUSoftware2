@@ -195,8 +195,10 @@ public class CalendarViewMainDAO {
         String location = apv.getLocation();
         String contact = apv.getCustomerName();
         String apt_type = apv.getAppointment_type();
-        ZonedDateTime start_time_znd = apv.getStart_date_time();
-        ZonedDateTime end_time_znd = apv.getEnd_date_time();
+        Timestamp start_time_znd = apv.getStart();
+        Timestamp end_time_znd = apv.getEnd();
+
+        // if I cannot find customer prompt to  create new customer.
 
         Integer customerID = active_user.getActive_user_id();
         Integer userID = customer_view_main.getId();

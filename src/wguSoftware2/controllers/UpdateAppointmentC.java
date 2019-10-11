@@ -222,7 +222,7 @@ public class UpdateAppointmentC {
 
 
 
-        Appoinment_view_main avm = new Appoinment_view_main(apt_id,contact,description,title,location,start_timestamp,end_timestamp,"www.link.com");
+        Appoinment_view_main avm = new Appoinment_view_main(apt_id,contact,description,title,location,start_timestamp,end_timestamp,"www.link.com",apt_type);
         calendarViewMainDAO.update(avm,active_user);
 
     }

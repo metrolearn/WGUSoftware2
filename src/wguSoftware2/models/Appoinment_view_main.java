@@ -2,7 +2,6 @@ package wguSoftware2.models;
 
 import java.sql.Timestamp;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -24,8 +23,8 @@ public class Appoinment_view_main {
     private ZonedDateTime lastUpdate = null;
     private String  lastUpdateBy = null;
     private Integer id = null;
-    private ZonedDateTime start;
-    private ZonedDateTime end;
+    private Timestamp start;
+    private Timestamp end;
     private String dateViewString = null;
     private String timeViewStringStart = null;
     private String timeViewStringEnd = null;
@@ -48,16 +47,20 @@ public class Appoinment_view_main {
     }
 
     public Appoinment_view_main(Integer appointmentId, String customerName, String description, String title, String location,
-                                Timestamp start, Timestamp end, String url)
+                                Timestamp start, Timestamp end, String url, String apt_type)
     {
         this.id = appointmentId;
         this.customerName = customerName;
         this.description = description;
-        this.start = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC"));
-        this.end = ZonedDateTime.ofInstant(end.toInstant(), ZoneId.of("UTC"));
+        this.start = Timestamp.valueOf(ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC")).toLocalDateTime());
+
+        this.end = Timestamp.valueOf(ZonedDateTime.ofInstant(end.toInstant(), ZoneId.of("UTC")).toLocalDateTime());
+
+
         this.url = url;
         this.title = title;
         this.location = location;
+        this.appointment_type = apt_type;
         date_time_view_convert(start,end);
 
     }
@@ -212,19 +215,19 @@ public class Appoinment_view_main {
                 Objects.equals(end_date_time, that.end_date_time);
     }
 
-    public ZonedDateTime getStart() {
+    public Timestamp getStart() {
         return start;
     }
 
-    public void setStart(ZonedDateTime start) {
+    public void setStart(Timestamp start) {
         this.start = start;
     }
 
-    public ZonedDateTime getEnd() {
+    public Timestamp getEnd() {
         return end;
     }
 
-    public void setEnd(ZonedDateTime end) {
+    public void setEnd(Timestamp end) {
         this.end = end;
     }
 

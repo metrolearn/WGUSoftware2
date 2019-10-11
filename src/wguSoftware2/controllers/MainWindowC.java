@@ -220,8 +220,9 @@ public class MainWindowC {
            Timestamp start = rs.getTimestamp("start");
            Timestamp end = rs.getTimestamp("end");
            String url = rs.getString("url");
+           String apt_type = rs.getString("type");
 
-           this.avm = new Appoinment_view_main(appointmentId,customerName,description,title,location,start,end,url);
+           this.avm = new Appoinment_view_main(appointmentId,customerName,description,title,location,start,end,url,apt_type);
            avm_list.add(this.avm);
 
 
