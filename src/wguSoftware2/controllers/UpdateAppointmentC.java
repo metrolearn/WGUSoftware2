@@ -50,7 +50,7 @@ public class UpdateAppointmentC {
     @FXML
     private Label end_date_time_lbl;
     @FXML
-    private Button add_apt_btn = null;
+    private Button updt_apt_btn = null;
     @FXML
     private Database_v3 curr_db;
     @FXML
@@ -230,7 +230,7 @@ public class UpdateAppointmentC {
             }
         }
 
-        this.add_apt_btn.getScene().getWindow().hide();
+        this.updt_apt_btn.getScene().getWindow().hide();
         return avm;
 
         }

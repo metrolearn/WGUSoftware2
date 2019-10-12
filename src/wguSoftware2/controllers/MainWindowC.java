@@ -285,12 +285,12 @@ public class MainWindowC {
             updateAppointmentC.initialize(this.curr_db, this.active_user, obv_customer_list);
             Appoinment_view_main selectedItem = getSelectedAVM();
             updateAppointmentC.set_fields(selectedItem);
-            Stage addCustomerStage = new Stage();
-            addCustomerStage.setTitle("Update Customer");
-            Scene addPartScene = new Scene(main_root);
-            addCustomerStage.setScene(addPartScene);
-            updateAppointmentC.setStage(addCustomerStage);
-            addCustomerStage.showAndWait();
+            Stage updateAptStage = new Stage();
+            updateAptStage.setTitle("Update Appointment");
+            Scene updateAptScene = new Scene(main_root);
+            updateAptStage.setScene(updateAptScene);
+            updateAppointmentC.setStage(updateAptStage);
+            updateAptStage.showAndWait();
             obv_apt_list.remove(selectedItem);
             selectedItem = updateAppointmentC.get_avm();
             obv_apt_list.add(selectedItem);
