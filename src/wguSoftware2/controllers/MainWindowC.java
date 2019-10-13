@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -257,15 +254,30 @@ public class MainWindowC {
         Stage addAppointmentStage = new Stage();
         addAppointmentStage.setTitle("Add Appointment");
         Scene addAptScene = new Scene(main_root);
-        Customer_view_main selectedCVM = customer_tbl.getSelectionModel().getSelectedItem();
+        Customer_view_main selectedCVM = null;
+        selectedCVM = customer_tbl.getSelectionModel().getSelectedItem();
         addAppointmentC.setSelectedCVM(selectedCVM);
-        addAppointmentStage.setScene(addAptScene);
-        addAppointmentC.setStage(addAppointmentStage);
-        addAppointmentStage.showAndWait();
-        Appoinment_view_main avm = addAppointmentC.get_avm();
-        obv_apt_list.add(avm);
-        apt_tbl.setItems(obv_apt_list);
-        apt_tbl.refresh();
+        if(selectedCVM == null){
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText("Please note: Per management");
+            alert.setContentText("If you want create an apppoinment please select a customer from the customer table," +
+                    "press the add button.");
+            alert.showAndWait();
+
+        }else {
+            addAppointmentStage.setScene(addAptScene);
+            addAppointmentC.setStage(addAppointmentStage);
+            addAppointmentStage.showAndWait();
+            Appoinment_view_main avm = addAppointmentC.get_avm();
+            obv_apt_list.add(avm);
+            apt_tbl.setItems(obv_apt_list);
+            apt_tbl.refresh();
+        }
+
+
+
 
 
 

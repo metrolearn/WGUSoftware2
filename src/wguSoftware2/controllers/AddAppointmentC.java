@@ -99,7 +99,7 @@ public class AddAppointmentC {
 
         }
 
-        for (int i = 1; i < 61; i++) {
+        for (int i = 1; i < 60; i++) {
 
             if(i % 5 == 0) {
                 min_items.add(String.valueOf(i));
@@ -121,7 +121,6 @@ public class AddAppointmentC {
         this.apt_type_cb.setItems(apt_types);
 
 
-        //unfocus pathField
         this.blank_lbl.setFocusTraversable(true);
 
         date_pkr.setDayCellFactory(picker -> new DateCell() {
@@ -132,6 +131,8 @@ public class AddAppointmentC {
                 setDisable(empty || date.compareTo(today) < 0 );
             }
         });
+
+
 
 
 
