@@ -17,14 +17,13 @@ import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer;
 import wguSoftware2.models.Customer_view_main;
-import wguSoftware2.models.Appointment;
 import wguSoftware2.utils.Database_v3;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.ZoneId;
+import java.util.*;
 
 public class MainWindowC {
 
@@ -45,8 +44,22 @@ public class MainWindowC {
     public TableColumn<Appoinment_view_main, String> APT_END_Tbl_Cell;
     @FXML
     public TableColumn<Appoinment_view_main, String> APT_URL_Tbl_Cell;
-
-
+    @FXML
+    public Button Art_Update_Btn;
+    @FXML
+    public Button Art_Delete_Btn;
+    @FXML
+    public Button Art_Add_Btn;
+    @FXML
+    public RadioButton Art_Mnt_filter_rad;
+    @FXML
+    public RadioButton Art_Wk_filter_rad;
+    @FXML
+    public RadioButton Art_All_filter_rad;
+    @FXML
+    public ChoiceBox<String> timezone_picker;
+    @FXML
+    public RadioButton Art_Tz_filter_rad;
     @FXML
     private TableView<Appoinment_view_main> apt_tbl;
     @FXML
@@ -168,6 +181,8 @@ public class MainWindowC {
         this.active_user = active_user;
         this.cvmDAO = new CustomerViewMainDAO(curr_db,active_user.getActive_user_name());
         this.avmDAO = new CalendarViewMainDAO(curr_db,active_user);
+        this.Art_All_filter_rad.setSelected(true);
+
 
         String sql_stm = "SELECT customer.customerId, customer.customerName, address.address, address.phone\n" +
                 "FROM customer\n" +
@@ -225,6 +240,7 @@ public class MainWindowC {
 
 
 
+
        }
 
         this.all_apts = avm_list;
@@ -238,6 +254,16 @@ public class MainWindowC {
         this.APT_END_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("timeViewStringEnd"));
         this.APT_URL_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("url"));
         apt_tbl.setItems(obv_apt_list);
+        Set<String> availableZoneIds = ZoneId.getAvailableZoneIds();
+
+        List<String> zoneList = new ArrayList<>(availableZoneIds);
+        Collections.sort(zoneList);
+        ObservableList<String> stringObservableList = FXCollections.observableArrayList(zoneList);
+        this.timezone_picker.setItems(stringObservableList);
+        this.timezone_picker.setValue("Etc/UTC");
+
+
+
 
 
     }
@@ -330,11 +356,54 @@ public class MainWindowC {
     }
 
     public void FILTER_BY_MONTH(ActionEvent actionEvent) {
+
+        for (Appoinment_view_main v: obv_apt_list) {
+           v.setDateViewString(v.getStart_month());
+        }
+        apt_tbl.refresh();
+        this.Art_Wk_filter_rad.setSelected(false);
+        this.Art_All_filter_rad.setSelected(false);
+        this.Art_Tz_filter_rad.setSelected(false);
+
+
     }
 
     public void FILTER_BY_WEEK(ActionEvent actionEvent) {
+
+
+        for (Appoinment_view_main v: obv_apt_list) {
+            v.setDateViewString(v.getStart_day_of_week());
+        }
+        apt_tbl.refresh();
+        this.Art_Mnt_filter_rad.setSelected(false);
+        this.Art_All_filter_rad.setSelected(false);
+        this.Art_Tz_filter_rad.setSelected(false);
+
+
     }
 
     public void FILTER_BY_ALL(ActionEvent actionEvent) {
+
+        for (Appoinment_view_main v: obv_apt_list) {
+            v.setDateViewString(v.getStandard_date());
+        }
+        apt_tbl.refresh();
+        this.Art_Mnt_filter_rad.setSelected(false);
+        this.Art_Wk_filter_rad.setSelected(false);
+        this.Art_Tz_filter_rad.setSelected(false);
+
+
+    }
+
+    public void FILTER_BY_TZ(ActionEvent actionEvent){
+
+        ZoneId zid = ZoneId.of(timezone_picker.getValue());
+
+        // set hours and mins....
+
+
+        this.Art_Mnt_filter_rad.setSelected(false);
+        this.Art_Wk_filter_rad.setSelected(false);
+        this.Art_All_filter_rad.setSelected(false);
     }
 }

@@ -44,12 +44,12 @@ public class CalendarViewMainDAO {
         String location = apv.getLocation();
         String contact = apv.getCustomerName();
         String apt_type = apv.getAppointment_type();
-        ZonedDateTime start_time_znd = apv.getStart_date_time();
-        ZonedDateTime end_time_znd = apv.getEnd_date_time();
+        ZonedDateTime start_time_znd = apv.getStart_date_time_zdt();
+        ZonedDateTime end_time_znd = apv.getEnd_date_time_zdt();
 
         Integer customerID = active_user.getActive_user_id();
         Integer userID = customer_view_main.getId();
-        String url = "www.link.com";
+        String url = "customer link";
         ZonedDateTime createDate = ZonedDateTime.now();
         String createdBy = active_user.getActive_user_name();
         ZonedDateTime lastUpdate = createDate;
@@ -138,12 +138,12 @@ public class CalendarViewMainDAO {
         String location = apv.getLocation();
         String contact = apv.getCustomerName();
         String apt_type = apv.getAppointment_type();
-        ZonedDateTime start_time_znd = apv.getStart_date_time();
-        ZonedDateTime end_time_znd = apv.getEnd_date_time();
+        ZonedDateTime start_time_znd = apv.getStart_date_time_zdt();
+        ZonedDateTime end_time_znd = apv.getEnd_date_time_zdt();
 
         Integer customerID = active_user.getActive_user_id();
         Integer userID = customer_view_main.getId();
-        String url = "www.link.com";
+        String url = "customer link";
         ZonedDateTime createDate = ZonedDateTime.now();
         String createdBy = active_user.getActive_user_name();
         ZonedDateTime lastUpdate = createDate;
@@ -195,10 +195,10 @@ public class CalendarViewMainDAO {
         String location = apv.getLocation();
         String contact = apv.getCustomerName();
         String apt_type = apv.getAppointment_type();
-        Timestamp start_time_znd = apv.getStart();
-        Timestamp end_time_znd = apv.getEnd();
+        Timestamp start_time_znd = apv.getStart_ts_ldt();
+        Timestamp end_time_znd = apv.getEnd_ts_ldt();
 
-        String url = "www.link.com";
+        String url = "customer link";
 
         Timestamp lastUpdate =  Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime());
         String  lastUpdateBy = active_user.getActive_user_name();
