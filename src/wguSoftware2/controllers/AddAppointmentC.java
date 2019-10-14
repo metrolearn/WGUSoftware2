@@ -81,6 +81,193 @@ public class AddAppointmentC {
 
     }
 
+    public ComboBox<String> getStart_hour_cb() {
+        return start_hour_cb;
+    }
+
+    public void setStart_hour_cb(ComboBox<String> start_hour_cb) {
+        this.start_hour_cb = start_hour_cb;
+    }
+
+    public ComboBox<String> getStart_min_cb() {
+        return start_min_cb;
+    }
+
+    public void setStart_min_cb(ComboBox<String> start_min_cb) {
+        this.start_min_cb = start_min_cb;
+    }
+
+    public ComboBox<String> getEnd_min_cb() {
+        return end_min_cb;
+    }
+
+    public void setEnd_min_cb(ComboBox<String> end_min_cb) {
+        this.end_min_cb = end_min_cb;
+    }
+
+    public ComboBox<String> getEnd_hour_cb() {
+        return end_hour_cb;
+    }
+
+    public void setEnd_hour_cb(ComboBox<String> end_hour_cb) {
+        this.end_hour_cb = end_hour_cb;
+    }
+
+    public Label getStart_date_time_lbl() {
+        return start_date_time_lbl;
+    }
+
+    public void setStart_date_time_lbl(Label start_date_time_lbl) {
+        this.start_date_time_lbl = start_date_time_lbl;
+    }
+
+    public Label getEnd_date_time_lbl() {
+        return end_date_time_lbl;
+    }
+
+    public void setEnd_date_time_lbl(Label end_date_time_lbl) {
+        this.end_date_time_lbl = end_date_time_lbl;
+    }
+
+    public Label getBlank_lbl() {
+        return blank_lbl;
+    }
+
+    public void setBlank_lbl(Label blank_lbl) {
+        this.blank_lbl = blank_lbl;
+    }
+
+    public Button getAdd_apt_btn() {
+        return add_apt_btn;
+    }
+
+    public void setAdd_apt_btn(Button add_apt_btn) {
+        this.add_apt_btn = add_apt_btn;
+    }
+
+    public ComboBox<String> getApt_type_cb() {
+        return apt_type_cb;
+    }
+
+    public void setApt_type_cb(ComboBox<String> apt_type_cb) {
+        this.apt_type_cb = apt_type_cb;
+    }
+
+    public ResourceBundle getResources() {
+        return resources;
+    }
+
+    public void setResources(ResourceBundle resources) {
+        this.resources = resources;
+    }
+
+    public URL getLocation() {
+        return location;
+    }
+
+    public void setLocation(URL location) {
+        this.location = location;
+    }
+
+    public TextField getTitle_txt() {
+        return title_txt;
+    }
+
+    public void setTitle_txt(TextField title_txt) {
+        this.title_txt = title_txt;
+    }
+
+    public TextField getContact_txt() {
+        return contact_txt;
+    }
+
+    public void setContact_txt(TextField contact_txt) {
+        this.contact_txt = contact_txt;
+    }
+
+    public DatePicker getDate_pkr() {
+        return date_pkr;
+    }
+
+    public void setDate_pkr(DatePicker date_pkr) {
+        this.date_pkr = date_pkr;
+    }
+
+    public RadioButton getStart_pm() {
+        return start_pm;
+    }
+
+    public void setStart_pm(RadioButton start_pm) {
+        this.start_pm = start_pm;
+    }
+
+    public MenuButton getStart_hour() {
+        return start_hour;
+    }
+
+    public void setStart_hour(MenuButton start_hour) {
+        this.start_hour = start_hour;
+    }
+
+    public RadioButton getEnd_pm() {
+        return end_pm;
+    }
+
+    public void setEnd_pm(RadioButton end_pm) {
+        this.end_pm = end_pm;
+    }
+
+    public TextField getDesc_txt() {
+        return desc_txt;
+    }
+
+    public void setDesc_txt(TextField desc_txt) {
+        this.desc_txt = desc_txt;
+    }
+
+    public TextField getLocation_txt() {
+        return location_txt;
+    }
+
+    public void setLocation_txt(TextField location_txt) {
+        this.location_txt = location_txt;
+    }
+
+    public CalendarViewMainDAO getCalendarViewMainDAO() {
+        return calendarViewMainDAO;
+    }
+
+    public void setCalendarViewMainDAO(CalendarViewMainDAO calendarViewMainDAO) {
+        this.calendarViewMainDAO = calendarViewMainDAO;
+    }
+
+    public Customer_view_main getSelectedCVM() {
+        return selectedCVM;
+    }
+
+    public Appoinment_view_main getApv() {
+        return apv;
+    }
+
+    public void setApv(Appoinment_view_main apv) {
+        this.apv = apv;
+    }
+
+    public Active_User getActive_user() {
+        return active_user;
+    }
+
+    public void setActive_user(Active_User active_user) {
+        this.active_user = active_user;
+    }
+
+    public Database_v3 getCurr_db() {
+        return curr_db;
+    }
+
+    public void setCurr_db(Database_v3 curr_db) {
+        this.curr_db = curr_db;
+    }
 
     public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) {
 
@@ -120,7 +307,6 @@ public class AddAppointmentC {
 
         this.apt_type_cb.setItems(apt_types);
 
-
         this.blank_lbl.setFocusTraversable(true);
 
         date_pkr.setDayCellFactory(picker -> new DateCell() {
@@ -132,14 +318,7 @@ public class AddAppointmentC {
             }
         });
 
-
-
-
-
-
-
     }
-
 
     public void setStage(Stage addAppointmentStage) {
     }
@@ -180,10 +359,10 @@ public class AddAppointmentC {
         ZonedDateTime start_ztd = start_ldt.atZone(zone);
         ZonedDateTime end_ztd = end_ldt.atZone(zone);
 
-
-
         this.apv = new Appoinment_view_main(
                 title,description,location,contact,apt_type,start_ztd,end_ztd);
+        this.apv.setCustomerID(this.getSelectedCVM().getId());
+        this.apv.create_hyperlink();
 
         this.apv.setCustomerID(selectedCVM.getId());
         this.apv.setUserID(active_user.getActive_user_id());
@@ -196,8 +375,6 @@ public class AddAppointmentC {
         }
         this.add_apt_btn.getScene().getWindow().hide();
 
-
-
     }
 
     public void setSelectedCVM(Customer_view_main selectedCVM) {
@@ -205,6 +382,5 @@ public class AddAppointmentC {
         this.selectedCVM = selectedCVM;
 
     }
-
 
 }

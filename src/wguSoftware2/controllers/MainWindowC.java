@@ -3,12 +3,14 @@ package wguSoftware2.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import wguSoftware2.DAO.CalendarViewMainDAO;
@@ -233,8 +235,9 @@ public class MainWindowC {
            Timestamp end = rs.getTimestamp("end");
            String url = rs.getString("url");
            String apt_type = rs.getString("type");
+           Integer customer_id = rs.getInt("customerId");
 
-           this.avm = new Appoinment_view_main(appointmentId,customerName,description,title,location,start,end,url,apt_type);
+           this.avm = new Appoinment_view_main(customer_id,appointmentId,customerName,description,title,location,start,end,url,apt_type);
            avm_list.add(this.avm);
 
 
@@ -252,7 +255,7 @@ public class MainWindowC {
         this.APT_LOC_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("location"));
         this.APT_START_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("timeViewStringStart"));
         this.APT_END_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("timeViewStringEnd"));
-        this.APT_URL_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("url"));
+        this.APT_URL_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("hl"));
         apt_tbl.setItems(obv_apt_list);
         Set<String> availableZoneIds = ZoneId.getAvailableZoneIds();
 
@@ -264,6 +267,14 @@ public class MainWindowC {
 
 
 
+//        apt_tbl.setOnMousePressed(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+//                    System.out.println(apt_tbl.getSelectionModel().getSelectedItem());
+//                }
+//            }
+//        });
 
 
     }
@@ -288,7 +299,7 @@ public class MainWindowC {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information Dialog");
             alert.setHeaderText("Please note: Per management");
-            alert.setContentText("If you want create an apppoinment please select a customer from the customer table," +
+            alert.setContentText("If you want create an appointment please select a customer from the customer table," +
                     "press the add button.");
             alert.showAndWait();
 

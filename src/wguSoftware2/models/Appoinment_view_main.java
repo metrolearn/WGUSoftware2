@@ -1,10 +1,27 @@
 package wguSoftware2.models;
 
-import java.sql.Timestamp;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import wguSoftware2.controllers.UpdateAppointmentC;
+import wguSoftware2.controllers.UpdateCustomerC;
+import wguSoftware2.utils.Converters;
+import wguSoftware2.utils.Database_v3;
+
+import java.net.URL;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Appoinment_view_main {
@@ -37,6 +54,8 @@ public class Appoinment_view_main {
     private String start_day_of_week = null;
     private String start_month = null;
     private String standard_date = null;
+    private Hyperlink hl =null;
+
     public Appoinment_view_main(String title, String description, String location, String contact,
 
                                 String appointment_type, ZonedDateTime start_date_time, ZonedDateTime end_date_time) {
@@ -52,14 +71,21 @@ public class Appoinment_view_main {
         Timestamp end = Timestamp.from(start_date_time.toInstant());
         date_time_view_convert(start,end);
 
-
     }
 
-    // called from main init
+    private void date_time_view_convert(Timestamp start, Timestamp end) {
+        DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        this.dateViewString = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC")).format(date_formatter);
 
-    public Appoinment_view_main(Integer appointmentId, String customerName, String description, String title, String location,
+        DateTimeFormatter time_formatter = DateTimeFormatter.ofPattern("HH:mm");
+        this.timeViewStringStart = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC")).format(time_formatter);
+        this.timeViewStringEnd =ZonedDateTime.ofInstant(end.toInstant(), ZoneId.of("UTC")).format(time_formatter);
+    }
+
+    public Appoinment_view_main(Integer customer_id, Integer appointmentId, String customerName, String description, String title, String location,
                                 Timestamp start, Timestamp end, String url, String apt_type)
     {
+        this.customerID = customer_id;
         this.id = appointmentId;
         this.customerName = customerName;
         this.description = description;
@@ -82,26 +108,131 @@ public class Appoinment_view_main {
         this.title = title;
         this.location = location;
         this.appointment_type = apt_type;
-
-
-
-
-
-
-
+        create_hyperlink();
         date_time_view_convert(start,end);
 
     }
 
+    public void create_hyperlink() {
+        String s2 = "Detail view customer ID: ";
+        Hyperlink h = new Hyperlink();
+        h.setTooltip(new Tooltip("Double click to open detail view."));
+        h.setText(s2 + customerID.toString());
+        this.hl = h;
+        this.hl.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+                    String[] arrOfStr = hl.getText().split(": ");
 
 
-    private void date_time_view_convert(Timestamp start, Timestamp end) {
-        DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        this.dateViewString = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC")).format(date_formatter);
 
-        DateTimeFormatter time_formatter = DateTimeFormatter.ofPattern("HH:mm");
-        this.timeViewStringStart = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC")).format(time_formatter);
-        this.timeViewStringEnd =ZonedDateTime.ofInstant(end.toInstant(), ZoneId.of("UTC")).format(time_formatter);
+
+
+                    try {
+                        Database_v3 db = new Database_v3(
+                                "52.206.157.109",
+                                "U05mJi",
+                                "U05mJi",
+                                "53688547099"
+                        );
+                        db.dbConnect();
+                        Connection con = db.getCon();
+                        String sql_stm = "select * from customer inner join address a on customer.addressId = a.addressId" +
+                                " inner join city c on a.cityId = c.cityId" +
+                                " inner join country c2 on c.countryId = c2.countryId " +
+                                "where customerId = ?;";
+
+                        PreparedStatement ps = con.prepareStatement(sql_stm, Statement.RETURN_GENERATED_KEYS);
+                        ps.setInt(1, Integer.parseInt(arrOfStr[1]));
+                        ResultSet rs = ps.executeQuery();
+                        while (rs.next()) {
+                            String name = rs.getString("customerName");
+                            String address = rs.getString("address");
+                            String address2 = rs.getString("address2");
+                            String city = rs.getString("city");
+                            String postalCode = rs.getString("postalCode");
+                            String country = rs.getString("country");
+                            String phone = rs.getString("phone");
+
+
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText("Customer Detail");
+                            alert.setTitle("Customer Detail");
+                            alert.setContentText("" +
+                                    "Customer name: "+name+"\n" +
+                                    "Customer address: "+address+"\n"+
+                                    "Customer address2: "+address2+"\n"+
+                                    "Customer city: "+city+"\n"+
+                                    "Customer zip: "+postalCode+"\n"+
+                                    "Customer country: "+country+"\n"+
+                                    "Customer phone: "+phone+"\n");
+
+
+                            alert.showAndWait();
+
+
+
+//                            Customer_view_main cmv = null;
+//
+//                                public Customer_view_main(String name, String address, String alt_address, String city_name,
+//                                    String zip, String country, String phone){
+
+                            try {
+
+                            } catch (Exception e) {
+                                System.out.println(e);
+                            }
+
+
+                        }
+                    }
+                     catch (SQLException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+
+                }
+            }
+
+        });
+    }
+
+    public Appoinment_view_main(Integer appointmentId, String contact, String description, String title, String location, Timestamp start, Timestamp end, String s, String apt_type) {
+
+        this.id = appointmentId;
+        this.description = description;
+        this.zoneID = ZoneId.of("UTC");
+        this.start_date_time_zdt = ZonedDateTime.ofInstant(start.toInstant(), zoneID);
+        this.start_ts = start;
+        this.start_ldt = start_ts.toLocalDateTime();
+        this.start_ts_ldt = Timestamp.valueOf(this.start_ts.toLocalDateTime());
+        DateTimeFormatter day_of_week_formatter = DateTimeFormatter.ofPattern("EEEE");
+        this.start_day_of_week = start_date_time_zdt.format(day_of_week_formatter);
+        DateTimeFormatter month_formatter = DateTimeFormatter.ofPattern("MMMM");
+        this.start_month = start_date_time_zdt.format(month_formatter);
+        DateTimeFormatter std_date = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        this.standard_date = start_date_time_zdt.format(std_date);
+        this.end_ts = end;
+        this.end_ldt = end_ts.toLocalDateTime();
+        this.end_ts_ldt = Timestamp.valueOf(this.end_ts.toLocalDateTime());
+        this.end_date_time_zdt = ZonedDateTime.ofInstant(end.toInstant(), zoneID);
+        this.title = title;
+        this.location = location;
+        this.appointment_type = apt_type;
+        create_hyperlink();
+        date_time_view_convert(start,end);
+
+    }
+
+    public Hyperlink getHl() {
+        return hl;
+    }
+
+    public void setHl(Hyperlink hl) {
+        this.hl = hl;
     }
 
     public Integer getId() {
@@ -327,5 +458,7 @@ public class Appoinment_view_main {
     public void setStandard_date(String standard_date) {
         this.standard_date = standard_date;
     }
+
+    // called from main init
 
 }
