@@ -17,8 +17,11 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class UpdateAppointmentC {
+    @FXML
+    public TextField customer_txt;
     @FXML
     private Label blank_lbl;
     @FXML
@@ -61,7 +64,6 @@ public class UpdateAppointmentC {
     private Stage curr_stage = null;
     private CalendarViewMainDAO calendarViewMainDAO = null;
     private Integer apt_id = null;
-    private String org_contact_name = null;
 
     public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) {
 
@@ -73,11 +75,12 @@ public class UpdateAppointmentC {
     }
 
     public void set_fields(Appoinment_view_main selectedItem) throws SQLException, ClassNotFoundException {
-        this.org_contact_name = selectedItem.getCustomerName();
         title_txt.setText(selectedItem.getTitle());
         desc_txt.setText(selectedItem.getDescription());
         location_txt.setText(selectedItem.getLocation());
-        contact_txt.setText(selectedItem.getCustomerName());
+        customer_txt.setText(selectedItem.getCustomerName());
+        customer_txt.setEditable(false);
+        customer_txt.setDisable(true);
         desc_txt.setText(selectedItem.getDescription());
         System.out.println(desc_txt.getText());
         ObservableList<String> apt_types = null;
@@ -135,8 +138,7 @@ public class UpdateAppointmentC {
         end_min_cb.getSelectionModel().select(end_min_str);
         start_hour_cb.getSelectionModel().select(start_hour_str);
          start_min_cb.getSelectionModel().select(start_min_str);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
 
         //convert String to LocalDate
         LocalDate localDate = LocalDate.parse(selectedItem.getDateViewString(), formatter);
@@ -152,8 +154,10 @@ public class UpdateAppointmentC {
             }
         });
 
-        apt_type_cb.setValue(this.calendarViewMainDAO.getAppointmentType(selectedItem.getId()));
-
+        ArrayList<String>list = new ArrayList<>();
+        list = this.calendarViewMainDAO.getAppointmentTypeAndContact(selectedItem.getId());
+        apt_type_cb.setValue(list.get(0));
+        contact_txt.setText(list.get(1));
         this.apt_id = selectedItem.getId();
 
     }
@@ -177,6 +181,7 @@ public class UpdateAppointmentC {
         String description = desc_txt.getText();
         String location = location_txt.getText();
         String contact = contact_txt.getText();
+
         String apt_type = apt_type_cb.getValue();
         String date = date_pkr.getValue().toString();
         String start_hour = start_hour_cb.getValue();
@@ -217,18 +222,6 @@ public class UpdateAppointmentC {
         Timestamp end_timestamp = Timestamp.valueOf(local_end_date_time);
 
         Appoinment_view_main avm = null;
-
-        if(!contact.equals(org_contact_name)){
-            on_contact_change();
-            this.contact_txt.setText(org_contact_name);
-        }else {
-            try {
-                avm = new Appoinment_view_main(apt_id, contact, description, title, location, start_timestamp, end_timestamp, "www.link.com", apt_type);
-                this.avm = calendarViewMainDAO.update(avm, active_user);
-            } catch (SQLException | ClassNotFoundException | NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
 
         this.updt_apt_btn.getScene().getWindow().hide();
         return avm;

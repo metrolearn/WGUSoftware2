@@ -276,10 +276,8 @@ public class AddAppointmentC {
         this.calendarViewMainDAO = new CalendarViewMainDAO(curr_db);
 
         ObservableList<String> hour_items = end_hour_cb.getItems();
-        ObservableList<String> end_minItems =  end_min_cb.getItems();
 
         ObservableList<String> min_items = start_hour_cb.getItems();
-        ObservableList<String> start_minItems = start_min_cb.getItems();
 
         for (int i = 1; i < 13 ; i++) {
             hour_items.add(String.valueOf(i));

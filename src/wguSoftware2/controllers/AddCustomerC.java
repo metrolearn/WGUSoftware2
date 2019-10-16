@@ -3,6 +3,7 @@ package wguSoftware2.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import wguSoftware2.DAO.CustomerViewMainDAO;
@@ -19,6 +20,7 @@ import java.util.ResourceBundle;
 
 public class AddCustomerC {
 
+    public Label blank_lbl;
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
@@ -68,6 +70,7 @@ public class AddCustomerC {
         this.obv_customer_list = obv_customer_list;
         this.update = false;
         this.cvmDAO = new CustomerViewMainDAO(curr_db,active_user.getActive_user_name());
+        this.blank_lbl.setFocusTraversable(true);
 
     }
 

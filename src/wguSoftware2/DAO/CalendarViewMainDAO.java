@@ -7,6 +7,7 @@ import wguSoftware2.utils.Database_v3;
 
 import java.sql.*;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 
 public class CalendarViewMainDAO {
 
@@ -104,12 +105,12 @@ public class CalendarViewMainDAO {
 
     }
 
-    public String getAppointmentType(Integer apt_id) throws SQLException, ClassNotFoundException {
-        String r_val = null;
+    public ArrayList<String> getAppointmentTypeAndContact(Integer apt_id) throws SQLException, ClassNotFoundException {
+        ArrayList<String> r_val = new ArrayList<>();
         Connection con;
         PreparedStatement ps;
         ResultSet rs;
-        String sql_update_view = "SELECT appointment.type from appointment where appointmentId = ?";
+        String sql_update_view = "SELECT appointment.type, appointment.contact from appointment where appointmentId = ?";
 
         this.curr_db.dbConnect();
         con = this.curr_db.getCon();
@@ -120,7 +121,8 @@ public class CalendarViewMainDAO {
 
 
         if (rs.next()){
-            r_val = rs.getString(1);
+            r_val.add(rs.getString(1));
+            r_val.add(rs.getString(2));
         }
 
 

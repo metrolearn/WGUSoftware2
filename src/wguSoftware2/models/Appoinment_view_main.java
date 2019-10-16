@@ -122,7 +122,7 @@ public class Appoinment_view_main {
         this.hl.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+                if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
                     String[] arrOfStr = hl.getText().split(": ");
 
 
