@@ -50,6 +50,8 @@ public class CalendarViewMainDAO {
 
         Integer customerID = customer_view_main.getId();
         Integer userID = active_user.getActive_user_id();
+
+
         String url = "customer link";
         ZonedDateTime createDate = ZonedDateTime.now();
         String createdBy = active_user.getActive_user_name();
