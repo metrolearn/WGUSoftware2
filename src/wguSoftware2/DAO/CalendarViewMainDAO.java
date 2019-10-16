@@ -48,8 +48,8 @@ public class CalendarViewMainDAO {
         ZonedDateTime start_time_znd = apv.getStart_date_time_zdt();
         ZonedDateTime end_time_znd = apv.getEnd_date_time_zdt();
 
-        Integer customerID = active_user.getActive_user_id();
-        Integer userID = customer_view_main.getId();
+        Integer customerID = customer_view_main.getId();
+        Integer userID = active_user.getActive_user_id();
         String url = "customer link";
         ZonedDateTime createDate = ZonedDateTime.now();
         String createdBy = active_user.getActive_user_name();
@@ -81,6 +81,7 @@ public class CalendarViewMainDAO {
 
 
 
+        System.out.println(ps.toString());
         rs = curr_db.dbExecuteUpdate(ps);
         Integer apt_id = null;
         if (rs.next()) {
