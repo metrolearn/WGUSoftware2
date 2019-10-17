@@ -4,7 +4,10 @@ import javafx.fxml.FXML;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Objects;
+import java.util.TimeZone;
+
 import wguSoftware2.utils.Converters;
 
 /**
@@ -32,6 +35,8 @@ public class User {
     private ZonedDateTime last_update_date_time;
     private Converters c = new Converters();
 
+
+
     /**
      * Instantiates a new User.
      *
@@ -47,6 +52,8 @@ public class User {
         this.create_date_time = ZonedDateTime.now();
         this.last_update_date_time = this.create_date_time;
 
+
+
     }
 
     public User(String name, String password) {
@@ -55,6 +62,15 @@ public class User {
         this.password = password;
 
     }
+
+    public Converters getC() {
+        return c;
+    }
+
+    public void setC(Converters c) {
+        this.c = c;
+    }
+
 
     @Override
     @FXML

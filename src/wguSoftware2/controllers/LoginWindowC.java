@@ -131,6 +131,8 @@ public class LoginWindowC {
 
                 // good login.
                 this.ac = new Active_User(rs.getInt(1),this.user_txt_fld.getText());
+                this.ac.setCurrent_location(this.g.getLoginLocationString());
+                this.ac.setGp(this.g);
                 System.out.println("Logging in "+ this.ac);
                 FXMLLoader loader = new FXMLLoader(this.main_window_url);
                 Parent main_root;

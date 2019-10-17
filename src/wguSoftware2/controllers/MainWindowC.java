@@ -1,5 +1,6 @@
 package wguSoftware2.controllers;
 
+import com.mysql.jdbc.util.TimezoneDump;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,7 +25,9 @@ import wguSoftware2.utils.Database_v3;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.Duration;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class MainWindowC {
@@ -62,6 +65,10 @@ public class MainWindowC {
     public ChoiceBox<String> timezone_picker;
     @FXML
     public RadioButton Art_Tz_filter_rad;
+    @FXML
+    public Label curr_tz_lbl;
+    @FXML
+    public CheckBox dst_cbx;
     @FXML
     private TableView<Appoinment_view_main> apt_tbl;
     @FXML
@@ -184,6 +191,7 @@ public class MainWindowC {
         this.cvmDAO = new CustomerViewMainDAO(curr_db,active_user.getActive_user_name());
         this.avmDAO = new CalendarViewMainDAO(curr_db,active_user);
         this.Art_All_filter_rad.setSelected(true);
+        this.curr_tz_lbl.setText(this.active_user.getCurrent_location());
 
 
         String sql_stm = "SELECT customer.customerId, customer.customerName, address.address, address.phone\n" +
@@ -263,7 +271,8 @@ public class MainWindowC {
         Collections.sort(zoneList);
         ObservableList<String> stringObservableList = FXCollections.observableArrayList(zoneList);
         this.timezone_picker.setItems(stringObservableList);
-        this.timezone_picker.setValue("Etc/UTC");
+        this.timezone_picker.getSelectionModel().select(this.active_user.getTz().getID());
+
 
 
 
@@ -416,5 +425,18 @@ public class MainWindowC {
         this.Art_Mnt_filter_rad.setSelected(false);
         this.Art_Wk_filter_rad.setSelected(false);
         this.Art_All_filter_rad.setSelected(false);
+    }
+
+    public void on_dst_cbx_action(ActionEvent actionEvent) {
+
+        for (Appoinment_view_main avm: all_apts) {
+
+            System.out.println(avm.getEnd_date_time_zdt());
+        //    .plus(tz.getRules().getDaylightSavings(startTime));
+            Duration start_duration = this.active_user.getTz().toZoneId().getRules().getDaylightSavings(avm.getStart_date_time_zdt().toInstant());
+            System.out.println(start_duration.getSeconds());
+
+        }
+
     }
 }
