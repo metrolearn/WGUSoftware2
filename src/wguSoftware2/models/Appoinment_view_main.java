@@ -31,19 +31,14 @@ public class Appoinment_view_main {
     private String location;
     private String customerName;
     private String appointment_type;
+
+
     private ZonedDateTime start_date_time_zdt;
     private ZonedDateTime end_date_time_zdt;
     private LocalDateTime start_ldt = null;
     private LocalDateTime end_ldt= null;
-    private ZoneId zoneID = null;
-    private Integer customerID = null;
-    private Integer userID = null;
-    private String url = null;
     private ZonedDateTime createDate = null;
-    private String createdBy = null;
     private ZonedDateTime lastUpdate = null;
-    private String  lastUpdateBy = null;
-    private Integer id = null;
     private Timestamp start_ts_ldt;
     private Timestamp end_ts_ldt;
     private Timestamp start_ts;
@@ -54,9 +49,18 @@ public class Appoinment_view_main {
     private String start_day_of_week = null;
     private String start_month = null;
     private String standard_date = null;
+
+    private ZoneId zoneID = null;
+    private Integer customerID = null;
+    private Integer userID = null;
+    private String url = null;
+    private String createdBy = null;
+    private String  lastUpdateBy = null;
+    private Integer id = null;
+
     private Hyperlink hl =null;
 
-    public Appoinment_view_main(String title, String description, String location, String contact,
+    public Appoinment_view_main(Active_User ac, String title, String description, String location, String contact,
 
                                 String appointment_type, ZonedDateTime start_date_time, ZonedDateTime end_date_time) {
         this.title = title;
@@ -69,27 +73,28 @@ public class Appoinment_view_main {
         this.url = "www.link.com";
         Timestamp start = Timestamp.from(start_date_time.toInstant());
         Timestamp end = Timestamp.from(start_date_time.toInstant());
-        date_time_view_convert(start,end);
+        date_time_view_convert(start,end,ac.getTz().toZoneId());
 
     }
 
-    private void date_time_view_convert(Timestamp start, Timestamp end) {
+    private void date_time_view_convert(Timestamp start, Timestamp end, ZoneId zid) {
         DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        this.dateViewString = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC")).format(date_formatter);
+        ZoneId zoneID = zid;
+        this.dateViewString = ZonedDateTime.ofInstant(start.toInstant(), zoneID).format(date_formatter);
 
         DateTimeFormatter time_formatter = DateTimeFormatter.ofPattern("HH:mm");
-        this.timeViewStringStart = ZonedDateTime.ofInstant(start.toInstant(), ZoneId.of("UTC")).format(time_formatter);
-        this.timeViewStringEnd =ZonedDateTime.ofInstant(end.toInstant(), ZoneId.of("UTC")).format(time_formatter);
+        this.timeViewStringStart = ZonedDateTime.ofInstant(start.toInstant(), zoneID).format(time_formatter);
+        this.timeViewStringEnd =ZonedDateTime.ofInstant(end.toInstant(), zoneID).format(time_formatter);
     }
 
-    public Appoinment_view_main(Integer customer_id, Integer appointmentId, String customerName, String description, String title, String location,
+    public Appoinment_view_main(Active_User ac, Integer customer_id, Integer appointmentId, String customerName, String description, String title, String location,
                                 Timestamp start, Timestamp end, String url, String apt_type)
     {
         this.customerID = customer_id;
         this.id = appointmentId;
         this.customerName = customerName;
         this.description = description;
-        this.zoneID = ZoneId.of("UTC");
+        this.zoneID = ac.getTz().toZoneId();
         this.start_date_time_zdt = ZonedDateTime.ofInstant(start.toInstant(), zoneID);
         this.start_ts = start;
         this.start_ldt = start_ts.toLocalDateTime();
@@ -109,7 +114,7 @@ public class Appoinment_view_main {
         this.location = location;
         this.appointment_type = apt_type;
         create_hyperlink();
-        date_time_view_convert(start,end);
+        date_time_view_convert(start,end,zoneID);
 
     }
 
@@ -200,11 +205,11 @@ public class Appoinment_view_main {
         });
     }
 
-    public Appoinment_view_main(Integer appointmentId, String contact, String description, String title, String location, Timestamp start, Timestamp end, String s, String apt_type) {
+    public Appoinment_view_main(Active_User ac, Integer appointmentId, String contact, String description, String title, String location, Timestamp start, Timestamp end, String s, String apt_type) {
 
         this.id = appointmentId;
         this.description = description;
-        this.zoneID = ZoneId.of("UTC");
+        this.zoneID = ac.getTz().toZoneId();
         this.start_date_time_zdt = ZonedDateTime.ofInstant(start.toInstant(), zoneID);
         this.start_ts = start;
         this.start_ldt = start_ts.toLocalDateTime();
@@ -223,7 +228,7 @@ public class Appoinment_view_main {
         this.location = location;
         this.appointment_type = apt_type;
         create_hyperlink();
-        date_time_view_convert(start,end);
+        date_time_view_convert(start,end,zoneID);
 
     }
 
@@ -457,6 +462,27 @@ public class Appoinment_view_main {
 
     public void setStandard_date(String standard_date) {
         this.standard_date = standard_date;
+    }
+
+    public void ajustTimebySeconds(long diff_in_seconds) {
+
+        start_date_time_zdt = null;
+        end_date_time_zdt = null;
+        start_ldt = null;
+        end_ldt= null;
+        createDate = null;
+        lastUpdate = null;
+        start_ts_ldt = null;
+        end_ts_ldt = null;
+        start_ts = null;
+        end_ts = null;
+        dateViewString = null;
+        timeViewStringStart = null;
+        timeViewStringEnd = null;
+        start_day_of_week = null;
+         start_month = null;
+         standard_date = null;
+
     }
 
     // called from main init

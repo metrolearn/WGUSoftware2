@@ -357,8 +357,7 @@ public class AddAppointmentC {
         ZonedDateTime start_ztd = start_ldt.atZone(zone);
         ZonedDateTime end_ztd = end_ldt.atZone(zone);
 
-        this.apv = new Appoinment_view_main(
-                title,description,location,contact,apt_type,start_ztd,end_ztd);
+        this.apv = new Appoinment_view_main(active_user,title,description,location,contact,apt_type,start_ztd,end_ztd);
         this.apv.setCustomerID(this.getSelectedCVM().getId());
         this.apv.create_hyperlink();
 

@@ -245,7 +245,7 @@ public class MainWindowC {
            String apt_type = rs.getString("type");
            Integer customer_id = rs.getInt("customerId");
 
-           this.avm = new Appoinment_view_main(customer_id,appointmentId,customerName,description,title,location,start,end,url,apt_type);
+           this.avm = new Appoinment_view_main(active_user,customer_id,appointmentId,customerName,description,title,location,start,end,url,apt_type);
            avm_list.add(this.avm);
 
 
@@ -431,10 +431,9 @@ public class MainWindowC {
 
         for (Appoinment_view_main avm: all_apts) {
 
-            System.out.println(avm.getEnd_date_time_zdt());
-        //    .plus(tz.getRules().getDaylightSavings(startTime));
             Duration start_duration = this.active_user.getTz().toZoneId().getRules().getDaylightSavings(avm.getStart_date_time_zdt().toInstant());
-            System.out.println(start_duration.getSeconds());
+            long diff_in_seconds = start_duration.getSeconds();
+            avm.ajustTimebySeconds(diff_in_seconds);
 
         }
 
