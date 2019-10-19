@@ -1,6 +1,7 @@
 package wguSoftware2.controllers;
 
 import com.mysql.jdbc.util.TimezoneDump;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,8 +27,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.zone.ZoneRules;
 import java.util.*;
 
 public class MainWindowC {
@@ -283,10 +286,19 @@ public class MainWindowC {
 //                    System.out.println(apt_tbl.getSelectionModel().getSelectedItem());
 //                }
 //            }
-//        });
+//        })
+
+
+        timezone_picker.getSelectionModel()
+                .selectedItemProperty()
+                .addListener( (ObservableValue<? extends String> observable, String oldValue, String newValue)
+                        -> this.updateTimeBasedOnZoneID(newValue)
+                );
 
 
     }
+
+
 
     public void ADD_APR(ActionEvent actionEvent) throws IOException {
 
@@ -383,7 +395,6 @@ public class MainWindowC {
         apt_tbl.refresh();
         this.Art_Wk_filter_rad.setSelected(false);
         this.Art_All_filter_rad.setSelected(false);
-        this.Art_Tz_filter_rad.setSelected(false);
 
 
     }
@@ -397,7 +408,6 @@ public class MainWindowC {
         apt_tbl.refresh();
         this.Art_Mnt_filter_rad.setSelected(false);
         this.Art_All_filter_rad.setSelected(false);
-        this.Art_Tz_filter_rad.setSelected(false);
 
 
     }
@@ -410,7 +420,6 @@ public class MainWindowC {
         apt_tbl.refresh();
         this.Art_Mnt_filter_rad.setSelected(false);
         this.Art_Wk_filter_rad.setSelected(false);
-        this.Art_Tz_filter_rad.setSelected(false);
 
 
     }
@@ -419,7 +428,7 @@ public class MainWindowC {
 
         ZoneId zid = ZoneId.of(timezone_picker.getValue());
 
-        // set hours and mins....
+        // set hours and mins....user
 
 
         this.Art_Mnt_filter_rad.setSelected(false);
@@ -429,13 +438,38 @@ public class MainWindowC {
 
     public void on_dst_cbx_action(ActionEvent actionEvent) {
 
-        for (Appoinment_view_main avm: all_apts) {
-
-            Duration start_duration = this.active_user.getTz().toZoneId().getRules().getDaylightSavings(avm.getStart_date_time_zdt().toInstant());
-            long diff_in_seconds = start_duration.getSeconds();
-            avm.ajustTimebySeconds(diff_in_seconds);
-
-        }
+        update_apt_table_time_by_tz_in_seconds();
 
     }
+
+    private void update_apt_table_time_by_tz_in_seconds() {
+        for (Appoinment_view_main avm: all_apts) {
+
+            TimeZone tz = this.active_user.getTz();
+            ZoneId zoneId = tz.toZoneId();
+            ZoneRules rules = zoneId.getRules();
+            Appoinment_view_main avm1 = avm;
+            ZonedDateTime avm_zdt = avm1.getStart_date_time_zdt();
+            Instant avm_zdt_instant = avm_zdt.toInstant();
+
+            Duration start_duration = rules.getDaylightSavings(avm_zdt_instant);
+            long diff_in_seconds = start_duration.getSeconds();
+            avm1.ajustTimebySeconds(diff_in_seconds);
+
+        }
+    }
+
+    private void updateTimeBasedOnZoneID(String newValue) {
+
+        TimeZone tz = this.active_user.getTz();
+        String id = newValue;
+        tz.setID(id);
+
+
+        update_apt_table_time_by_tz_in_seconds();
+
+    }
+
+
+
 }

@@ -466,22 +466,10 @@ public class Appoinment_view_main {
 
     public void ajustTimebySeconds(long diff_in_seconds) {
 
-        start_date_time_zdt = null;
-        end_date_time_zdt = null;
-        start_ldt = null;
-        end_ldt= null;
-        createDate = null;
-        lastUpdate = null;
-        start_ts_ldt = null;
-        end_ts_ldt = null;
-        start_ts = null;
-        end_ts = null;
-        dateViewString = null;
-        timeViewStringStart = null;
-        timeViewStringEnd = null;
-        start_day_of_week = null;
-         start_month = null;
-         standard_date = null;
+        start_date_time_zdt = this.start_date_time_zdt.plusSeconds(diff_in_seconds);
+        end_date_time_zdt = this.start_date_time_zdt.plusSeconds(diff_in_seconds);
+        start_ldt = this.start_ldt.plusSeconds(diff_in_seconds);
+        end_ldt= this.start_ldt.plusSeconds(diff_in_seconds);
 
     }
 
