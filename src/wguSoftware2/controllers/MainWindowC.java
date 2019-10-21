@@ -445,15 +445,21 @@ public class MainWindowC {
     private void update_apt_table_time_by_tz_in_seconds() {
         for (Appoinment_view_main avm: all_apts) {
 
+
+
             TimeZone tz = this.active_user.getTz();
             ZoneId zoneId = tz.toZoneId();
             ZoneRules rules = zoneId.getRules();
             Appoinment_view_main avm1 = avm;
             ZonedDateTime avm_zdt = avm1.getStart_date_time_zdt();
             Instant avm_zdt_instant = avm_zdt.toInstant();
-
             Duration start_duration = rules.getDaylightSavings(avm_zdt_instant);
             long diff_in_seconds = start_duration.getSeconds();
+
+            if(!dst_cbx.isSelected()){
+                diff_in_seconds = diff_in_seconds*-1;
+            }
+
             avm1.ajustTimebySeconds(diff_in_seconds);
 
         }

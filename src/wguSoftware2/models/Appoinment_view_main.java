@@ -1,28 +1,18 @@
 package wguSoftware2.models;
 
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
-import wguSoftware2.controllers.UpdateAppointmentC;
-import wguSoftware2.controllers.UpdateCustomerC;
-import wguSoftware2.utils.Converters;
 import wguSoftware2.utils.Database_v3;
 
-import java.net.URL;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class Appoinment_view_main {
 
@@ -470,6 +460,20 @@ public class Appoinment_view_main {
         end_date_time_zdt = this.start_date_time_zdt.plusSeconds(diff_in_seconds);
         start_ldt = this.start_ldt.plusSeconds(diff_in_seconds);
         end_ldt= this.start_ldt.plusSeconds(diff_in_seconds);
+        start_ts = Timestamp.valueOf(start_ldt);
+        end_ts = Timestamp.valueOf(end_ldt);
+        date_time_view_convert(start_ts,end_ts,zoneID);
+
+
+
+    }
+
+
+    public void convert24hourFormatTo12HourFormat(ZonedDateTime ts){
+
+        SimpleDateFormat outputformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa");
+        String format = outputformat.format(ts);
+
 
     }
 
