@@ -221,7 +221,7 @@ public class UpdateAppointmentC {
         Timestamp start_timestamp = Timestamp.valueOf(local_start_date_time);
         Timestamp end_timestamp = Timestamp.valueOf(local_end_date_time);
 
-        Appoinment_view_main avm = null;
+        this.calendarViewMainDAO.update(this.avm,this.active_user);
 
         this.updt_apt_btn.getScene().getWindow().hide();
         return avm;

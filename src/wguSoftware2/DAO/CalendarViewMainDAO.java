@@ -6,6 +6,7 @@ import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
 import java.sql.*;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
@@ -200,9 +201,9 @@ public class CalendarViewMainDAO {
         String location = apv.getLocation();
         String contact = apv.getCustomerName();
         String apt_type = apv.getAppointment_type();
-        Timestamp start_time_znd =  Timestamp.valueOf(apv.getStart_ldt());
-        Timestamp end_time_znd = Timestamp.valueOf(apv.getEnd_ldt());
-        Timestamp lastUpdate =  Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime());
+        Timestamp start_time_znd_utc =  Timestamp.valueOf(String.valueOf(apv.getStart_ldt().toInstant(ZoneOffset.UTC)));
+        Timestamp end_time_znd_utc = Timestamp.valueOf(String.valueOf(apv.getEnd_ldt().toInstant(ZoneOffset.UTC)));
+        Timestamp lastUpdate_utc =  Timestamp.valueOf(String.valueOf(ZonedDateTime.now().toLocalDateTime().atZone(ZoneOffset.UTC)));
         String  lastUpdateBy = active_user.getActive_user_name();
 
 
@@ -219,9 +220,9 @@ public class CalendarViewMainDAO {
         ps.setString(3,description);
         ps.setString(4,location);
         ps.setString(5,apt_type);
-        ps.setTimestamp(6,end_time_znd);
-        ps.setTimestamp(7,start_time_znd);
-        ps.setTimestamp(8,lastUpdate);
+        ps.setTimestamp(6,start_time_znd_utc);
+        ps.setTimestamp(7,end_time_znd_utc);
+        ps.setTimestamp(8,lastUpdate_utc);
         ps.setString(9,active_user.getActive_user_name());
         ps.setInt(10,apv.getId());
 
