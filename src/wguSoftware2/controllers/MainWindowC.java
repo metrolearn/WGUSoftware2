@@ -428,7 +428,6 @@ public class MainWindowC {
 
         ZoneId zid = ZoneId.of(timezone_picker.getValue());
 
-        // set hours and mins....user
 
 
         this.Art_Mnt_filter_rad.setSelected(false);
@@ -438,11 +437,13 @@ public class MainWindowC {
 
     public void on_dst_cbx_action(ActionEvent actionEvent) {
 
-        update_apt_table_time_by_tz_in_seconds();
+        update_apt_table_time_by_dst_in_seconds();
+        apt_tbl.setItems(obv_apt_list);
+        apt_tbl.refresh();
 
     }
 
-    private void update_apt_table_time_by_tz_in_seconds() {
+    private void update_apt_table_time_by_dst_in_seconds() {
         for (Appoinment_view_main avm: all_apts) {
 
             TimeZone tz = this.active_user.getTz();
@@ -454,19 +455,47 @@ public class MainWindowC {
 
             Duration start_duration = rules.getDaylightSavings(avm_zdt_instant);
             long diff_in_seconds = start_duration.getSeconds();
-            avm1.ajustTimebySeconds(diff_in_seconds);
+            if(!dst_cbx.isSelected()) {
+                avm1.ajustTimebySeconds(diff_in_seconds*-1);
+
+            }else {
+
+                avm1.ajustTimebySeconds(diff_in_seconds);
+
+            }
+
+        }
+
+
+    }
+
+    private void update_apt_table_time_by_tz_in_seconds() {
+        for (Appoinment_view_main avm : all_apts) {
+
+            TimeZone tz = this.active_user.getTz();
+            ZoneId zoneId = tz.toZoneId();
+            ZonedDateTime start_date_time_zdt = avm.getStart_date_time_zdt();
+            start_date_time_zdt = start_date_time_zdt.toInstant().atZone(tz.toZoneId());
+            avm.setStart_date_time_zdt(start_date_time_zdt);
+
+            ZonedDateTime end_date_time_zdt = avm.getEnd_date_time_zdt();
+            end_date_time_zdt = end_date_time_zdt.toInstant().atZone(tz.toZoneId());
+            avm.setEnd_date_time_zdt(end_date_time_zdt);
+
+            avm.updateTimes();
+
 
         }
     }
 
     private void updateTimeBasedOnZoneID(String newValue) {
 
-        TimeZone tz = this.active_user.getTz();
-        String id = newValue;
-        tz.setID(id);
-
-
+        this.active_user.getTz().setID(newValue);
+        System.out.println(active_user.getTz().toString());
+//        update_apt_table_time_by_dst_in_seconds();
         update_apt_table_time_by_tz_in_seconds();
+        apt_tbl.setItems(obv_apt_list);
+        apt_tbl.refresh();
 
     }
 

@@ -200,11 +200,8 @@ public class CalendarViewMainDAO {
         String location = apv.getLocation();
         String contact = apv.getCustomerName();
         String apt_type = apv.getAppointment_type();
-        Timestamp start_time_znd = apv.getStart_ts_ldt();
-        Timestamp end_time_znd = apv.getEnd_ts_ldt();
-
-        String url = "customer link";
-
+        Timestamp start_time_znd =  Timestamp.valueOf(apv.getStart_ldt());
+        Timestamp end_time_znd = Timestamp.valueOf(apv.getEnd_ldt());
         Timestamp lastUpdate =  Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime());
         String  lastUpdateBy = active_user.getActive_user_name();
 

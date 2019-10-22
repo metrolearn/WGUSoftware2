@@ -4,7 +4,6 @@
 
 package wguSoftware2.controllers;
 
-import com.sun.rowset.CachedRowSetImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +16,6 @@ import javafx.stage.Stage;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.GeoIP;
 import wguSoftware2.utils.Converters;
-import wguSoftware2.utils.Database;
 import wguSoftware2.utils.Database_v3;
 
 import java.io.IOException;
@@ -26,7 +24,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class LoginWindowC {
     private static final boolean TESTING = true;
@@ -132,7 +132,8 @@ public class LoginWindowC {
                 // good login.
                 this.ac = new Active_User(rs.getInt(1),this.user_txt_fld.getText());
                 this.ac.setCurrent_location(this.g.getLoginLocationString());
-                this.ac.setGp(this.g);
+                this.ac.setGeoIp(this.g);
+                this.ac.setTz(TimeZone.getDefault());
                 System.out.println("Logging in "+ this.ac);
                 FXMLLoader loader = new FXMLLoader(this.main_window_url);
                 Parent main_root;
