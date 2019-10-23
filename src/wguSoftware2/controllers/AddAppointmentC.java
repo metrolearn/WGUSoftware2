@@ -337,7 +337,7 @@ public class AddAppointmentC {
         boolean end_pm = this.end_pm.isArmed();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
-        TimeZone tz = TimeZone.getDefault();
+        TimeZone tz = active_user.getTz();
         String zoneId = tz.toZoneId().toString();
 
         if (this.start_pm.isSelected()){

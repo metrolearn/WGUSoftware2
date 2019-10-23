@@ -370,6 +370,12 @@ public class MainWindowC {
             apt_tbl.setItems(obv_apt_list);
             apt_tbl.refresh();
 
+//            obv_customer_list.remove(selectedItem);
+//            selectedItem = updateCustomerC.get_cvm();
+//            obv_customer_list.add(selectedItem);
+//            customer_tbl.setItems(obv_customer_list);
+//            customer_tbl.refresh();
+
         } catch (Exception e) {
             System.out.println(e);
         }

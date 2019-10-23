@@ -75,6 +75,10 @@ public class UpdateAppointmentC {
     }
 
     public void set_fields(Appoinment_view_main selectedItem) throws SQLException, ClassNotFoundException {
+
+        this.avm = selectedItem;
+
+
         title_txt.setText(selectedItem.getTitle());
         desc_txt.setText(selectedItem.getDescription());
         location_txt.setText(selectedItem.getLocation());
@@ -220,6 +224,15 @@ public class UpdateAppointmentC {
 
         Timestamp start_timestamp = Timestamp.valueOf(local_start_date_time);
         Timestamp end_timestamp = Timestamp.valueOf(local_end_date_time);
+
+        /// create AVM HERE
+        /// convert all time to UTC
+        /// use new method to store in db.
+
+
+
+
+//        this.avm
 
         this.calendarViewMainDAO.update(this.avm,this.active_user);
 
