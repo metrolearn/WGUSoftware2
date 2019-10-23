@@ -182,6 +182,7 @@ public class UpdateAppointmentC {
 
 //        Integer apt_id = this.apt_id;
         String title = title_txt.getText();
+        String customer = customer_txt.getText();
         String description = desc_txt.getText();
         String location = location_txt.getText();
         String contact = contact_txt.getText();
@@ -195,6 +196,14 @@ public class UpdateAppointmentC {
         Boolean s_pm = start_pm.isSelected();
         Boolean e_pm = end_pm.isSelected();
 
+
+        // redo this part to capture UTC
+        //values being sent to the database
+
+        // two seprate times like db times
+        // and view times...
+
+        // get rid of local date.
         String start_am_pm_str = "AM";
 
         if (s_pm){
@@ -228,6 +237,17 @@ public class UpdateAppointmentC {
         /// create AVM HERE
         /// convert all time to UTC
         /// use new method to store in db.
+
+        this.avm.setCustomerName(customer);
+        this.avm.setTitle(title);
+        this.avm.setDescription(description);
+        this.avm.setLocation(location);
+        this.avm.setContact(contact);
+        this.avm.setAppointment_type(apt_type);
+
+
+
+
 
 
 

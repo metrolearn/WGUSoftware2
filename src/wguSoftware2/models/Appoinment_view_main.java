@@ -32,6 +32,7 @@ public class Appoinment_view_main {
     private String location;
     private String customerName;
     private String appointment_type;
+    private String contact;
 
 
     private ZonedDateTime start_date_time_zdt;
@@ -492,6 +493,10 @@ public class Appoinment_view_main {
         date_time_view_convert(start,end,start_date_time_zdt.getZone());
 
 
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     // called from main init
