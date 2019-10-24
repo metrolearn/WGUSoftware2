@@ -337,6 +337,8 @@ public class AddAppointmentC {
         boolean end_pm = this.end_pm.isArmed();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
+        TimeZone tz = active_user.getTz();
+        String zoneId = tz.toZoneId().toString();
 
         if (this.start_pm.isSelected()){
             int i = 12 + Integer.parseInt(start_hour_str);
@@ -351,7 +353,7 @@ public class AddAppointmentC {
                 with(LocalTime.of(Integer.parseInt(start_hour_str),Integer.parseInt(start_min_str)));
         LocalDateTime end_ldt = this.date_pkr.getValue().atStartOfDay().
                 with(LocalTime.of(Integer.parseInt(end_hour_str),Integer.parseInt(end_min_str)));
-        ZoneId zone = active_user.getTz().toZoneId();
+        ZoneId zone = ZonedDateTime.now().getZone();
         ZonedDateTime start_ztd = start_ldt.atZone(zone);
         ZonedDateTime end_ztd = end_ldt.atZone(zone);
 

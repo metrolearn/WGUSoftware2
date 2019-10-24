@@ -164,6 +164,10 @@ public class MainWindowC {
         }
     }
 
+    private Customer_view_main getSelectedCVM() {
+        return customer_tbl.getSelectionModel().getSelectedItem();
+    }
+
     @FXML
     void CRT_DELETE() throws SQLException, ClassNotFoundException {
         Customer_view_main selectedItem = getSelectedCVM();
@@ -175,18 +179,6 @@ public class MainWindowC {
 
     }
 
-    private Customer_view_main getSelectedCVM() {
-        return customer_tbl.getSelectionModel().getSelectedItem();
-    }
-
-    private Appoinment_view_main getSelectedAVM() {
-        return apt_tbl.getSelectionModel().getSelectedItem();
-    }
-
-
-
-
-
     @FXML
     void initialize(Database_v3 curr_db, Active_User active_user) throws SQLException, ClassNotFoundException {
         this.curr_db = curr_db;
@@ -195,7 +187,6 @@ public class MainWindowC {
         this.avmDAO = new CalendarViewMainDAO(curr_db,active_user);
         this.Art_All_filter_rad.setSelected(true);
         this.curr_tz_lbl.setText(this.active_user.getCurrent_location());
-
 
         String sql_stm = "SELECT customer.customerId, customer.customerName, address.address, address.phone\n" +
                 "FROM customer\n" +
@@ -235,7 +226,6 @@ public class MainWindowC {
 
         List<Appoinment_view_main> avm_list = new ArrayList<>();
 
-
         while (rs.next()){
            Integer appointmentId = rs.getInt("appointmentId");
            String customerName = rs.getString("customerName");
@@ -250,10 +240,6 @@ public class MainWindowC {
 
            this.avm = new Appoinment_view_main(active_user,customer_id,appointmentId,customerName,description,title,location,start,end,url,apt_type);
            avm_list.add(this.avm);
-
-
-
-
 
        }
 
@@ -276,9 +262,6 @@ public class MainWindowC {
         this.timezone_picker.setItems(stringObservableList);
         this.timezone_picker.getSelectionModel().select(this.active_user.getTz().getID());
 
-
-
-
 //        apt_tbl.setOnMousePressed(new EventHandler<MouseEvent>() {
 //            @Override
 //            public void handle(MouseEvent event) {
@@ -288,17 +271,42 @@ public class MainWindowC {
 //            }
 //        })
 
-
         timezone_picker.getSelectionModel()
                 .selectedItemProperty()
                 .addListener( (ObservableValue<? extends String> observable, String oldValue, String newValue)
                         -> this.updateTimeBasedOnZoneID(newValue)
                 );
 
+    }
+
+    private void updateTimeBasedOnZoneID(String newValue) {
+
+        this.active_user.getTz().setID(newValue);
+        System.out.println(active_user.getTz().toString());
+//        update_apt_table_time_by_dst_in_seconds();
+        update_apt_table_time_by_tz_in_seconds();
+        apt_tbl.setItems(obv_apt_list);
+        apt_tbl.refresh();
 
     }
 
+    private void update_apt_table_time_by_tz_in_seconds() {
+        for (Appoinment_view_main avm : all_apts) {
 
+            TimeZone tz = this.active_user.getTz();
+            ZoneId zoneId = tz.toZoneId();
+            ZonedDateTime start_date_time_zdt = avm.getStart_date_time_zdt();
+            start_date_time_zdt = start_date_time_zdt.toInstant().atZone(tz.toZoneId());
+            avm.setStart_date_time_zdt(start_date_time_zdt);
+
+            ZonedDateTime end_date_time_zdt = avm.getEnd_date_time_zdt();
+            end_date_time_zdt = end_date_time_zdt.toInstant().atZone(tz.toZoneId());
+            avm.setEnd_date_time_zdt(end_date_time_zdt);
+
+            avm.updateTimes();
+
+        }
+    }
 
     public void ADD_APR(ActionEvent actionEvent) throws IOException {
 
@@ -334,11 +342,6 @@ public class MainWindowC {
             apt_tbl.refresh();
         }
 
-
-
-
-
-
     }
 
     public void UPDATE_APR(ActionEvent actionEvent) {
@@ -367,13 +370,20 @@ public class MainWindowC {
             apt_tbl.setItems(obv_apt_list);
             apt_tbl.refresh();
 
+//            obv_customer_list.remove(selectedItem);
+//            selectedItem = updateCustomerC.get_cvm();
+//            obv_customer_list.add(selectedItem);
+//            customer_tbl.setItems(obv_customer_list);
+//            customer_tbl.refresh();
 
         } catch (Exception e) {
             System.out.println(e);
         }
 
+    }
 
-
+    private Appoinment_view_main getSelectedAVM() {
+        return apt_tbl.getSelectionModel().getSelectedItem();
     }
 
     public void DELETE_APR(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
@@ -383,7 +393,6 @@ public class MainWindowC {
         obv_apt_list.remove(selected_apt);
         apt_tbl.setItems(obv_apt_list);
         apt_tbl.refresh();
-
 
     }
 
@@ -396,11 +405,9 @@ public class MainWindowC {
         this.Art_Wk_filter_rad.setSelected(false);
         this.Art_All_filter_rad.setSelected(false);
 
-
     }
 
     public void FILTER_BY_WEEK(ActionEvent actionEvent) {
-
 
         for (Appoinment_view_main v: obv_apt_list) {
             v.setDateViewString(v.getStart_day_of_week());
@@ -408,7 +415,6 @@ public class MainWindowC {
         apt_tbl.refresh();
         this.Art_Mnt_filter_rad.setSelected(false);
         this.Art_All_filter_rad.setSelected(false);
-
 
     }
 
@@ -421,15 +427,11 @@ public class MainWindowC {
         this.Art_Mnt_filter_rad.setSelected(false);
         this.Art_Wk_filter_rad.setSelected(false);
 
-
     }
 
     public void FILTER_BY_TZ(ActionEvent actionEvent){
 
         ZoneId zid = ZoneId.of(timezone_picker.getValue());
-
-        // set hours and mins....user
-
 
         this.Art_Mnt_filter_rad.setSelected(false);
         this.Art_Wk_filter_rad.setSelected(false);
@@ -438,14 +440,14 @@ public class MainWindowC {
 
     public void on_dst_cbx_action(ActionEvent actionEvent) {
 
-        update_apt_table_time_by_tz_in_seconds();
+        update_apt_table_time_by_dst_in_seconds();
+        apt_tbl.setItems(obv_apt_list);
+        apt_tbl.refresh();
 
     }
 
-    private void update_apt_table_time_by_tz_in_seconds() {
+    private void update_apt_table_time_by_dst_in_seconds() {
         for (Appoinment_view_main avm: all_apts) {
-
-
 
             TimeZone tz = this.active_user.getTz();
             ZoneId zoneId = tz.toZoneId();
@@ -453,29 +455,20 @@ public class MainWindowC {
             Appoinment_view_main avm1 = avm;
             ZonedDateTime avm_zdt = avm1.getStart_date_time_zdt();
             Instant avm_zdt_instant = avm_zdt.toInstant();
+
             Duration start_duration = rules.getDaylightSavings(avm_zdt_instant);
             long diff_in_seconds = start_duration.getSeconds();
+            if(!dst_cbx.isSelected()) {
+                avm1.ajustTimebySeconds(diff_in_seconds*-1);
 
-            if(!dst_cbx.isSelected()){
-                diff_in_seconds = diff_in_seconds*-1;
+            }else {
+
+                avm1.ajustTimebySeconds(diff_in_seconds);
+
             }
 
-            avm1.ajustTimebySeconds(diff_in_seconds);
-
         }
-    }
-
-    private void updateTimeBasedOnZoneID(String newValue) {
-
-        TimeZone tz = this.active_user.getTz();
-        String id = newValue;
-        tz.setID(id);
-
-
-        update_apt_table_time_by_tz_in_seconds();
 
     }
-
-
 
 }

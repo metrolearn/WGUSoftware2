@@ -6,8 +6,13 @@ import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import static java.time.ZoneOffset.UTC;
 
 public class CalendarViewMainDAO {
 
@@ -200,37 +205,52 @@ public class CalendarViewMainDAO {
         String location = apv.getLocation();
         String contact = apv.getCustomerName();
         String apt_type = apv.getAppointment_type();
-        Timestamp start_time_znd = apv.getStart_ts_ldt();
-        Timestamp end_time_znd = apv.getEnd_ts_ldt();
 
-        String url = "customer link";
+        Timestamp start_ts_utc = convertZTDtoTSUTC(apv.getStart_date_time_zdt());
+        Timestamp end_ts_utc = convertZTDtoTSUTC(apv.getEnd_date_time_zdt());
+        Timestamp update_ts_utc = convertZTDtoTSUTC(ZonedDateTime.now());
 
-        Timestamp lastUpdate =  Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime());
         String  lastUpdateBy = active_user.getActive_user_name();
 
 
-        String sql_stmt = "UPDATE appointment SET " +
-                "userId = ?, title = ?, description = ?, location = ?," +
-                " type = ?, start = ?, end = ?, lastUpdate = ?," +
-                " lastUpdateBy = ? WHERE appointmentId = ?";
+        String sql_stmt = "" +
+                "UPDATE appointment " +
+                "SET title        = ?," +
+                "    description  = ?," +
+                "    location     = ?," +
+                "    contact      = ?," +
+                "    type         = ?," +
+                "    start        = ?," +
+                "    end          = ?," +
+                "    lastUpdate   = ?," +
+                "    lastUpdateBy = ?" +
+                "WHERE appointmentId = ?";
 
         this.curr_db.dbConnect();
         Connection con = this.curr_db.getCon();
         PreparedStatement ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
-        ps.setInt(1,active_user.getActive_user_id());
-        ps.setString(2,title);
-        ps.setString(3,description);
-        ps.setString(4,location);
+        ps.setString(1,title);
+        ps.setString(2,description);
+        ps.setString(3,location);
+        ps.setString(4,contact);
         ps.setString(5,apt_type);
-        ps.setTimestamp(6,end_time_znd);
-        ps.setTimestamp(7,start_time_znd);
-        ps.setTimestamp(8,lastUpdate);
+        ps.setTimestamp(6,start_ts_utc);
+        ps.setTimestamp(7,end_ts_utc);
+        ps.setTimestamp(8,update_ts_utc);
         ps.setString(9,active_user.getActive_user_name());
         ps.setInt(10,apv.getId());
 
         ps.execute();
 
         return apv;
+
+    }
+
+    private Timestamp convertZTDtoTSUTC(ZonedDateTime zdt) {
+        ZonedDateTime zdt_utc = ZonedDateTime.of(zdt.toLocalDateTime(), UTC);
+        Timestamp ts_utc = Timestamp.valueOf(zdt_utc.toLocalDateTime());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        return Timestamp.valueOf(dateFormat.format(ts_utc));
 
     }
 

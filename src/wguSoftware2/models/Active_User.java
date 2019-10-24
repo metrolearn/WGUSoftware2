@@ -32,7 +32,7 @@ public class Active_User {
         return gp;
     }
 
-    public void setGp(GeoIP gp) {
+    public void setGeoIp(GeoIP gp) {
         this.gp = gp;
     }
 
