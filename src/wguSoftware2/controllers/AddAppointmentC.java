@@ -284,6 +284,7 @@ public class AddAppointmentC {
 
         }
 
+
         for (int i = 1; i < 60; i++) {
 
             if(i % 5 == 0) {

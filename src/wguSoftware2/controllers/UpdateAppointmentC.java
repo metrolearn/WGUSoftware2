@@ -14,10 +14,10 @@ import wguSoftware2.utils.Database_v3;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 public class UpdateAppointmentC {
     @FXML
@@ -186,19 +186,21 @@ public class UpdateAppointmentC {
         String description = desc_txt.getText();
         String location = location_txt.getText();
         String contact = contact_txt.getText();
+        Integer customerID = this.avm.getCustomerID();
 
         String apt_type = apt_type_cb.getValue();
         String date = date_pkr.getValue().toString();
-        String start_hour = start_hour_cb.getValue();
-        String start_min = start_min_cb.getValue();
-        String end_hour = end_hour_cb.getValue();
-        String end_min = end_min_cb.getValue();
+        String start_hour_str = start_hour_cb.getValue();
+        String end_hour_str = end_hour_cb.getValue();
+        String start_min_str = start_min_cb.getValue();
+        String end_min_str = end_min_cb.getValue();
         Boolean s_pm = start_pm.isSelected();
         Boolean e_pm = end_pm.isSelected();
 
 
         // redo this part to capture UTC
         //values being sent to the database
+
 
         // two seprate times like db times
         // and view times...
@@ -207,52 +209,51 @@ public class UpdateAppointmentC {
         String start_am_pm_str = "AM";
 
         if (s_pm){
-            Integer start_val = Integer.valueOf(start_hour);
+            Integer start_val = Integer.valueOf(start_hour_str);
             start_val+=12;
-            start_hour = String.valueOf(start_val);
+            start_hour_str = String.valueOf(start_val);
             start_am_pm_str = "PM";
         }
 
         String end_am_pm_str = "AM";
 
         if (e_pm){
-            Integer end_val = Integer.valueOf(end_hour);
+            Integer end_val = Integer.valueOf(end_hour_str);
             end_val+=12;
-            start_hour = String.valueOf(end_val);
+            start_hour_str = String.valueOf(end_val);
             end_am_pm_str = "PM";
         }
 
-        DateTimeFormatter ts_format = DateTimeFormatter.ofPattern("yyyy-MM-d-h-mm-a");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
+        TimeZone tz = active_user.getTz();
+        String zoneId = tz.toZoneId().toString();
 
-        String start_date_time = date+"-"+start_hour+"-"+start_min+"-"+start_am_pm_str;
-        String end_date_time = date+"-"+end_hour+"-"+end_min+"-"+end_am_pm_str;
+        if (this.start_pm.isSelected()){
+            int i = 12 + Integer.parseInt(start_hour_str);
+            start_hour_str = String.valueOf(i);
+        }
 
-        //convert String to LocalDate
-        LocalDateTime local_start_date_time = LocalDateTime.parse(start_date_time, ts_format);
-        LocalDateTime local_end_date_time = LocalDateTime.parse(end_date_time, ts_format);
+        if (this.end_pm.isSelected()){
+            int i = 12 + Integer.parseInt(end_hour_str);
+            end_hour_str = String.valueOf(i);
+        }
+        LocalDateTime start_ldt =  this.date_pkr.getValue().atStartOfDay().
+                with(LocalTime.of(Integer.parseInt(start_hour_str),Integer.parseInt(start_min_str)));
+        LocalDateTime end_ldt = this.date_pkr.getValue().atStartOfDay().
+                with(LocalTime.of(Integer.parseInt(end_hour_str),Integer.parseInt(end_min_str)));
+        ZoneId zone = ZonedDateTime.now().getZone();
+        ZonedDateTime start_ztd = start_ldt.atZone(zone);
+        ZonedDateTime end_ztd = end_ldt.atZone(zone);
 
-        Timestamp start_timestamp = Timestamp.valueOf(local_start_date_time);
-        Timestamp end_timestamp = Timestamp.valueOf(local_end_date_time);
-
-        /// create AVM HERE
-        /// convert all time to UTC
-        /// use new method to store in db.
-
-        this.avm.setCustomerName(customer);
-        this.avm.setTitle(title);
-        this.avm.setDescription(description);
-        this.avm.setLocation(location);
+        this.avm = new Appoinment_view_main(active_user,title,description,location,contact,apt_type,start_ztd,end_ztd);
         this.avm.setContact(contact);
-        this.avm.setAppointment_type(apt_type);
+        this.avm.setId(apt_id);
+        this.avm.setCustomerID(customerID);
 
 
 
 
-
-
-
-
-//        this.avm
+        this.avm.create_hyperlink();
 
         this.calendarViewMainDAO.update(this.avm,this.active_user);
 
