@@ -284,7 +284,7 @@ public class AddAppointmentC {
 
         }
 
-
+        min_items.add(String.valueOf(0));
         for (int i = 1; i < 60; i++) {
 
             if(i % 5 == 0) {

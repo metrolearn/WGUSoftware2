@@ -151,7 +151,14 @@ public class LoginWindowC {
 
                 // bad login.
 
-                System.out.println("Bad username or password.");
+                String bad_user_pass_str = "Bad username or password.";
+                System.out.println(bad_user_pass_str);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(bad_user_pass_str);
+                alert.setHeaderText("Try again!");
+                alert.setContentText(bad_user_pass_str);
+                alert.showAndWait();
+
             }
 
 

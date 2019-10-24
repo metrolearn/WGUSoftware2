@@ -103,7 +103,7 @@ public class UpdateAppointmentC {
             hour_items.add(String.valueOf(i));
 
         }
-
+        min_items.add(String.valueOf(0));
         for (int i = 1; i < 61; i++) {
 
             if(i % 5 == 0) {
@@ -220,7 +220,7 @@ public class UpdateAppointmentC {
         if (e_pm){
             Integer end_val = Integer.valueOf(end_hour_str);
             end_val+=12;
-            start_hour_str = String.valueOf(end_val);
+            end_hour_str = String.valueOf(end_val);
             end_am_pm_str = "PM";
         }
 
@@ -228,15 +228,8 @@ public class UpdateAppointmentC {
         TimeZone tz = active_user.getTz();
         String zoneId = tz.toZoneId().toString();
 
-        if (this.start_pm.isSelected()){
-            int i = 12 + Integer.parseInt(start_hour_str);
-            start_hour_str = String.valueOf(i);
-        }
 
-        if (this.end_pm.isSelected()){
-            int i = 12 + Integer.parseInt(end_hour_str);
-            end_hour_str = String.valueOf(i);
-        }
+
         LocalDateTime start_ldt =  this.date_pkr.getValue().atStartOfDay().
                 with(LocalTime.of(Integer.parseInt(start_hour_str),Integer.parseInt(start_min_str)));
         LocalDateTime end_ldt = this.date_pkr.getValue().atStartOfDay().
