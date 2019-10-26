@@ -39,28 +39,26 @@ public class CalendarViewMainDAO {
     }
 
 
-    public Appoinment_view_main create(Appoinment_view_main apv, Active_User active_user, Customer_view_main selectedCVM) throws SQLException, ClassNotFoundException {
+    public Appoinment_view_main create(Appoinment_view_main avm, Active_User active_user, Customer_view_main selectedCVM) throws SQLException, ClassNotFoundException {
 
         this.active_user = active_user;
         this.customer_view_main = selectedCVM;
 
-        String title = apv.getTitle();
-        String description = apv.getDescription();
-        String location = apv.getLocation();
-        String contact = apv.getCustomerName();
-        String apt_type = apv.getAppointment_type();
-        ZonedDateTime start_time_znd = apv.getStart_date_time_zdt_utc();
-        ZonedDateTime end_time_znd = apv.getEnd_date_time_zdt_utc();
+        String title = avm.getTitle();
+        String description = avm.getDescription();
+        String location = avm.getLocation();
+        String contact = avm.getCustomerName();
+        String apt_type = avm.getAppointment_type();
+        Timestamp start_time_ts = avm.getStart_date_time().getUTCTimeStamp();
+        Timestamp end_time_ts = avm.getEnd_date_time().getUTCTimeStamp();
 
         Integer customerID = customer_view_main.getId();
         Integer userID = active_user.getActive_user_id();
 
 
         String url = "customer link";
-        ZonedDateTime createDate = ZonedDateTime.now();
+        Timestamp create_date_ts = Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime());
         String createdBy = active_user.getActive_user_name();
-        ZonedDateTime lastUpdate = createDate;
-        String  lastUpdateBy = createdBy;
 
         String sql_stmt = "INSERT INTO appointment " +
                 "(customerId, userId, title, " +
@@ -79,10 +77,10 @@ public class CalendarViewMainDAO {
         ps.setString(6,contact);
         ps.setString(7,apt_type);
         ps.setString(8,url);
-        ps.setTimestamp(9,Timestamp.valueOf(start_time_znd.toLocalDateTime()));
-        ps.setTimestamp(10,Timestamp.valueOf(end_time_znd.toLocalDateTime()));
-        ps.setTimestamp(11,Timestamp.valueOf(createDate.toLocalDateTime()));
-        ps.setString(12,active_user.getActive_user_name());
+        ps.setTimestamp(9,start_time_ts);
+        ps.setTimestamp(10,end_time_ts);
+        ps.setTimestamp(11,create_date_ts);
+        ps.setString(12,createdBy);
         ps.setString(13,active_user.getActive_user_name());
 
 
@@ -94,10 +92,10 @@ public class CalendarViewMainDAO {
             apt_id = rs.getInt("GENERATED_KEY");
         }
 
-        apv.setId(apt_id);
+        avm.setId(apt_id);
 
 
-        return apv;
+        return avm;
     }
 
     public void delete(Appoinment_view_main selectedItem) throws SQLException, ClassNotFoundException {
@@ -137,25 +135,26 @@ public class CalendarViewMainDAO {
     }
 
 
-    public Appoinment_view_main update(Appoinment_view_main apv, Active_User active_user, Customer_view_main selectedCVM) throws SQLException, ClassNotFoundException {
+    public Appoinment_view_main update(Appoinment_view_main avm, Active_User active_user, Customer_view_main selectedCVM) throws SQLException, ClassNotFoundException {
 
         this.active_user = active_user;
         this.customer_view_main = selectedCVM;
 
-        String title = apv.getTitle();
-        String description = apv.getDescription();
-        String location = apv.getLocation();
-        String contact = apv.getCustomerName();
-        String apt_type = apv.getAppointment_type();
-        ZonedDateTime start_time_znd = apv.getStart_date_time_zdt_utc();
-        ZonedDateTime end_time_znd = apv.getEnd_date_time_zdt_utc();
+        String title = avm.getTitle();
+        String description = avm.getDescription();
+        String location = avm.getLocation();
+        String contact = avm.getCustomerName();
+        String apt_type = avm.getAppointment_type();
+        Timestamp start_time_ts_utc = avm.getStart_date_time().getUTCTimeStamp();
+        Timestamp end_time_ts_utc = avm.getEnd_date_time().getUTCTimeStamp();
+        Timestamp create_date_ts_utc = avm.getStart_date_time().getNowUTCTS();
+        Timestamp last_update = create_date_ts_utc;
 
         Integer customerID = active_user.getActive_user_id();
         Integer userID = customer_view_main.getId();
         String url = "customer link";
-        ZonedDateTime createDate = ZonedDateTime.now();
-        String createdBy = active_user.getActive_user_name();
-        ZonedDateTime lastUpdate = createDate;
+        String active_user_name = active_user.getActive_user_name();
+        String createdBy = active_user_name;
         String  lastUpdateBy = createdBy;
 
         String sql_stmt = "INSERT INTO appointment " +
@@ -175,11 +174,11 @@ public class CalendarViewMainDAO {
         ps.setString(6,contact);
         ps.setString(7,apt_type);
         ps.setString(8,url);
-        ps.setTimestamp(9,Timestamp.valueOf(start_time_znd.toLocalDateTime()));
-        ps.setTimestamp(10,Timestamp.valueOf(end_time_znd.toLocalDateTime()));
-        ps.setTimestamp(11,Timestamp.valueOf(createDate.toLocalDateTime()));
-        ps.setString(12,active_user.getActive_user_name());
-        ps.setString(13,active_user.getActive_user_name());
+        ps.setTimestamp(9,start_time_ts_utc);
+        ps.setTimestamp(10,end_time_ts_utc);
+        ps.setTimestamp(11,create_date_ts_utc);
+        ps.setString(12, active_user_name);
+        ps.setString(13, active_user_name);
 
 
 
@@ -189,27 +188,28 @@ public class CalendarViewMainDAO {
             apt_id = rs.getInt("GENERATED_KEY");
         }
 
-        apv.setId(apt_id);
+        avm.setId(apt_id);
 
 
-        return apv;
+        return avm;
     }
 
-    public Appoinment_view_main update(Appoinment_view_main apv, Active_User active_user) throws SQLException, ClassNotFoundException {
+    public Appoinment_view_main update(Appoinment_view_main avm, Active_User active_user) throws SQLException, ClassNotFoundException {
 
         this.active_user = active_user;
 
-        String title = apv.getTitle();
-        String description = apv.getDescription();
-        String location = apv.getLocation();
-        String contact = apv.getCustomerName();
-        String apt_type = apv.getAppointment_type();
+        String title = avm.getTitle();
+        String description = avm.getDescription();
+        String location = avm.getLocation();
+        String contact = avm.getCustomerName();
+        String apt_type = avm.getAppointment_type();
 
-        Timestamp start_ts_utc = convertZTDtoTSUTC(apv.getStart_date_time_zdt_utc());
-        Timestamp end_ts_utc = convertZTDtoTSUTC(apv.getEnd_date_time_zdt_utc());
-        Timestamp update_ts_utc = convertZTDtoTSUTC(ZonedDateTime.now());
+        Timestamp start_time_ts_utc = avm.getStart_date_time().getUTCTimeStamp();
+        Timestamp end_time_ts_utc = avm.getEnd_date_time().getUTCTimeStamp();
+        Timestamp update_time_ts_utc = avm.getStart_date_time().getNowUTCTS();
 
-        String  lastUpdateBy = active_user.getActive_user_name();
+        String active_user_name = active_user.getActive_user_name();
+        String  lastUpdateBy = active_user_name;
 
 
         String sql_stmt = "" +
@@ -233,15 +233,15 @@ public class CalendarViewMainDAO {
         ps.setString(3,location);
         ps.setString(4,contact);
         ps.setString(5,apt_type);
-        ps.setTimestamp(6,start_ts_utc);
-        ps.setTimestamp(7,end_ts_utc);
-        ps.setTimestamp(8,update_ts_utc);
-        ps.setString(9,active_user.getActive_user_name());
-        ps.setInt(10,apv.getId());
+        ps.setTimestamp(6,start_time_ts_utc);
+        ps.setTimestamp(7,end_time_ts_utc);
+        ps.setTimestamp(8,update_time_ts_utc);
+        ps.setString(9, active_user_name);
+        ps.setInt(10,avm.getId());
 
         ps.execute();
 
-        return apv;
+        return avm;
 
     }
 

@@ -8,38 +8,23 @@ import javafx.scene.input.MouseEvent;
 import wguSoftware2.utils.Database_v3;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Appoinment_view_main {
 
-    private String title;
-    private String description;
-    private String location;
-    private String customerName;
-    private String appointment_type;
-    private String contact;
+    private String title = null;
+    private String description = null;
+    private String location = null;
+    private String customerName = null ;
+    private String appointment_type = null;
+    private String contact = null;
+    private MyDateTime start_date_time = null;
+    private MyDateTime end_date_time = null;
+    private MyDateTime create_date = null;
+    private MyDateTime last_update = null;
 
 
-    private ZonedDateTime start_date_time_zdt_utc = null;
-    private ZonedDateTime end_date_time_zdt_utc;
-    private ZonedDateTime start_zdt_ldt = null;
-    private ZonedDateTime end_zdt_ldt= null;
-    private Timestamp start_ts_utc = null;
-    private Timestamp end_ts_utc = null;
-    private Timestamp start_ts_local = null;
-    private Timestamp end_ts_local = null;
-
-    private ZonedDateTime createDate = null;
-    private ZonedDateTime lastUpdate = null;
-    private String dateViewString = null;
-    private String timeViewStringStart = null;
-    private String timeViewStringEnd = null;
-    private String start_day_of_week = null;
-    private String start_month = null;
-    private String standard_date = null;
 
     private ZoneId zoneID = null;
     private Integer customerID = null;
@@ -59,23 +44,19 @@ public class Appoinment_view_main {
         this.location = location;
         this.customerName = contact;
         this.appointment_type = appointment_type;
-        this.start_date_time_zdt_utc = start_date_time;
-        this.end_date_time_zdt_utc = end_date_time;
         this.url = "www.link.com";
-        Timestamp start = Timestamp.from(start_date_time.toInstant());
-        Timestamp end = Timestamp.from(start_date_time.toInstant());
-        date_time_view_convert(start,end,ac.getTz().toZoneId());
-
     }
 
-    private void date_time_view_convert(Timestamp start, Timestamp end, ZoneId zid) {
-        DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        ZoneId zoneID = zid;
-        this.dateViewString = ZonedDateTime.ofInstant(start.toInstant(), zoneID).format(date_formatter);
+    public Appoinment_view_main(Active_User ac, Integer appointmentId, String contact, String description, String title, String location, Timestamp start, Timestamp end, String s, String apt_type) {
 
-        DateTimeFormatter time_formatter = DateTimeFormatter.ofPattern("HH:mm");
-        this.timeViewStringStart = ZonedDateTime.ofInstant(start.toInstant(), zoneID).format(time_formatter);
-        this.timeViewStringEnd =ZonedDateTime.ofInstant(end.toInstant(), zoneID).format(time_formatter);
+        this.id = appointmentId;
+        this.description = description;
+        this.zoneID = ac.getTz().toZoneId();
+        this.title = title;
+        this.location = location;
+        this.appointment_type = apt_type;
+        create_hyperlink();
+
     }
 
     public Appoinment_view_main(Active_User ac, Integer customer_id, Integer appointmentId, String customerName, String description, String title, String location,
@@ -86,24 +67,11 @@ public class Appoinment_view_main {
         this.customerName = customerName;
         this.description = description;
         this.zoneID = ac.getTz().toZoneId();
-        this.start_date_time_zdt_utc = ZonedDateTime.ofInstant(start.toInstant(), zoneID);
-        this.end_date_time_zdt_utc = ZonedDateTime.ofInstant(end.toInstant(), zoneID);
-
-        DateTimeFormatter day_of_week_formatter = DateTimeFormatter.ofPattern("EEEE");
-        this.start_day_of_week = start_date_time_zdt_utc.format(day_of_week_formatter);
-        DateTimeFormatter month_formatter = DateTimeFormatter.ofPattern("MMMM");
-        this.start_month = start_date_time_zdt_utc.format(month_formatter);
-        DateTimeFormatter std_date = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        this.standard_date = start_date_time_zdt_utc.format(std_date);
-//        this.end_ts = end;
-//        this.end_ldt = end_ts.toLocalDateTime();
-//        this.end_ts_ldt = Timestamp.valueOf(this.end_ts.toLocalDateTime());
         this.url = url;
         this.title = title;
         this.location = location;
         this.appointment_type = apt_type;
         create_hyperlink();
-        date_time_view_convert(start,end,zoneID);
 
     }
 
@@ -188,27 +156,25 @@ public class Appoinment_view_main {
         });
     }
 
-    public Appoinment_view_main(Active_User ac, Integer appointmentId, String contact, String description, String title, String location, Timestamp start, Timestamp end, String s, String apt_type) {
 
-        this.id = appointmentId;
-        this.description = description;
-        this.zoneID = ac.getTz().toZoneId();
-        this.start_date_time_zdt_utc = ZonedDateTime.ofInstant(start.toInstant(), zoneID);
+    public MyDateTime getStart_date_time() {
+        return start_date_time;
+    }
 
-        DateTimeFormatter day_of_week_formatter = DateTimeFormatter.ofPattern("EEEE");
-        this.start_day_of_week = start_date_time_zdt_utc.format(day_of_week_formatter);
-        DateTimeFormatter month_formatter = DateTimeFormatter.ofPattern("MMMM");
-        this.start_month = start_date_time_zdt_utc.format(month_formatter);
-        DateTimeFormatter std_date = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        this.standard_date = start_date_time_zdt_utc.format(std_date);
+    public MyDateTime getEnd_date_time() {
+        return end_date_time;
+    }
 
-        this.end_date_time_zdt_utc = ZonedDateTime.ofInstant(end.toInstant(), zoneID);
-        this.title = title;
-        this.location = location;
-        this.appointment_type = apt_type;
-        create_hyperlink();
-        date_time_view_convert(start,end,zoneID);
+    public MyDateTime getCreate_date() {
+        return create_date;
+    }
 
+    public MyDateTime getLast_update() {
+        return last_update;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
     }
 
     public Hyperlink getHl() {
@@ -251,29 +217,6 @@ public class Appoinment_view_main {
         this.url = url;
     }
 
-    public ZonedDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(ZonedDateTime createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public ZonedDateTime getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(ZonedDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
 
     public String getLastUpdateBy() {
         return lastUpdateBy;
@@ -323,67 +266,9 @@ public class Appoinment_view_main {
         this.appointment_type = appointment_type;
     }
 
-    public ZonedDateTime getStart_date_time_zdt_utc() {
-        return start_date_time_zdt_utc;
-    }
-
-    public void setStart_date_time_zdt_utc(ZonedDateTime start_date_time_zdt_utc) {
-        this.start_date_time_zdt_utc = start_date_time_zdt_utc;
-    }
-
-    public ZonedDateTime getEnd_date_time_zdt_utc() {
-        return end_date_time_zdt_utc;
-    }
-
-    public void setEnd_date_time_zdt_utc(ZonedDateTime end_date_time_zdt_utc) {
-        this.end_date_time_zdt_utc = end_date_time_zdt_utc;
-    }
-
     public String getContact() {
         return contact;
     }
-
-    public ZonedDateTime getStart_zdt_ldt() {
-        return start_zdt_ldt;
-    }
-
-    public void setStart_zdt_ldt(ZonedDateTime start_zdt_ldt) {
-        this.start_zdt_ldt = start_zdt_ldt;
-    }
-
-    public ZonedDateTime getEnd_zdt_ldt() {
-        return end_zdt_ldt;
-    }
-
-    public void setEnd_zdt_ldt(ZonedDateTime end_zdt_ldt) {
-        this.end_zdt_ldt = end_zdt_ldt;
-    }
-
-    public String getDateViewString() {
-        return dateViewString;
-    }
-
-    public void setDateViewString(String dateViewString) {
-        this.dateViewString = dateViewString;
-    }
-
-    public String getTimeViewStringStart() {
-        return timeViewStringStart;
-    }
-
-    public void setTimeViewStringStart(String timeViewStringStart) {
-        this.timeViewStringStart = timeViewStringStart;
-    }
-
-    public String getTimeViewStringEnd() {
-        return timeViewStringEnd;
-    }
-
-    public void setTimeViewStringEnd(String timeViewStringEnd) {
-        this.timeViewStringEnd = timeViewStringEnd;
-    }
-
-
 
     public ZoneId getZoneID() {
         return zoneID;
@@ -401,62 +286,17 @@ public class Appoinment_view_main {
         this.active_user = active_user;
     }
 
-    public String getStart_day_of_week() {
-        return start_day_of_week;
-    }
-
-    public void setStart_day_of_week(String start_day_of_week) {
-        this.start_day_of_week = start_day_of_week;
-    }
-
-    public String getStart_month() {
-        return start_month;
-    }
-
-    public void setStart_month(String start_month) {
-        this.start_month = start_month;
-    }
-
-    public String getStandard_date() {
-        return standard_date;
-    }
-
-    public void setStandard_date(String standard_date) {
-        this.standard_date = standard_date;
-    }
 
     public void ajustTimebySeconds(long diff_in_seconds) {
 
-        start_date_time_zdt_utc = this.start_date_time_zdt_utc.plusSeconds(diff_in_seconds);
-        end_date_time_zdt_utc = this.end_date_time_zdt_utc.plusSeconds(diff_in_seconds);
-//        start_ldt = this.start_ldt.plusSeconds(diff_in_seconds);
-//        end_ldt= this.start_ldt.plusSeconds(diff_in_seconds);
-        updateTimes();
 
     }
 
-    public void updateTimes() {
 
-
-        start_zdt_ldt = start_date_time_zdt_utc.withZoneSameInstant(active_user.getTz().toZoneId());
-        end_zdt_ldt = end_date_time_zdt_utc.withZoneSameInstant(active_user.getTz().toZoneId());
-        DateTimeFormatter day_of_week_formatter = DateTimeFormatter.ofPattern("EEEE");
-        this.start_day_of_week = start_date_time_zdt_utc.format(day_of_week_formatter);
-        DateTimeFormatter month_formatter = DateTimeFormatter.ofPattern("MMMM");
-        this.start_month = start_date_time_zdt_utc.format(month_formatter);
-        DateTimeFormatter std_date = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        this.standard_date = start_date_time_zdt_utc.format(std_date);
-        Timestamp start = Timestamp.from(start_date_time_zdt_utc.toInstant());
-        Timestamp end = Timestamp.from(end_date_time_zdt_utc.toInstant());
-        date_time_view_convert(start,end, start_date_time_zdt_utc.getZone());
-
-
-    }
 
     public void setContact(String contact) {
         this.contact = contact;
     }
 
-    // called from main init
 
 }

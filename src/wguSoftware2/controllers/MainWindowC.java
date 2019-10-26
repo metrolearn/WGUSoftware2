@@ -395,8 +395,8 @@ public class MainWindowC {
 
     public void FILTER_BY_MONTH(ActionEvent actionEvent) {
 
-        for (Appoinment_view_main v: obv_apt_list) {
-           v.setDateViewString(v.getStart_month());
+        for (Appoinment_view_main avm: obv_apt_list) {
+           avm.setDateViewString(avm.getStart_month());
         }
         apt_tbl.refresh();
         this.Art_Wk_filter_rad.setSelected(false);
