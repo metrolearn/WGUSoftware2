@@ -9,7 +9,6 @@ import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static java.time.ZoneOffset.UTC;
@@ -50,8 +49,8 @@ public class CalendarViewMainDAO {
         String location = apv.getLocation();
         String contact = apv.getCustomerName();
         String apt_type = apv.getAppointment_type();
-        ZonedDateTime start_time_znd = apv.getStart_date_time_zdt();
-        ZonedDateTime end_time_znd = apv.getEnd_date_time_zdt();
+        ZonedDateTime start_time_znd = apv.getStart_date_time_zdt_utc();
+        ZonedDateTime end_time_znd = apv.getEnd_date_time_zdt_utc();
 
         Integer customerID = customer_view_main.getId();
         Integer userID = active_user.getActive_user_id();
@@ -148,8 +147,8 @@ public class CalendarViewMainDAO {
         String location = apv.getLocation();
         String contact = apv.getCustomerName();
         String apt_type = apv.getAppointment_type();
-        ZonedDateTime start_time_znd = apv.getStart_date_time_zdt();
-        ZonedDateTime end_time_znd = apv.getEnd_date_time_zdt();
+        ZonedDateTime start_time_znd = apv.getStart_date_time_zdt_utc();
+        ZonedDateTime end_time_znd = apv.getEnd_date_time_zdt_utc();
 
         Integer customerID = active_user.getActive_user_id();
         Integer userID = customer_view_main.getId();
@@ -206,8 +205,8 @@ public class CalendarViewMainDAO {
         String contact = apv.getCustomerName();
         String apt_type = apv.getAppointment_type();
 
-        Timestamp start_ts_utc = convertZTDtoTSUTC(apv.getStart_date_time_zdt());
-        Timestamp end_ts_utc = convertZTDtoTSUTC(apv.getEnd_date_time_zdt());
+        Timestamp start_ts_utc = convertZTDtoTSUTC(apv.getStart_date_time_zdt_utc());
+        Timestamp end_ts_utc = convertZTDtoTSUTC(apv.getEnd_date_time_zdt_utc());
         Timestamp update_ts_utc = convertZTDtoTSUTC(ZonedDateTime.now());
 
         String  lastUpdateBy = active_user.getActive_user_name();

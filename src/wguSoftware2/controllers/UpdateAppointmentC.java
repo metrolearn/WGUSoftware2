@@ -211,8 +211,17 @@ public class UpdateAppointmentC {
         if (s_pm){
             Integer start_val = Integer.valueOf(start_hour_str);
             start_val+=12;
+            if(start_val == 24){
+                start_val =0;
+                start_am_pm_str = "AM";
+            }else
+            {
+                start_am_pm_str = "PM";
+
+            }
+
             start_hour_str = String.valueOf(start_val);
-            start_am_pm_str = "PM";
+
         }
 
         String end_am_pm_str = "AM";
@@ -220,9 +229,15 @@ public class UpdateAppointmentC {
         if (e_pm){
             Integer end_val = Integer.valueOf(end_hour_str);
             end_val+=12;
+            if (end_val==24){
+                end_val = 0;
+                end_am_pm_str = "AM";
+            }else {
+                end_am_pm_str = "PM";
+            }
             end_hour_str = String.valueOf(end_val);
-            end_am_pm_str = "PM";
         }
+
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
         TimeZone tz = active_user.getTz();

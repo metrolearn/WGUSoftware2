@@ -1,18 +1,15 @@
 package wguSoftware2.controllers;
 
-import com.mysql.jdbc.util.TimezoneDump;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import wguSoftware2.DAO.CalendarViewMainDAO;
@@ -295,13 +292,13 @@ public class MainWindowC {
 
             TimeZone tz = this.active_user.getTz();
             ZoneId zoneId = tz.toZoneId();
-            ZonedDateTime start_date_time_zdt = avm.getStart_date_time_zdt();
+            ZonedDateTime start_date_time_zdt = avm.getStart_date_time_zdt_utc();
             start_date_time_zdt = start_date_time_zdt.toInstant().atZone(tz.toZoneId());
-            avm.setStart_date_time_zdt(start_date_time_zdt);
+            avm.setStart_date_time_zdt_utc(start_date_time_zdt);
 
-            ZonedDateTime end_date_time_zdt = avm.getEnd_date_time_zdt();
+            ZonedDateTime end_date_time_zdt = avm.getEnd_date_time_zdt_utc();
             end_date_time_zdt = end_date_time_zdt.toInstant().atZone(tz.toZoneId());
-            avm.setEnd_date_time_zdt(end_date_time_zdt);
+            avm.setEnd_date_time_zdt_utc(end_date_time_zdt);
 
             avm.updateTimes();
 
@@ -453,7 +450,7 @@ public class MainWindowC {
             ZoneId zoneId = tz.toZoneId();
             ZoneRules rules = zoneId.getRules();
             Appoinment_view_main avm1 = avm;
-            ZonedDateTime avm_zdt = avm1.getStart_date_time_zdt();
+            ZonedDateTime avm_zdt = avm1.getStart_date_time_zdt_utc();
             Instant avm_zdt_instant = avm_zdt.toInstant();
 
             Duration start_duration = rules.getDaylightSavings(avm_zdt_instant);
