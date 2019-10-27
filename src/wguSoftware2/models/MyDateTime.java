@@ -3,10 +3,11 @@ package wguSoftware2.models;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.zone.ZoneRules;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -248,7 +249,7 @@ public class MyDateTime {
     }
 
     public String getStartDayOfWeek(){
-        return   DateTimeFormatter.ofPattern("dddd").format(zonedLocalDateTime);
+        return   DateTimeFormatter.ofPattern("EEE").format(zonedLocalDateTime);
 
     }
 
@@ -274,4 +275,34 @@ public class MyDateTime {
         return DateTimeFormatter.ofPattern("a").format(this.zonedLocalDateTime);
 
     }
+
+    public String setMenuZonedDateTime(ZonedDateTime zonedDateTime) {
+        this.menuZonedDateTime = zonedDateTime;
+        return DateTimeFormatter.ofPattern("hh:mm").format(this.menuZonedDateTime);
+    }
+
+    public String getSimpleTimeMenuZDTMinusDST() {
+
+            TimeZone tz = this.ac.getTz();
+            ZoneId zoneId = tz.toZoneId();
+            ZoneRules rules = zoneId.getRules();
+            ZonedDateTime avm_zdt_start = menuZonedDateTime;
+            Instant avm_zdt_instant = avm_zdt_start.toInstant();
+            Duration start_duration = rules.getDaylightSavings(avm_zdt_instant);
+            long diff_in_seconds = start_duration.getSeconds();
+            ZonedDateTime zonedDateTime = avm_zdt_start;
+            return DateTimeFormatter.ofPattern("hh:mm a").
+                    format(this.menuZonedDateTime.minus(diff_in_seconds, ChronoUnit.SECONDS));
+
+
+    }
+
+    public String getSimpleTimeMenuZDTNoDST() {
+
+        return DateTimeFormatter.ofPattern("hh:mm a").
+                format(this.menuZonedDateTime);
+
+
+    }
+
 }

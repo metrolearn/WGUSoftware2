@@ -317,10 +317,6 @@ public class Appoinment_view_main {
     }
 
 
-    public void ajustTimebySeconds(long diff_in_seconds) {
-
-
-    }
 
 
 
@@ -373,7 +369,13 @@ public class Appoinment_view_main {
     public void setStartTimeViewStr(String startTimeViewStr) {
         this.startTimeViewStr = startTimeViewStr;
     }
+    public void setStartTimeViewStrPlusDST(String startTimeViewStr) {
+        this.startTimeViewStr = startTimeViewStr;
+    }
 
+    public void setStartTimeViewStrMinusDST(String startTimeViewStr) {
+        this.startTimeViewStr = startTimeViewStr;
+    }
     public String getEndTimeViewStr() {
         return endTimeViewStr;
     }
@@ -401,4 +403,6 @@ public class Appoinment_view_main {
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
+
+
 }

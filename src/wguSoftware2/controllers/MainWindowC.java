@@ -23,11 +23,7 @@ import wguSoftware2.utils.Database_v3;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.time.Duration;
-import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.zone.ZoneRules;
 import java.util.*;
 
 public class MainWindowC {
@@ -419,7 +415,18 @@ public class MainWindowC {
 
     public void on_dst_cbx_action(ActionEvent actionEvent) {
 
-        update_apt_table_time_by_dst_in_seconds();
+        for (Appoinment_view_main avm: obv_apt_list) {
+
+            if(!dst_cbx.isSelected()) {
+                avm.setStartTimeViewStr(avm.getStart_date_time().getSimpleTimeMenuZDTNoDST());
+                avm.setEndTimeViewStr(avm.getEnd_date_time().getSimpleTimeMenuZDTNoDST());
+            }else {
+                avm.setStartTimeViewStr(avm.getStart_date_time().getSimpleTimeMenuZDTMinusDST());
+                avm.setEndTimeViewStr(avm.getEnd_date_time().getSimpleTimeMenuZDTMinusDST());
+            }
+        }
+
+
         apt_tbl.setItems(obv_apt_list);
         apt_tbl.refresh();
 
@@ -428,23 +435,26 @@ public class MainWindowC {
     private void update_apt_table_time_by_dst_in_seconds() {
         for (Appoinment_view_main avm: all_apts) {
 
-            TimeZone tz = this.active_user.getTz();
-            ZoneId zoneId = tz.toZoneId();
-            ZoneRules rules = zoneId.getRules();
-            Appoinment_view_main avm1 = avm;
-            ZonedDateTime avm_zdt = avm1.getStart_date_time().getZonedLocalDateTime();
-            Instant avm_zdt_instant = avm_zdt.toInstant();
-
-            Duration start_duration = rules.getDaylightSavings(avm_zdt_instant);
-            long diff_in_seconds = start_duration.getSeconds();
-            if(!dst_cbx.isSelected()) {
-                avm1.ajustTimebySeconds(diff_in_seconds*-1);
-
-            }else {
-
-                avm1.ajustTimebySeconds(diff_in_seconds);
-
-            }
+//            TimeZone tz = this.active_user.getTz();
+//            ZoneId zoneId = tz.toZoneId();
+//            ZoneRules rules = zoneId.getRules();
+//            ZonedDateTime avm_zdt_start = avm.getStart_date_time().getZonedLocalDateTime();
+//            ZonedDateTime avm_zdt_end = avm.getEnd_date_time().getZonedLocalDateTime();
+//            Instant avm_zdt_instant = avm_zdt_start.toInstant();
+//
+//            Duration start_duration = rules.getDaylightSavings(avm_zdt_instant);
+//            long diff_in_seconds = start_duration.getSeconds();
+//            if(!dst_cbx.isSelected()) {
+//                System.out.println("Unchecked: ");
+//                ZonedDateTime zonedDateTime = avm.getStart_date_time().getMenuZonedDateTime();
+//                zonedDateTime = zonedDateTime.plusSeconds(diff_in_seconds);
+//                String avm.getStart_date_time().setMenuZonedDateTime(zonedDateTime);
+//
+//            }else {
+//                System.out.println("Checked: ");
+//                avm.ajustTimebySeconds(diff_in_seconds);
+//
+//            };
 
         }
 
