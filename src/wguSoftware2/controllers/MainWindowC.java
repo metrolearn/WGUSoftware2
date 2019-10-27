@@ -99,8 +99,8 @@ public class MainWindowC {
     private Button CRT_Update_Btn;
 
     private ObservableList<Customer_view_main> obv_customer_list = null;
-    private List<Customer_view_main> all_customers;
-    private List<Appoinment_view_main> all_apts;
+    private List<Customer_view_main> all_customers = null;
+    private List<Appoinment_view_main> all_apts = null;
     private ObservableList<Appoinment_view_main> obv_apt_list = null;
     private Database_v3 curr_db;
     private Active_User active_user;
@@ -235,20 +235,21 @@ public class MainWindowC {
            String apt_type = rs.getString("type");
            Integer customer_id = rs.getInt("customerId");
 
-           this.avm = new Appoinment_view_main(active_user,customer_id,appointmentId,customerName,description,title,location,start,end,url,apt_type);
-           avm_list.add(this.avm);
+           Appoinment_view_main avm = new Appoinment_view_main(active_user,customer_id,appointmentId,customerName,description,title,location,start,end,url,apt_type);
+           avm_list.add(avm);
+
 
        }
 
         this.all_apts = avm_list;
         this.obv_apt_list = FXCollections.observableArrayList(this.all_apts);
         this.APT_ID_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("id"));
-        this.APT_DATE_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("dateViewString"));
+        this.APT_DATE_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("dateViewStr"));
         this.APT_CUST_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         this.APT_TITLE_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("title"));
         this.APT_LOC_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("location"));
-        this.APT_START_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("timeViewStringStart"));
-        this.APT_END_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("timeViewStringEnd"));
+        this.APT_START_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("startTimeViewStr"));
+        this.APT_END_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("endTimeViewStr"));
         this.APT_URL_Tbl_Cell.setCellValueFactory(new PropertyValueFactory<>("hl"));
         apt_tbl.setItems(obv_apt_list);
         Set<String> availableZoneIds = ZoneId.getAvailableZoneIds();
@@ -259,14 +260,6 @@ public class MainWindowC {
         this.timezone_picker.setItems(stringObservableList);
         this.timezone_picker.getSelectionModel().select(this.active_user.getTz().getID());
 
-//        apt_tbl.setOnMousePressed(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-//                    System.out.println(apt_tbl.getSelectionModel().getSelectedItem());
-//                }
-//            }
-//        })
 
         timezone_picker.getSelectionModel()
                 .selectedItemProperty()
@@ -281,27 +274,16 @@ public class MainWindowC {
         this.active_user.getTz().setID(newValue);
         System.out.println(active_user.getTz().toString());
 //        update_apt_table_time_by_dst_in_seconds();
-        update_apt_table_time_by_tz_in_seconds();
+        updateMenuTimesByMenuSelection();
         apt_tbl.setItems(obv_apt_list);
         apt_tbl.refresh();
 
     }
 
-    private void update_apt_table_time_by_tz_in_seconds() {
+    private void updateMenuTimesByMenuSelection() {
         for (Appoinment_view_main avm : all_apts) {
-
-            TimeZone tz = this.active_user.getTz();
-            ZoneId zoneId = tz.toZoneId();
-            ZonedDateTime start_date_time_zdt = avm.getStart_date_time_zdt_utc();
-            start_date_time_zdt = start_date_time_zdt.toInstant().atZone(tz.toZoneId());
-            avm.setStart_date_time_zdt_utc(start_date_time_zdt);
-
-            ZonedDateTime end_date_time_zdt = avm.getEnd_date_time_zdt_utc();
-            end_date_time_zdt = end_date_time_zdt.toInstant().atZone(tz.toZoneId());
-            avm.setEnd_date_time_zdt_utc(end_date_time_zdt);
-
-            avm.updateTimes();
-
+            avm.getStart_date_time().setMenuZonedDateTime(active_user.getTz().toZoneId());
+            avm.getEnd_date_time().setMenuZonedDateTime(active_user.getTz().toZoneId());
         }
     }
 
@@ -396,7 +378,7 @@ public class MainWindowC {
     public void FILTER_BY_MONTH(ActionEvent actionEvent) {
 
         for (Appoinment_view_main avm: obv_apt_list) {
-           avm.setDateViewString(avm.getStart_month());
+           avm.setDateViewString(avm.getStart_date_time().getStartMonth());
         }
         apt_tbl.refresh();
         this.Art_Wk_filter_rad.setSelected(false);
@@ -406,8 +388,8 @@ public class MainWindowC {
 
     public void FILTER_BY_WEEK(ActionEvent actionEvent) {
 
-        for (Appoinment_view_main v: obv_apt_list) {
-            v.setDateViewString(v.getStart_day_of_week());
+        for (Appoinment_view_main avm: obv_apt_list) {
+            avm.setDateViewString(avm.getStart_date_time().getStartDayOfWeek());
         }
         apt_tbl.refresh();
         this.Art_Mnt_filter_rad.setSelected(false);
@@ -417,8 +399,8 @@ public class MainWindowC {
 
     public void FILTER_BY_ALL(ActionEvent actionEvent) {
 
-        for (Appoinment_view_main v: obv_apt_list) {
-            v.setDateViewString(v.getStandard_date());
+        for (Appoinment_view_main avm: obv_apt_list) {
+            avm.setDateViewString(avm.getStart_date_time().getSimpleDateMenuStringZDT());
         }
         apt_tbl.refresh();
         this.Art_Mnt_filter_rad.setSelected(false);
@@ -450,7 +432,7 @@ public class MainWindowC {
             ZoneId zoneId = tz.toZoneId();
             ZoneRules rules = zoneId.getRules();
             Appoinment_view_main avm1 = avm;
-            ZonedDateTime avm_zdt = avm1.getStart_date_time_zdt_utc();
+            ZonedDateTime avm_zdt = avm1.getStart_date_time().getZonedLocalDateTime();
             Instant avm_zdt_instant = avm_zdt.toInstant();
 
             Duration start_duration = rules.getDaylightSavings(avm_zdt_instant);

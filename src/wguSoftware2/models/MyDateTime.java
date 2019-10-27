@@ -1,5 +1,7 @@
 package wguSoftware2.models;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -10,9 +12,12 @@ import java.util.regex.Pattern;
 
 import static java.time.ZoneOffset.UTC;
 
+/**
+ * The type My date time.
+ */
 public class MyDateTime {
 
-    private ZonedDateTime UTCZonedDateTime = null;
+    private ZonedDateTime uTCZonedDateTime = null;
     private ZonedDateTime zonedLocalDateTime = null;
     private ZonedDateTime menuZonedDateTime = null;
     private String local_date_str = null;
@@ -36,6 +41,21 @@ public class MyDateTime {
         this.ac = ac;
         setLocalZonedDateTime(ac);
         setUTCZondedDateTime();
+
+    }
+
+    /**
+     *
+     * @param ts Timestamp
+     * @param ac Active user
+     * Constructor used while loading in appointments in MaineWindowC.java
+     */
+    public MyDateTime(Timestamp ts, Active_User ac) {
+        this.ac = ac;
+        this.uTCZonedDateTime = ts.toLocalDateTime().atZone(UTC);
+        this.zonedLocalDateTime = uTCZonedDateTime.withZoneSameInstant(ac.getTz().toZoneId());
+        this.menuZonedDateTime = zonedLocalDateTime;
+
 
     }
 
@@ -103,6 +123,10 @@ public class MyDateTime {
 
     }
 
+    public void setMenuZonedDateTimeByZoneID(ZoneId zid){
+        menuZonedDateTime = menuZonedDateTime.toInstant().atZone(zid);
+    }
+
     public Timestamp getNowUTCTS(){
         return Timestamp.valueOf(ZonedDateTime.now().withZoneSameInstant(UTC).toLocalDateTime());
     }
@@ -121,11 +145,11 @@ public class MyDateTime {
     }
 
     private void setUTCZondedDateTime() {
-        this.UTCZonedDateTime = this.zonedLocalDateTime.withZoneSameInstant(ZoneOffset.UTC);
+        this.uTCZonedDateTime = this.zonedLocalDateTime.withZoneSameInstant(ZoneOffset.UTC);
     }
 
     public Timestamp getUTCTimeStamp(){
-        return Timestamp.valueOf(UTCZonedDateTime.toLocalDateTime());
+        return Timestamp.valueOf(uTCZonedDateTime.toLocalDateTime());
     }
 
     public Timestamp getLocalTimeStamp(){
@@ -178,19 +202,35 @@ public class MyDateTime {
     }
 
     public void setMenuZonedDateTime(ZoneId zid) {
-        this.menuZonedDateTime = UTCZonedDateTime.withZoneSameInstant(zid);
+        this.menuZonedDateTime = uTCZonedDateTime.withZoneSameInstant(zid);
     }
 
     public String getSimpleDate(ZonedDateTime zdt) {
         return DateTimeFormatter.ofPattern("MM/d/yyyy").format(zdt);
     }
 
+    public String getSimpleDateLocalStr() {
+        return DateTimeFormatter.ofPattern("MM/d/yyyy").format(this.zonedLocalDateTime);
+    }
+
     public String getSimpleTime(ZonedDateTime zdt) {
         return DateTimeFormatter.ofPattern("hh:mm a").format(zdt);
     }
 
-    public ZonedDateTime getUTCZonedDateTime() {
-        return UTCZonedDateTime;
+    public String getSimpleTimeLocal() {
+        return DateTimeFormatter.ofPattern("hh:mm a").format(this.zonedLocalDateTime);
+    }
+
+    public String getSimpleTimeHourLocal() {
+        return DateTimeFormatter.ofPattern("hh").format(this.zonedLocalDateTime);
+    }
+
+    public String getSimpleTimeMinLocal() {
+        return DateTimeFormatter.ofPattern("mm").format(this.zonedLocalDateTime);
+    }
+
+    public ZonedDateTime getuTCZonedDateTime() {
+        return uTCZonedDateTime;
     }
 
     public ZonedDateTime getZonedLocalDateTime() {
@@ -201,4 +241,37 @@ public class MyDateTime {
         return menuZonedDateTime;
     }
 
+    public String getStartMonth() {
+
+      return   DateTimeFormatter.ofPattern("MMMM").format(zonedLocalDateTime);
+
+    }
+
+    public String getStartDayOfWeek(){
+        return   DateTimeFormatter.ofPattern("dddd").format(zonedLocalDateTime);
+
+    }
+
+    public String getSimpleDateMenuStringZDT(){
+        return DateTimeFormatter.ofPattern("MM/d/yyyy").format(menuZonedDateTime);
+
+    }
+
+    public void setUTCDateTimeZoneByTimeStamp(Timestamp ts) {
+
+        this.uTCZonedDateTime = ts.toLocalDateTime().atZone(UTC);
+
+    }
+
+    public String getSimpleTimeHourMin() {
+
+        return DateTimeFormatter.ofPattern("hh:mm").format(this.zonedLocalDateTime);
+
+    }
+
+    public String getSimpleAmPm() {
+
+        return DateTimeFormatter.ofPattern("a").format(this.zonedLocalDateTime);
+
+    }
 }

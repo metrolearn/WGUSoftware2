@@ -1,5 +1,6 @@
 package wguSoftware2.models;
 
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -9,6 +10,7 @@ public class Active_User {
     private Integer active_user_id;
     private String active_user_name;
     private TimeZone tz = null;
+    private TimeZone menu_tz = null;
     private String current_ip = null;
     private String current_location = null;
     private GeoIP gp = null;
@@ -18,6 +20,14 @@ public class Active_User {
         this.active_user_name = active_user_name;
         this.tz = Calendar.getInstance().getTimeZone();
 
+    }
+
+    public TimeZone getMenu_tz() {
+        return menu_tz;
+    }
+
+    public void setMenu_tz(TimeZone menu_tz) {
+        this.menu_tz = menu_tz;
     }
 
     public Integer getActive_user_id() {

@@ -13,7 +13,6 @@ import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -116,39 +115,17 @@ public class UpdateAppointmentC {
         end_min_cb.setItems(min_items);
         start_min_cb.setItems(min_items);
 
-        String timeViewStringStart = selectedItem.getTimeViewStringStart();
-        String timeViewStringEnd = selectedItem.getTimeViewStringEnd();
+        String endHourStr = selectedItem.getEnd_date_time().getSimpleTimeHourLocal();
+        String  startHourStr = selectedItem.getStart_date_time().getSimpleTimeHourLocal();
+        String endMinStr = selectedItem.getEnd_date_time().getSimpleTimeMinLocal();
+        String  startMinStr = selectedItem.getStart_date_time().getSimpleTimeMinLocal();
 
-        String start_time_values [] = timeViewStringStart.split(":");
-        String end_time_values [] = timeViewStringEnd.split(":");
+        end_hour_cb.getSelectionModel().select(endHourStr);
+        end_min_cb.getSelectionModel().select(endMinStr);
+        start_hour_cb.getSelectionModel().select(startHourStr);
+        start_min_cb.getSelectionModel().select(startMinStr);
 
-        Integer start_hour = Integer.valueOf(start_time_values[0]);
-        Integer end_hour = Integer.valueOf(end_time_values[0]);
-
-        if(start_hour>12){
-            start_hour-=12;
-        }
-
-        if(end_hour>12){
-            end_hour-=12;
-        }
-
-        String start_min_str = String.valueOf(start_time_values[1]);
-        String end_hour_str = String.valueOf(end_hour);
-        String end_min_str = String.valueOf(end_time_values[1]);
-        String  start_hour_str = String.valueOf(start_hour);
-
-        end_hour_cb.getSelectionModel().select(end_hour_str);
-        end_min_cb.getSelectionModel().select(end_min_str);
-        start_hour_cb.getSelectionModel().select(start_hour_str);
-         start_min_cb.getSelectionModel().select(start_min_str);
-         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
-
-        //convert String to LocalDate
-        LocalDate localDate = LocalDate.parse(selectedItem.getDateViewString(), formatter);
-
-         date_pkr.setValue(localDate);
-
+        date_pkr.setValue(LocalDate.parse(selectedItem.getStart_date_time().getSimpleDateLocalStr()));
         date_pkr.setDayCellFactory(picker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);

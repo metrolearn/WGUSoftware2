@@ -10,6 +10,8 @@ import wguSoftware2.utils.Database_v3;
 import java.sql.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.TimeZone;
+import java.util.function.BooleanSupplier;
 
 public class Appoinment_view_main {
 
@@ -23,6 +25,12 @@ public class Appoinment_view_main {
     private MyDateTime end_date_time = null;
     private MyDateTime create_date = null;
     private MyDateTime last_update = null;
+
+    private String dateViewStr  = null;
+    private String startTimeViewStr = null;
+    private String  endTimeViewStr = null;
+    private Boolean startPm = null;
+    private Boolean endPm = null;
 
 
 
@@ -62,6 +70,28 @@ public class Appoinment_view_main {
     public Appoinment_view_main(Active_User ac, Integer customer_id, Integer appointmentId, String customerName, String description, String title, String location,
                                 Timestamp start, Timestamp end, String url, String apt_type)
     {
+
+        this.start_date_time = new MyDateTime(start,ac);
+        this.end_date_time = new MyDateTime(end,ac);
+        this.dateViewStr =start_date_time.getSimpleDateLocalStr();
+        this.startTimeViewStr =start_date_time.getSimpleTimeLocal();
+        this.endTimeViewStr =end_date_time.getSimpleTimeLocal();
+
+        if(start_date_time.getSimpleAmPm().toUpperCase().equals("PM")){
+            this.startPm = true;
+        }else{
+            this.startPm = false;
+        }
+
+        if(end_date_time.getSimpleAmPm().toUpperCase().equals("PM")){
+            this.endPm = true;
+        }else{
+            this.endPm = false;
+        }
+
+
+
+
         this.customerID = customer_id;
         this.id = appointmentId;
         this.customerName = customerName;
@@ -299,4 +329,76 @@ public class Appoinment_view_main {
     }
 
 
+    public void setMenuZoneDateTimeByZone(TimeZone menu_tz) {
+
+        ZonedDateTime menuZonedDateTime_start = this.getStart_date_time().getMenuZonedDateTime();//.end_date_time_zdt.toInstant().atZone(tz.toZoneId());
+        ZonedDateTime menuZonedDateTime_end = this.getEnd_date_time().getMenuZonedDateTime();
+        menuZonedDateTime_start.toInstant().atZone(menu_tz.toZoneId());
+
+
+    }
+
+    public void setDateViewString(String str) {
+        this.dateViewStr = str;
+    }
+
+    public void setStart_date_time(MyDateTime start_date_time) {
+        this.start_date_time = start_date_time;
+    }
+
+    public void setEnd_date_time(MyDateTime end_date_time) {
+        this.end_date_time = end_date_time;
+    }
+
+    public void setCreate_date(MyDateTime create_date) {
+        this.create_date = create_date;
+    }
+
+    public void setLast_update(MyDateTime last_update) {
+        this.last_update = last_update;
+    }
+
+    public String getDateViewStr() {
+        return dateViewStr;
+    }
+
+    public void setDateViewStr(String dateViewStr) {
+        this.dateViewStr = dateViewStr;
+    }
+
+    public String getStartTimeViewStr() {
+        return startTimeViewStr;
+    }
+
+    public void setStartTimeViewStr(String startTimeViewStr) {
+        this.startTimeViewStr = startTimeViewStr;
+    }
+
+    public String getEndTimeViewStr() {
+        return endTimeViewStr;
+    }
+
+    public void setEndTimeViewStr(String endTimeViewStr) {
+        this.endTimeViewStr = endTimeViewStr;
+    }
+
+    public Boolean getStartPm() {
+        return startPm;
+    }
+
+    public void setStartPm(Boolean startPm) {
+        this.startPm = startPm;
+    }
+
+    public Boolean getEndPm() {
+        return endPm;
+    }
+
+    public void setEndPm(Boolean endPm) {
+        this.endPm = endPm;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
 }
