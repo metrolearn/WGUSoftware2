@@ -44,28 +44,28 @@ public class Appoinment_view_main {
     private Hyperlink hl =null;
     private Active_User active_user = null;
 
-    public Appoinment_view_main(Active_User ac, String title, String description, String location, String contact,
-
-                                String appointment_type, ZonedDateTime start_date_time, ZonedDateTime end_date_time) {
-        this.title = title;
-        this.description = description;
-        this.location = location;
-        this.customerName = contact;
-        this.appointment_type = appointment_type;
-        this.url = "www.link.com";
-    }
-
-    public Appoinment_view_main(Active_User ac, Integer appointmentId, String contact, String description, String title, String location, Timestamp start, Timestamp end, String s, String apt_type) {
-
-        this.id = appointmentId;
-        this.description = description;
-        this.zoneID = ac.getTz().toZoneId();
-        this.title = title;
-        this.location = location;
-        this.appointment_type = apt_type;
-        create_hyperlink();
-
-    }
+//    public Appoinment_view_main(Active_User ac, String title, String description, String location, String contact,
+//
+//                                String appointment_type, ZonedDateTime start_date_time, ZonedDateTime end_date_time) {
+//        this.title = title;
+//        this.description = description;
+//        this.location = location;
+//        this.customerName = contact;
+//        this.appointment_type = appointment_type;
+//        this.url = "www.link.com";
+//    }
+//
+//    public Appoinment_view_main(Active_User ac, Integer appointmentId, String contact, String description, String title, String location, Timestamp start, Timestamp end, String s, String apt_type) {
+//
+//        this.id = appointmentId;
+//        this.description = description;
+//        this.zoneID = ac.getTz().toZoneId();
+//        this.title = title;
+//        this.location = location;
+//        this.appointment_type = apt_type;
+//        create_hyperlink();
+//
+//    }
 
     public Appoinment_view_main(Active_User ac, Integer customer_id, Integer appointmentId, String customerName, String description, String title, String location,
                                 Timestamp start, Timestamp end, String url, String apt_type)

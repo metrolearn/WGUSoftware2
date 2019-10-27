@@ -9,15 +9,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
+import org.jetbrains.annotations.NotNull;
 import wguSoftware2.DAO.CalendarViewMainDAO;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
+import wguSoftware2.models.MyDateTime;
 import wguSoftware2.utils.Database_v3;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -329,50 +331,67 @@ public class AddAppointmentC {
         String location = this.location_txt.getText();
         String contact = this.contact_txt.getText();
         String apt_type = this.apt_type_cb.getValue();
-        StringConverter<LocalDate> converter = this.date_pkr.getConverter();
         String start_hour_str = this.start_hour_cb.getValue();
         String start_min_str = this.start_min_cb.getValue();
         boolean start_pm = this.start_pm.isArmed();
         String end_hour_str = this.end_hour_cb.getValue();
         String end_min_str = this.end_min_cb.getValue();
         boolean end_pm = this.end_pm.isArmed();
+        String startPmString = "AM";
+        String endPmString = "AM";
+
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
         TimeZone tz = active_user.getTz();
         String zoneId = tz.toZoneId().toString();
 
         if (this.start_pm.isSelected()){
-            int i = 12 + Integer.parseInt(start_hour_str);
-            start_hour_str = String.valueOf(i);
+            startPmString = "PM";
         }
-
-        if (this.end_pm.isSelected()){
-            int i = 12 + Integer.parseInt(end_hour_str);
-            end_hour_str = String.valueOf(i);
+        if(this.end_pm.isSelected()){
+            endPmString = "PM";
         }
-        LocalDateTime start_ldt =  this.date_pkr.getValue().atStartOfDay().
-                with(LocalTime.of(Integer.parseInt(start_hour_str),Integer.parseInt(start_min_str)));
-        LocalDateTime end_ldt = this.date_pkr.getValue().atStartOfDay().
-                with(LocalTime.of(Integer.parseInt(end_hour_str),Integer.parseInt(end_min_str)));
-        ZoneId zone = ZonedDateTime.now().getZone();
-        ZonedDateTime start_ztd = start_ldt.atZone(zone);
-        ZonedDateTime end_ztd = end_ldt.atZone(zone);
+        start_hour_str = appendZero(start_hour_str);
+        start_min_str = appendZero(start_min_str);
+        end_hour_str = appendZero(end_hour_str);
+        end_min_str = appendZero(end_min_str);
 
-        this.apv = new Appoinment_view_main(active_user,title,description,location,contact,apt_type,start_ztd,end_ztd);
-        this.apv.setCustomerID(this.getSelectedCVM().getId());
-        this.apv.create_hyperlink();
+        String startInput = getTimeDateInputStr(start_hour_str, start_min_str, startPmString);
+        String endInput = getTimeDateInputStr(end_hour_str,end_min_str,endPmString);
 
-        this.apv.setCustomerID(selectedCVM.getId());
-        this.apv.setUserID(active_user.getActive_user_id());
-        try {
-            this.apv = calendarViewMainDAO.create(this.apv,active_user,selectedCVM);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        Timestamp startTS = new MyDateTime(startInput,this.active_user).getUTCTimeStamp();
+        Timestamp endTS = new MyDateTime(endInput,this.active_user).getUTCTimeStamp();
+        Integer customerID = this.getSelectedCVM().getId();
+        String customerName = this.getSelectedCVM().getName();
+
+        Integer nextID = calendarViewMainDAO.getNextAppointmentID();
+
+
+        Appoinment_view_main apv =
+                new Appoinment_view_main(active_user,customerID,nextID,customerName,
+        description,title,location,startTS,endTS,"test",apt_type);
+
+        apv.create_hyperlink();
+        apv = calendarViewMainDAO.create(apv,active_user,selectedCVM);
+        this.apv = apv;
         this.add_apt_btn.getScene().getWindow().hide();
 
+    }
+
+    @NotNull
+    private String getTimeDateInputStr(String start_hour_str, String start_min_str, String startPmString) {
+        String startTime = start_hour_str + ":" + start_min_str + " " + startPmString;
+        String date = date_pkr.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyy"));
+        String startInput = date+" "+startTime;
+        return startInput;
+    }
+
+    @NotNull
+    private String appendZero(String start_hour_str) {
+        if(Integer.parseInt(start_hour_str) < 10){
+            start_hour_str = "0"+start_hour_str;
+        }
+        return start_hour_str;
     }
 
     public void setSelectedCVM(Customer_view_main selectedCVM) {

@@ -253,5 +253,28 @@ public class CalendarViewMainDAO {
 
     }
 
+    public Integer getNextAppointmentID() throws SQLException, ClassNotFoundException {
+        this.curr_db.dbConnect();
+        Connection con = this.curr_db.getCon();
+
+        String sqlStmt = "SELECT AUTO_INCREMENT FROM information_schema.tables" +
+                " WHERE table_name = 'appointment' AND " +
+                "table_schema = DATABASE( );";
+
+        PreparedStatement ps = con.prepareStatement(sqlStmt, Statement.RETURN_GENERATED_KEYS);
+
+
+        rs = curr_db.dbExecuteQuery(ps);
+        Integer next_id = null;
+        while (rs.next()){
+           next_id = rs.getInt(1);
+        }
+        return next_id;
+
+
+
+
+    }
+
 
 }

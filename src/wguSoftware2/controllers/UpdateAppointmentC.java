@@ -230,10 +230,10 @@ public class UpdateAppointmentC {
         ZonedDateTime start_ztd = start_ldt.atZone(zone);
         ZonedDateTime end_ztd = end_ldt.atZone(zone);
 
-        this.avm = new Appoinment_view_main(active_user,title,description,location,contact,apt_type,start_ztd,end_ztd);
-        this.avm.setContact(contact);
-        this.avm.setId(apt_id);
-        this.avm.setCustomerID(customerID);
+//        this.avm = new Appoinment_view_main(active_user,title,description,location,contact,apt_type,start_ztd,end_ztd);
+//        this.avm.setContact(contact);
+//        this.avm.setId(apt_id);
+//        this.avm.setCustomerID(customerID);
 
 
 
