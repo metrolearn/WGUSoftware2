@@ -6,13 +6,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 import wguSoftware2.DAO.CalendarViewMainDAO;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
+import wguSoftware2.models.MyDateTime;
 import wguSoftware2.utils.Database_v3;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -116,16 +119,19 @@ public class UpdateAppointmentC {
         start_min_cb.setItems(min_items);
 
         String endHourStr = selectedItem.getEnd_date_time().getSimpleTimeHourLocal();
-        String  startHourStr = selectedItem.getStart_date_time().getSimpleTimeHourLocal();
+        MyDateTime start_date_time = selectedItem.getStart_date_time();
+        String  startHourStr = start_date_time.getSimpleTimeHourLocal();
         String endMinStr = selectedItem.getEnd_date_time().getSimpleTimeMinLocal();
-        String  startMinStr = selectedItem.getStart_date_time().getSimpleTimeMinLocal();
+        String  startMinStr = start_date_time.getSimpleTimeMinLocal();
 
         end_hour_cb.getSelectionModel().select(endHourStr);
         end_min_cb.getSelectionModel().select(endMinStr);
         start_hour_cb.getSelectionModel().select(startHourStr);
         start_min_cb.getSelectionModel().select(startMinStr);
 
-        date_pkr.setValue(LocalDate.parse(selectedItem.getStart_date_time().getSimpleDateLocalStr()));
+        
+        LocalDateTime ldt = start_date_time.getZonedLocalDateTime().toLocalDateTime();
+        date_pkr.setValue(ldt.toLocalDate());
         date_pkr.setDayCellFactory(picker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
@@ -171,74 +177,43 @@ public class UpdateAppointmentC {
         String end_hour_str = end_hour_cb.getValue();
         String start_min_str = start_min_cb.getValue();
         String end_min_str = end_min_cb.getValue();
-        Boolean s_pm = start_pm.isSelected();
-        Boolean e_pm = end_pm.isSelected();
 
 
-        // redo this part to capture UTC
-        //values being sent to the database
+        String startPmString ="AM";
+        String endPmString = "AM";
 
 
-        // two seprate times like db times
-        // and view times...
-
-        // get rid of local date.
-        String start_am_pm_str = "AM";
-
-        if (s_pm){
-            Integer start_val = Integer.valueOf(start_hour_str);
-            start_val+=12;
-            if(start_val == 24){
-                start_val =0;
-                start_am_pm_str = "AM";
-            }else
-            {
-                start_am_pm_str = "PM";
-
-            }
-
-            start_hour_str = String.valueOf(start_val);
-
+        if (this.start_pm.isSelected()){
+            startPmString = "PM";
         }
-
-        String end_am_pm_str = "AM";
-
-        if (e_pm){
-            Integer end_val = Integer.valueOf(end_hour_str);
-            end_val+=12;
-            if (end_val==24){
-                end_val = 0;
-                end_am_pm_str = "AM";
-            }else {
-                end_am_pm_str = "PM";
-            }
-            end_hour_str = String.valueOf(end_val);
+        if(this.end_pm.isSelected()){
+            endPmString = "PM";
         }
+        start_hour_str = appendZero(start_hour_str);
+        start_min_str = appendZero(start_min_str);
+        end_hour_str = appendZero(end_hour_str);
+        end_min_str = appendZero(end_min_str);
 
+        String startInput = getTimeDateInputStr(start_hour_str, start_min_str, startPmString);
+        String endInput = getTimeDateInputStr(end_hour_str,end_min_str,endPmString);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
-        TimeZone tz = active_user.getTz();
-        String zoneId = tz.toZoneId().toString();
+        Timestamp startTS = new MyDateTime(startInput,this.active_user).getUTCTimeStamp();
+        Timestamp endTS = new MyDateTime(endInput,this.active_user).getUTCTimeStamp();
 
-
-
-        LocalDateTime start_ldt =  this.date_pkr.getValue().atStartOfDay().
-                with(LocalTime.of(Integer.parseInt(start_hour_str),Integer.parseInt(start_min_str)));
-        LocalDateTime end_ldt = this.date_pkr.getValue().atStartOfDay().
-                with(LocalTime.of(Integer.parseInt(end_hour_str),Integer.parseInt(end_min_str)));
-        ZoneId zone = ZonedDateTime.now().getZone();
-        ZonedDateTime start_ztd = start_ldt.atZone(zone);
-        ZonedDateTime end_ztd = end_ldt.atZone(zone);
-
-//        this.avm = new Appoinment_view_main(active_user,title,description,location,contact,apt_type,start_ztd,end_ztd);
-//        this.avm.setContact(contact);
-//        this.avm.setId(apt_id);
-//        this.avm.setCustomerID(customerID);
-
-
-
-
-        this.avm.create_hyperlink();
+        Appoinment_view_main avm = new Appoinment_view_main(
+                active_user,
+                customerID,
+                apt_id,
+                customer,
+                description,
+                title,
+                location,
+                startTS,
+                endTS,
+                "",
+                apt_type);
+        avm.create_hyperlink();
+        this.avm = avm;
 
         this.calendarViewMainDAO.update(this.avm,this.active_user);
 
@@ -257,6 +232,23 @@ public class UpdateAppointmentC {
 
         alert.showAndWait();
 
+    }
+
+    @NotNull
+    private String getTimeDateInputStr(String start_hour_str, String start_min_str, String startPmString) {
+        String startTime = start_hour_str + ":" + start_min_str + " " + startPmString;
+        String date = date_pkr.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyy"));
+        String startInput = date+" "+startTime;
+        return startInput;
+    }
+
+    @NotNull
+    private String appendZero(String input) {
+        if(Integer.parseInt(input) < 10){
+            if(input.length() == 1)
+                input = "0"+input;
+        }
+        return input;
     }
 
 
