@@ -253,28 +253,22 @@ public class MainWindowC {
         List<String> zoneList = new ArrayList<>(availableZoneIds);
         Collections.sort(zoneList);
         ObservableList<String> stringObservableList = FXCollections.observableArrayList(zoneList);
+
+
+
         this.timezone_picker.setItems(stringObservableList);
         this.timezone_picker.getSelectionModel().select(this.active_user.getTz().getID());
-
-
         timezone_picker.getSelectionModel()
                 .selectedItemProperty()
                 .addListener( (ObservableValue<? extends String> observable, String oldValue, String newValue)
-                        -> this.updateTimeBasedOnZoneID(newValue)
+                        -> this.FILTER_BY_TZ()
                 );
 
     }
 
-    private void updateTimeBasedOnZoneID(String newValue) {
 
-        this.active_user.getTz().setID(newValue);
-        System.out.println(active_user.getTz().toString());
-//        update_apt_table_time_by_dst_in_seconds();
-        updateMenuTimesByMenuSelection();
-        apt_tbl.setItems(obv_apt_list);
-        apt_tbl.refresh();
 
-    }
+
 
     private void updateMenuTimesByMenuSelection() {
         for (Appoinment_view_main avm : all_apts) {
@@ -404,9 +398,19 @@ public class MainWindowC {
 
     }
 
-    public void FILTER_BY_TZ(ActionEvent actionEvent){
+    public void FILTER_BY_TZ(){
 
         ZoneId zid = ZoneId.of(timezone_picker.getValue());
+
+        for (Appoinment_view_main avm: obv_apt_list) {
+            avm.getStart_date_time().setMenuZone(zid);;
+            avm.getEnd_date_time().setMenuZone(zid);
+            avm.setStartTimeViewStr(avm.getStart_date_time().getSimpleDateMenuStringByTZ());
+            avm.setEndTimeViewStr(avm.getEnd_date_time().getSimpleDateMenuStringByTZ());
+        }
+
+        apt_tbl.setItems(obv_apt_list);
+        apt_tbl.refresh();
 
         this.Art_Mnt_filter_rad.setSelected(false);
         this.Art_Wk_filter_rad.setSelected(false);
@@ -432,32 +436,5 @@ public class MainWindowC {
 
     }
 
-    private void update_apt_table_time_by_dst_in_seconds() {
-        for (Appoinment_view_main avm: all_apts) {
-
-//            TimeZone tz = this.active_user.getTz();
-//            ZoneId zoneId = tz.toZoneId();
-//            ZoneRules rules = zoneId.getRules();
-//            ZonedDateTime avm_zdt_start = avm.getStart_date_time().getZonedLocalDateTime();
-//            ZonedDateTime avm_zdt_end = avm.getEnd_date_time().getZonedLocalDateTime();
-//            Instant avm_zdt_instant = avm_zdt_start.toInstant();
-//
-//            Duration start_duration = rules.getDaylightSavings(avm_zdt_instant);
-//            long diff_in_seconds = start_duration.getSeconds();
-//            if(!dst_cbx.isSelected()) {
-//                System.out.println("Unchecked: ");
-//                ZonedDateTime zonedDateTime = avm.getStart_date_time().getMenuZonedDateTime();
-//                zonedDateTime = zonedDateTime.plusSeconds(diff_in_seconds);
-//                String avm.getStart_date_time().setMenuZonedDateTime(zonedDateTime);
-//
-//            }else {
-//                System.out.println("Checked: ");
-//                avm.ajustTimebySeconds(diff_in_seconds);
-//
-//            };
-
-        }
-
-    }
 
 }

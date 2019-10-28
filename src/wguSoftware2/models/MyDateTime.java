@@ -33,6 +33,7 @@ public class MyDateTime {
 
     private Active_User ac = null;
     private DateTimeFormatter formatter = null;
+    private ZoneId menuZone = null;
 
     public MyDateTime(String input, Active_User ac) {
         // input should be MM/DD/YYYY hh:mm:AM/PM
@@ -305,4 +306,18 @@ public class MyDateTime {
 
     }
 
+    public String getSimpleDateMenuStringByTZ() {
+        return DateTimeFormatter.ofPattern("hh:mm a").
+                format(this.menuZonedDateTime.withZoneSameInstant(this.menuZone));
+
+
+    }
+
+    public ZoneId getMenuZone() {
+        return menuZone;
+    }
+
+    public void setMenuZone(ZoneId menuZone) {
+        this.menuZone = menuZone;
+    }
 }
