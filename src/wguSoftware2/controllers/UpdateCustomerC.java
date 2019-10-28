@@ -2,18 +2,20 @@ package wguSoftware2.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import wguSoftware2.DAO.CustomerViewMainDAO;
 import wguSoftware2.models.*;
-import wguSoftware2.utils.Database;
 import wguSoftware2.utils.Database_v3;
 
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UpdateCustomerC {
 
@@ -83,7 +85,6 @@ public class UpdateCustomerC {
     public void set_fields(Customer_view_main selectedItem) throws SQLException, ClassNotFoundException {
 
         this.cvm = this.cvmDAO.read(selectedItem);
-
         this.name_txt.setText(this.cvm.getName());
         this.address_txt.setText(this.cvm.getAddress());
         this.alt_address_txt.setText(this.cvm.getAlt_address());
@@ -96,30 +97,99 @@ public class UpdateCustomerC {
     }
 
     public Customer_view_main update_customer(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-        String name_txt = this.name_txt.getText();
-        String address_txt = this.address_txt.getText();
-        String alt_address_txt = this.alt_address_txt.getText();
-        String city_txt = this.city_txt.getText();
-        String zip_txt = this.zip_txt.getText();
-        String country_txt = this.country_txt.getText();
-        String phone_txt = this.phone_txt.getText();
-        this.cvm = new Customer_view_main(
-                name_txt,
-                address_txt,
-                alt_address_txt,
-                city_txt,
-                zip_txt,
-                country_txt,
-                phone_txt
+        try {
+            String name_txt = testForBlankString(this.name_txt);
+            String address_txt = testForBlankString(this.address_txt);
+            String alt_address_txt = testForBlankString(this.alt_address_txt);
+            String city_txt = testForBlankString(this.city_txt);
+            String zip_txt = testForBlankString(this.zip_txt);
+            String country_txt = testForBlankString(this.country_txt);
+            String phone_txt = testForBlankString(this.phone_txt);
 
-        );
+            if(!phoneNumberCheck(phone_txt)){
+                throw new Error("Bad Phone Number");
+            }
 
-        this.cvm.setId(this.customer_id);
+            this.cvm = new Customer_view_main(
+                    name_txt,
+                    address_txt,
+                    alt_address_txt,
+                    city_txt,
+                    zip_txt,
+                    country_txt,
+                    phone_txt
 
-        this.cvm = cvmDAO.update(this.cvm);
-        this.add_customer_btn.getScene().getWindow().hide();
+            );
+
+            this.cvm.setId(this.customer_id);
+
+            this.cvm = cvmDAO.update(this.cvm);
+            this.add_customer_btn.getScene().getWindow().hide();
+        } catch (Error error) {
+                               /*
+            Program Constraint:
+            F. Write exception controls to prevent each of the following. You may use the same mechanism of exception control more than once, but you must incorporate at least  two different mechanisms of exception control.
+            • scheduling overlapping appointments
+            */
+
+            String message = "This program only accepts North American phone" +
+                    "numbers. Valid Examples are as follows:\n" +
+                    "1234567890\n" +
+                    "123-456-7890\n" +
+                    "123.456.7890\n" +
+                    "123 456 7890\n" +
+                    "(123) 456 7890";
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Customer Add Error!");
+            alert.setHeaderText("Try again!");
+            alert.setContentText(message);
+            alert.showAndWait();
+            System.out.println("Bad phone!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }catch (NullPointerException e){
+
+            /*
+            Program Constraint:
+            F. Write exception controls to prevent each of the following. You may use the same mechanism of exception control more than once, but you must incorporate at least  two different mechanisms of exception control.
+            • scheduling overlapping appointments
+            */
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Appointment Add Error!");
+            alert.setHeaderText("Try again!");
+            alert.setContentText(e.toString());
+            System.out.println("Blank fields not allowed. ");
+
+            alert.showAndWait();
+        }
         return  this.cvm;
 
+    }
+
+
+
+    private String testForBlankString(TextField inputStr) {
+        if(inputStr.getText().equals("")){
+            throw new NullPointerException("No fields can be blank");
+        }else
+            return inputStr.getText();
+    }
+
+    private Boolean phoneNumberCheck(String phone_txt) {
+
+        Boolean rval = false;
+        String regex = "^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(phone_txt);
+        if(matcher.matches()) {
+            rval = true;
+        }
+        return rval;
     }
 
 }

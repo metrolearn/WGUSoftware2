@@ -41,61 +41,62 @@ public class CalendarViewMainDAO {
 
     public Appoinment_view_main create(Appoinment_view_main avm, Active_User active_user, Customer_view_main selectedCVM) throws SQLException, ClassNotFoundException {
 
-        this.active_user = active_user;
-        this.customer_view_main = selectedCVM;
+            this.active_user = active_user;
+            this.customer_view_main = selectedCVM;
 
-        String title = avm.getTitle();
-        String description = avm.getDescription();
-        String location = avm.getLocation();
-        String contact = avm.getCustomerName();
-        String apt_type = avm.getAppointment_type();
-        Timestamp start_time_ts = avm.getStart_date_time().getUTCTimeStamp();
-        Timestamp end_time_ts = avm.getEnd_date_time().getUTCTimeStamp();
+                String title = avm.getTitle();
+                String description = avm.getDescription();
+                String location = avm.getLocation();
+                String contact = avm.getCustomerName();
+                String apt_type = avm.getAppointment_type();
+                Timestamp start_time_ts = avm.getStart_date_time().getUTCTimeStamp();
+                Timestamp end_time_ts = avm.getEnd_date_time().getUTCTimeStamp();
 
-        Integer customerID = customer_view_main.getId();
-        Integer userID = active_user.getActive_user_id();
-
-
-        String url = "customer link";
-        Timestamp create_date_ts = Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime());
-        String createdBy = active_user.getActive_user_name();
-
-        String sql_stmt = "INSERT INTO appointment " +
-                "(customerId, userId, title, " +
-                "description, location, contact, type, url, " +
-                "start, end, createDate, createdBy, " +
-                "lastUpdateBy) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        this.curr_db.dbConnect();
-        Connection con = this.curr_db.getCon();
-        PreparedStatement ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
-        ps.setInt(1,customerID);
-        ps.setInt(2,userID);
-        ps.setString(3,title);
-        ps.setString(4,description);
-        ps.setString(5,location);
-        ps.setString(6,contact);
-        ps.setString(7,apt_type);
-        ps.setString(8,url);
-        ps.setTimestamp(9,start_time_ts);
-        ps.setTimestamp(10,end_time_ts);
-        ps.setTimestamp(11,create_date_ts);
-        ps.setString(12,createdBy);
-        ps.setString(13,active_user.getActive_user_name());
+                Integer customerID = customer_view_main.getId();
+                Integer userID = active_user.getActive_user_id();
 
 
+                String url = "customer link";
+                Timestamp create_date_ts = Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime());
+                String createdBy = active_user.getActive_user_name();
 
-        System.out.println(ps.toString());
-        rs = curr_db.dbExecuteUpdate(ps);
-        Integer apt_id = null;
-        if (rs.next()) {
-            apt_id = rs.getInt("GENERATED_KEY");
-        }
+                String sql_stmt = "INSERT INTO appointment " +
+                        "(customerId, userId, title, " +
+                        "description, location, contact, type, url, " +
+                        "start, end, createDate, createdBy, " +
+                        "lastUpdateBy) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        avm.setId(apt_id);
+                this.curr_db.dbConnect();
+                Connection con = this.curr_db.getCon();
+                PreparedStatement ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1,customerID);
+                ps.setInt(2,userID);
+                ps.setString(3,title);
+                ps.setString(4,description);
+                ps.setString(5,location);
+                ps.setString(6,contact);
+                ps.setString(7,apt_type);
+                ps.setString(8,url);
+                ps.setTimestamp(9,start_time_ts);
+                ps.setTimestamp(10,end_time_ts);
+                ps.setTimestamp(11,create_date_ts);
+                ps.setString(12,createdBy);
+                ps.setString(13,active_user.getActive_user_name());
 
 
-        return avm;
+                System.out.println(ps.toString());
+                rs = curr_db.dbExecuteUpdate(ps);
+                Integer apt_id = null;
+                if (rs.next()) {
+                    apt_id = rs.getInt("GENERATED_KEY");
+                }
+
+                avm.setId(apt_id);
+
+
+
+            return avm;
+
     }
 
     public void delete(Appoinment_view_main selectedItem) throws SQLException, ClassNotFoundException {

@@ -13,6 +13,7 @@ import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.models.MyDateTime;
 import wguSoftware2.utils.Database_v3;
+import wguSoftware2.utils.Utils;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -66,13 +67,15 @@ public class UpdateAppointmentC {
     private Stage curr_stage = null;
     private CalendarViewMainDAO calendarViewMainDAO = null;
     private Integer apt_id = null;
+    private Utils utils =null;
 
-    public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) {
+    public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) throws SQLException, ClassNotFoundException {
 
         this.curr_db = curr_db;
         this.obv_customer_list = obv_customer_list;
         this.active_user = active_user;
         this.calendarViewMainDAO = new CalendarViewMainDAO(this.curr_db);
+        this.utils = new Utils();
 
     }
 
@@ -179,14 +182,14 @@ public class UpdateAppointmentC {
         String end_min_str = end_min_cb.getValue();
 
 
-        String startPmString ="AM";
+        String startPmString = "AM";
         String endPmString = "AM";
 
 
-        if (this.start_pm.isSelected()){
+        if (this.start_pm.isSelected()) {
             startPmString = "PM";
         }
-        if(this.end_pm.isSelected()){
+        if (this.end_pm.isSelected()) {
             endPmString = "PM";
         }
         start_hour_str = appendZero(start_hour_str);
@@ -195,32 +198,75 @@ public class UpdateAppointmentC {
         end_min_str = appendZero(end_min_str);
 
         String startInput = getTimeDateInputStr(start_hour_str, start_min_str, startPmString);
-        String endInput = getTimeDateInputStr(end_hour_str,end_min_str,endPmString);
+        String endInput = getTimeDateInputStr(end_hour_str, end_min_str, endPmString);
 
-        Timestamp startTS = new MyDateTime(startInput,this.active_user).getUTCTimeStamp();
-        Timestamp endTS = new MyDateTime(endInput,this.active_user).getUTCTimeStamp();
+        MyDateTime myStartDateTime = new MyDateTime(startInput, this.active_user);
+        Timestamp startTS = myStartDateTime.getUTCTimeStamp();
+        MyDateTime myEndDateTime = new MyDateTime(endInput, this.active_user);
+        Timestamp endTS = myEndDateTime.getUTCTimeStamp();
 
-        Appoinment_view_main avm = new Appoinment_view_main(
-                active_user,
-                customerID,
-                apt_id,
-                customer,
-                description,
-                title,
-                location,
-                startTS,
-                endTS,
-                "",
-                apt_type);
-        avm.create_hyperlink();
-        this.avm = avm;
 
-        this.calendarViewMainDAO.update(this.avm,this.active_user);
+            /*
+            Program Constraint:
+            F. Write exception controls to prevent each of the following. You may use the same mechanism of exception control more than once, but you must incorporate at least  two different mechanisms of exception control.
+            • scheduling an appointment outside business hours
+         */
+        try {
+            utils.timeCheckError(myStartDateTime, myEndDateTime);
+            utils.appointmentOverlapCheck(myStartDateTime, myEndDateTime);
+            Appoinment_view_main avm = new Appoinment_view_main(
+                    active_user,
+                    customerID,
+                    apt_id,
+                    customer,
+                    description,
+                    title,
+                    location,
+                    startTS,
+                    endTS,
+                    "",
+                    apt_type);
+            avm.create_hyperlink();
+            this.avm = avm;
 
-        this.updt_apt_btn.getScene().getWindow().hide();
-        return avm;
+            this.calendarViewMainDAO.update(this.avm, this.active_user);
 
+            this.updt_apt_btn.getScene().getWindow().hide();
         }
+
+        /*
+            Program Constraint:
+            F. Write exception controls to prevent each of the following. You may use the same mechanism of exception control more than once, but you must incorporate at least  two different mechanisms of exception control.
+            • scheduling an appointment outside business hours
+         */
+
+        catch (Error error) {
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Appointment Add Error!");
+                alert.setHeaderText("Try again!");
+                alert.setContentText(error.toString());
+                alert.showAndWait();
+            }
+        /*
+            Program Constraint:
+            F. Write exception controls to prevent each of the following. You may use the same mechanism of exception control more than once, but you must incorporate at least  two different mechanisms of exception control.
+            • scheduling overlapping appointments
+         */
+
+            catch (IllegalArgumentException i){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Appointment Add Error!");
+                alert.setHeaderText("Try again!");
+                alert.setContentText(i.toString());
+                alert.showAndWait();
+            }
+
+        return avm;
+    }
+
+
+
 
     public void on_contact_change(){
 

@@ -15,6 +15,7 @@ import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.models.MyDateTime;
+import wguSoftware2.utils.Utils;
 import wguSoftware2.utils.Database_v3;
 
 import java.net.URL;
@@ -75,6 +76,7 @@ public class AddAppointmentC {
     private Active_User active_user = null;
     @FXML
     private Database_v3 curr_db = null;
+    private Utils utils = null;
 
     @FXML
     public Appoinment_view_main get_avm() {
@@ -271,11 +273,12 @@ public class AddAppointmentC {
         this.curr_db = curr_db;
     }
 
-    public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) {
+    public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) throws SQLException, ClassNotFoundException {
 
         this.active_user = active_user;
         this.curr_db = curr_db;
         this.calendarViewMainDAO = new CalendarViewMainDAO(curr_db);
+        this.utils = new Utils();
 
         ObservableList<String> hour_items = end_hour_cb.getItems();
 
@@ -310,6 +313,18 @@ public class AddAppointmentC {
 
         this.blank_lbl.setFocusTraversable(true);
 
+        /*
+        Program Constraint:
+        G. Write two or more lambda expressions to make your program more
+        efficient, justifying the use of each lambda expression with an
+        in-line comment.
+
+        This a concise way to make sure past dates cannot be entered.
+        With out this there would be a lot more code to handle this issue.
+        So the Lambda helps in this sense.
+
+         */
+
         date_pkr.setDayCellFactory(picker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
@@ -333,50 +348,92 @@ public class AddAppointmentC {
         String apt_type = this.apt_type_cb.getValue();
         String start_hour_str = this.start_hour_cb.getValue();
         String start_min_str = this.start_min_cb.getValue();
-        boolean start_pm = this.start_pm.isArmed();
         String end_hour_str = this.end_hour_cb.getValue();
         String end_min_str = this.end_min_cb.getValue();
         boolean end_pm = this.end_pm.isArmed();
+        boolean start_pm = this.start_pm.isArmed();
         String startPmString = "AM";
         String endPmString = "AM";
 
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
-        TimeZone tz = active_user.getTz();
-        String zoneId = tz.toZoneId().toString();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
+            TimeZone tz = active_user.getTz();
+            String zoneId = tz.toZoneId().toString();
 
-        if (this.start_pm.isSelected()){
-            startPmString = "PM";
+            if (this.start_pm.isSelected()){
+                startPmString = "PM";
+            }
+            if(this.end_pm.isSelected()){
+                endPmString = "PM";
+            }
+            start_hour_str = appendZero(start_hour_str);
+            start_min_str = appendZero(start_min_str);
+            end_hour_str = appendZero(end_hour_str);
+            end_min_str = appendZero(end_min_str);
+
+            String startInput = getTimeDateInputStr(start_hour_str, start_min_str, startPmString);
+            String endInput = getTimeDateInputStr(end_hour_str,end_min_str,endPmString);
+
+            MyDateTime myStartDateTime = new MyDateTime(startInput, this.active_user);
+            Timestamp startTS = myStartDateTime.getUTCTimeStamp();
+            MyDateTime myEndDateTime = new MyDateTime(endInput, this.active_user);
+            Timestamp endTS = myEndDateTime.getUTCTimeStamp();
+
+        /*
+            Program Constraint:
+            F. Write exception controls to prevent each of the following. You may use the same mechanism of exception control more than once, but you must incorporate at least  two different mechanisms of exception control.
+            • scheduling an appointment outside business hours
+         */
+            try {
+                utils.timeCheckError(myStartDateTime,myEndDateTime);
+                utils.appointmentOverlapCheck(myStartDateTime,myEndDateTime);
+                Integer customerID = this.getSelectedCVM().getId();
+                String customerName = this.getSelectedCVM().getName();
+                Integer nextID = calendarViewMainDAO.getNextAppointmentID();
+                Appoinment_view_main apv =
+                        new Appoinment_view_main(active_user,customerID,nextID,customerName,
+                                description,title,location,startTS,endTS,"test",apt_type);
+
+                apv.create_hyperlink();
+
+                apv = calendarViewMainDAO.create(apv,active_user,selectedCVM);
+                this.apv = apv;
+                this.add_apt_btn.getScene().getWindow().hide();
+            }
+
+
+
+            catch (Error error) {
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Appointment Add Error!");
+                alert.setHeaderText("Try again!");
+                alert.setContentText(error.toString());
+                alert.showAndWait();
+            }
+        /*
+            Program Constraint:
+            F. Write exception controls to prevent each of the following. You may use the same mechanism of exception control more than once, but you must incorporate at least  two different mechanisms of exception control.
+            • scheduling an appointment outside business hours
+         */
+
+            catch (IllegalArgumentException i){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Appointment Add Error!");
+                alert.setHeaderText("Try again!");
+                alert.setContentText(i.toString());
+                alert.showAndWait();
+            }
+
+
         }
-        if(this.end_pm.isSelected()){
-            endPmString = "PM";
-        }
-        start_hour_str = appendZero(start_hour_str);
-        start_min_str = appendZero(start_min_str);
-        end_hour_str = appendZero(end_hour_str);
-        end_min_str = appendZero(end_min_str);
-
-        String startInput = getTimeDateInputStr(start_hour_str, start_min_str, startPmString);
-        String endInput = getTimeDateInputStr(end_hour_str,end_min_str,endPmString);
-
-        Timestamp startTS = new MyDateTime(startInput,this.active_user).getUTCTimeStamp();
-        Timestamp endTS = new MyDateTime(endInput,this.active_user).getUTCTimeStamp();
-        Integer customerID = this.getSelectedCVM().getId();
-        String customerName = this.getSelectedCVM().getName();
-
-        Integer nextID = calendarViewMainDAO.getNextAppointmentID();
 
 
-        Appoinment_view_main apv =
-                new Appoinment_view_main(active_user,customerID,nextID,customerName,
-        description,title,location,startTS,endTS,"test",apt_type);
 
-        apv.create_hyperlink();
-        apv = calendarViewMainDAO.create(apv,active_user,selectedCVM);
-        this.apv = apv;
-        this.add_apt_btn.getScene().getWindow().hide();
 
-    }
+
+
+
 
     @NotNull
     private String getTimeDateInputStr(String start_hour_str, String start_min_str, String startPmString) {

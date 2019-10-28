@@ -187,6 +187,10 @@ public class MyDateTime {
         return local_hour;
     }
 
+    public Integer getLocal24hour() {
+        return zonedLocalDateTime.getHour();
+    }
+
     public Integer getLocal_min() {
         return local_min;
     }
@@ -213,6 +217,11 @@ public class MyDateTime {
 
     public String getSimpleDateLocalStr() {
         return DateTimeFormatter.ofPattern("MM/d/yyyy").format(this.zonedLocalDateTime);
+    }
+
+    // 2019-10-25 12:55:00
+    public String getSimpleDateMySqlUTCTs() {
+        return DateTimeFormatter.ofPattern("yyyy-MM-d HH:mm").format(this.uTCZonedDateTime);
     }
 
     public String getSimpleTime(ZonedDateTime zdt) {

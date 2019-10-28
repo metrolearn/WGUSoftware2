@@ -258,11 +258,55 @@ public class MainWindowC {
 
         this.timezone_picker.setItems(stringObservableList);
         this.timezone_picker.getSelectionModel().select(this.active_user.getTz().getID());
+
+
+        /*
+        Program Constraint: Lambda 2
+        G. Write two or more lambda expressions to make your program more
+        efficient, justifying the use of each lambda expression with an
+        in-line comment.
+
+        This lambda is a nice way to add an action event listener to a combination
+        menu.  It makes my program more efficient as there is not a provided action
+        listener for combination menus in JavaFX.
+
+         */
+
+
         timezone_picker.getSelectionModel()
                 .selectedItemProperty()
                 .addListener( (ObservableValue<? extends String> observable, String oldValue, String newValue)
                         -> this.FILTER_BY_TZ()
                 );
+
+
+
+        /*
+         Program Constraint:
+         H. Write code to provide an alert if there is an
+         appointment within 15 minutes of the user’s log-in.
+        */
+
+         sql_stm = "SELECT * FROM appointment WHERE DATE_ADD(start, INTERVAL 15 MINUTE) >= NOW();";
+         this.curr_db.dbConnect();
+         con = this.curr_db.getCon();
+         ps = con.prepareStatement(sql_stm, Statement.RETURN_GENERATED_KEYS);
+         rs = this.curr_db.dbExecuteQuery(ps);
+
+         while (rs.next()){
+             String location = rs.getString("location");
+             Timestamp start = rs.getTimestamp("start");
+
+             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+             alert.setTitle("Appointment Reminder!");
+             alert.setHeaderText("You have an appointment at "+location+".\n" +
+                     "The appointment starts at "+ start.toString());
+             alert.showAndWait();
+
+         }
+
+
+
 
     }
 
@@ -277,7 +321,7 @@ public class MainWindowC {
         }
     }
 
-    public void ADD_APR(ActionEvent actionEvent) throws IOException {
+    public void ADD_APR(ActionEvent actionEvent) throws IOException, SQLException, ClassNotFoundException {
 
         URL add_customer_window = getClass().getClassLoader().getResource("wguSoftware2/views/add_appointment.fxml");
         FXMLLoader loader = new FXMLLoader();

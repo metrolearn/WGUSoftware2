@@ -2,6 +2,7 @@
 package wguSoftware2.controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -12,11 +13,14 @@ import wguSoftware2.utils.Database;
 import wguSoftware2.utils.Database_v2;
 import wguSoftware2.utils.Database_v3;
 
+import java.awt.*;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AddCustomerC {
 
@@ -82,28 +86,100 @@ public class AddCustomerC {
     @FXML
     void add_customer() throws SQLException, ClassNotFoundException {
 
-        String name_txt = this.name_txt.getText();
-        String address_txt = this.address_txt.getText();
-        String alt_address_txt = this.alt_address_txt.getText();
-        String city_txt = this.city_txt.getText();
-        String zip_txt = this.zip_txt.getText();
-        String country_txt = this.country_txt.getText();
-        String phone_txt = this.phone_txt.getText();
+        try {
+            String name_txt = testForBlankString(this.name_txt);
+            String address_txt = testForBlankString(this.address_txt);
+            String alt_address_txt = testForBlankString(this.alt_address_txt);
+            String city_txt = testForBlankString(this.city_txt);
+            String zip_txt = testForBlankString(this.zip_txt);
+            String country_txt = testForBlankString(this.country_txt);
+            String phone_txt = testForBlankString(this.phone_txt);
 
-        this.cvm = new Customer_view_main(
-                name_txt,
-                address_txt,
-                alt_address_txt,
-                city_txt,
-                zip_txt,
-                country_txt,
-                phone_txt
+            if(!phoneNumberCheck(phone_txt)){
+                throw new Error("Bad Phone Number");
+            }
 
-        );
 
-        this.cvm = cvmDAO.create(this.cvm);
-        this.add_customer_btn.getScene().getWindow().hide();
 
+
+            this.cvm = new Customer_view_main(
+                    name_txt,
+                    address_txt,
+                    alt_address_txt,
+                    city_txt,
+                    zip_txt,
+                    country_txt,
+                    phone_txt
+
+            );
+
+            this.cvm = cvmDAO.create(this.cvm);
+            this.add_customer_btn.getScene().getWindow().hide();
+
+        }catch (Error e){
+
+                        /*
+            Program Constraint:
+            F. Write exception controls to prevent each of the following. You may use the same mechanism of exception control more than once, but you must incorporate at least  two different mechanisms of exception control.
+            • scheduling overlapping appointments
+            */
+
+            String message = "This program only accepts North American phone" +
+                    "numbers. Valid Examples are as follows:\n" +
+                    "1234567890\n" +
+                    "123-456-7890\n" +
+                    "123.456.7890\n" +
+                    "123 456 7890\n" +
+                    "(123) 456 7890";
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Customer Add Error!");
+            alert.setHeaderText("Try again!");
+            alert.setContentText(message);
+            alert.showAndWait();
+            System.out.println("Bad phone!");
+
+        }
+
+        catch (SQLException | ClassNotFoundException | NullPointerException e) {
+
+            /*
+            Program Constraint:
+            F. Write exception controls to prevent each of the following. You may use the same mechanism of exception control more than once, but you must incorporate at least  two different mechanisms of exception control.
+            • scheduling overlapping appointments
+            */
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Appointment Add Error!");
+            alert.setHeaderText("Try again!");
+            alert.setContentText(e.toString());
+            System.out.println("Blank fields not allowed. ");
+
+            alert.showAndWait();
+
+
+        }
+
+    }
+
+    private Boolean phoneNumberCheck(String phone_txt) {
+
+        Boolean rval = false;
+        String regex = "^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(phone_txt);
+        if(matcher.matches()) {
+            rval = true;
+        }
+        return rval;
+    }
+
+
+    private String testForBlankString(TextField inputStr) {
+        if(inputStr.getText().equals("")){
+            throw new NullPointerException("No fields can be blank");
+        }else
+            return inputStr.getText();
     }
 
     public Customer_view_main get_cvm() {
