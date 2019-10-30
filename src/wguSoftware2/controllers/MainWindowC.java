@@ -292,6 +292,7 @@ public class MainWindowC {
         */
 
          sql_stm = "SELECT * FROM appointment WHERE DATE_ADD(start, INTERVAL 15 MINUTE) >= NOW();";
+         System.out.println(sql_stm);
          this.curr_db.dbConnect();
          con = this.curr_db.getCon();
          ps = con.prepareStatement(sql_stm, Statement.RETURN_GENERATED_KEYS);
@@ -413,7 +414,7 @@ public class MainWindowC {
 
     }
 
-    public void FILTER_BY_MONTH(ActionEvent actionEvent) {
+    public void FILTER_BY_MONTH() {
 
         for (Appoinment_view_main avm: obv_apt_list) {
            avm.setDateViewString(avm.getStart_date_time().getStartMonth());
@@ -424,7 +425,7 @@ public class MainWindowC {
 
     }
 
-    public void FILTER_BY_WEEK(ActionEvent actionEvent) {
+    public void FILTER_BY_WEEK() {
 
         for (Appoinment_view_main avm: obv_apt_list) {
             avm.setDateViewString(avm.getStart_date_time().getStartDayOfWeek());
@@ -435,7 +436,7 @@ public class MainWindowC {
 
     }
 
-    public void FILTER_BY_ALL(ActionEvent actionEvent) {
+    public void FILTER_BY_ALL() {
 
         for (Appoinment_view_main avm: obv_apt_list) {
             avm.setDateViewString(avm.getStart_date_time().getSimpleDateMenuStringZDT());
@@ -484,7 +485,7 @@ public class MainWindowC {
 
     }
 
-    public void directoryChooser(String defaultFileName) {
+    public void directoryChooser(String defaultFileName, ObservableList<Object> items) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Choose location To Save Report");
         chooser.setInitialFileName(defaultFileName);
@@ -505,23 +506,69 @@ public class MainWindowC {
             e.printStackTrace();
         }
 
-        for(int i = 0; i<this.apt_tbl.getItems().size(); i++){
-            outFile.println(apt_tbl.getItems().get(i).toString());
+
+        for(int i = 0; i< items.size(); i++){
+            outFile.println(items.get(i).toString());
         }
         outFile.close();
     }
     public void saveReportAppsByMonth(ActionEvent actionEvent) {
 
-        directoryChooser("AppointmentsByMonthReport.txt");
+        ObservableList<Object> temp = FXCollections.observableArrayList();
+
+
+        FILTER_BY_MONTH();
+
+        String line1 = "###################################################";
+        String line2 = "######### Appointments By Month Report ############";
+        temp.add(line1);
+        temp.add(line2);
+        temp.add("\n");
+
+
+
+        for (Appoinment_view_main avm:apt_tbl.getItems()) {
+            String buffer = avm.getDateViewStr() +": "+avm;
+            temp.add(buffer);
+
+        }
+
+
+
+        directoryChooser("AppointmentsByMonth.txt", temp);
+        FILTER_BY_ALL();
 
     }
 
     public void saveReportAppsByConsultant(ActionEvent actionEvent) {
 
 
+
+
     }
 
     public void saveReportAllApps(ActionEvent actionEvent) {
+
+        ObservableList<Object> temp = FXCollections.observableArrayList();
+
+        String line1 = "###################################################";
+        String line2 = "########### All Appointments Report ###############";
+
+        temp.add(line1);
+        temp.add(line2);
+        temp.add("\n");
+
+        Integer nth = 1;
+        for (Object o : apt_tbl.getItems()) {
+            String avmStr;
+            avmStr = o.toString();
+            String str = "Appointment ** " +nth.toString()+ " **: "+avmStr;
+            temp.add(str);
+            nth += 1;
+        }
+
+        directoryChooser("AllAppointmentsReport.txt", temp);
+
 
     }
 }

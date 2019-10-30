@@ -36,24 +36,28 @@ public class Utils {
     }
 
     public void appointmentOverlapCheck(MyDateTime myStartDateTime, MyDateTime myEndDateTime) throws SQLException, ClassNotFoundException, IllegalArgumentException{
-        String startTS = null;
-        String endTs = null;
-
-        String utcStartTimeStamp = myStartDateTime.getSimpleDateMySqlUTCTs();
-        String utcEndTimeStamp = myEndDateTime.getSimpleDateMySqlUTCTs();
-
-        String sql_stm;
-        sql_stm = "SELECT* FROM appointment WHERE " + startTS + " BETWEEN appointment.start AND appointment.end OR " + endTs + " BETWEEN appointment.start AND appointment.end;";
 
 
+        String startTimeTS = myStartDateTime.getSimpleDateMySqlUTCTs();
+        startTimeTS = "'"+startTimeTS+"'";
+        String endTimeTS = myEndDateTime.getSimpleDateMySqlUTCTs();
+        endTimeTS = "'"+endTimeTS+"'";
+
+
+        String sql_str = "SELECT appointmentId from appointment WHERE" +
+                " " + startTimeTS + " BETWEEN appointment.start and appointment.end " +
+                "OR " +
+                endTimeTS + " BETWEEN appointment.start and appointment.end;";
+
+        System.out.println(sql_str);
 
         db.dbConnect();
         Connection con = db.getCon();
-        PreparedStatement ps = con.prepareStatement(sql_stm, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement ps = con.prepareStatement(sql_str, Statement.RETURN_GENERATED_KEYS);
 
         ResultSet rs = ps.executeQuery();
 
-        if (!rs.next()) {
+        if (rs.next()) {
             throw new IllegalArgumentException(
                     "Schedule conflict: You cannot schedule appointments that overlap.");
         }

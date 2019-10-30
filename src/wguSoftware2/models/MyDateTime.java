@@ -329,4 +329,25 @@ public class MyDateTime {
     public void setMenuZone(ZoneId menuZone) {
         this.menuZone = menuZone;
     }
+
+
+    @Override
+    public String toString() {
+        return "MyDateTime{" +
+                "uTCZonedDateTime=" + uTCZonedDateTime +
+                ", zonedLocalDateTime=" + zonedLocalDateTime +
+                ", menuZonedDateTime=" + menuZonedDateTime +
+                ", local_date_str='" + local_date_str + '\'' +
+                ", local_time_str='" + local_time_str + '\'' +
+                ", month=" + month +
+                ", day=" + day +
+                ", year=" + year +
+                ", local_hour=" + local_hour +
+                ", local_min=" + local_min +
+                ", local_am_pm='" + local_am_pm + '\'' +
+                ", ac=" + ac +
+                ", formatter=" + formatter +
+                ", menuZone=" + menuZone +
+                '}';
+    }
 }
