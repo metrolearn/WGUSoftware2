@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import wguSoftware2.DAO.CalendarViewMainDAO;
 import wguSoftware2.DAO.CustomerViewMainDAO;
@@ -20,7 +21,10 @@ import wguSoftware2.models.Customer;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.Database_v3;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.*;
 import java.time.ZoneId;
@@ -480,5 +484,44 @@ public class MainWindowC {
 
     }
 
+    public void directoryChooser(String defaultFileName) {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Choose location To Save Report");
+        chooser.setInitialFileName(defaultFileName);
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        chooser.getExtensionFilters().add(extFilter);
+        chooser.setSelectedExtensionFilter(extFilter);
 
+        File selectedFile = null;
+        selectedFile = chooser.showSaveDialog(null);
+
+
+        File file = new File(String.valueOf(selectedFile));
+        PrintWriter outFile = null;
+        try {
+            outFile = new PrintWriter(file);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        for(int i = 0; i<this.apt_tbl.getItems().size(); i++){
+            outFile.println(apt_tbl.getItems().get(i).toString());
+        }
+        outFile.close();
+    }
+    public void saveReportAppsByMonth(ActionEvent actionEvent) {
+
+        directoryChooser("AppointmentsByMonthReport.txt");
+
+    }
+
+    public void saveReportAppsByConsultant(ActionEvent actionEvent) {
+
+
+    }
+
+    public void saveReportAllApps(ActionEvent actionEvent) {
+
+    }
 }

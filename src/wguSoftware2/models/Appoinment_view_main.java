@@ -404,5 +404,32 @@ public class Appoinment_view_main {
         this.createdBy = createdBy;
     }
 
-
+    @Override
+    public String toString() {
+        return "Appoinment_view_main{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", location='" + location + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", appointment_type='" + appointment_type + '\'' +
+                ", contact='" + contact + '\'' +
+                ", start_date_time=" + start_date_time +
+                ", end_date_time=" + end_date_time +
+                ", create_date=" + create_date +
+                ", last_update=" + last_update +
+                ", dateViewStr='" + dateViewStr + '\'' +
+                ", startTimeViewStr='" + startTimeViewStr + '\'' +
+                ", endTimeViewStr='" + endTimeViewStr + '\'' +
+                ", startPm=" + startPm +
+                ", endPm=" + endPm +
+                ", zoneID=" + zoneID +
+                ", customerID=" + customerID +
+                ", userID=" + userID +
+                ", createdBy='" + createdBy + '\'' +
+                ", lastUpdateBy='" + lastUpdateBy + '\'' +
+                ", id=" + id +
+                ", hl=" + hl +
+                ", active_user=" + active_user +
+                '}';
+    }
 }
