@@ -384,6 +384,8 @@ public class AddAppointmentC {
             F. Write exception controls to prevent each of the following. You may use the same mechanism of exception control more than once, but you must incorporate at least  two different mechanisms of exception control.
             • scheduling an appointment outside business hours
          */
+
+
             try {
                 utils.timeCheckError(myStartDateTime,myEndDateTime);
                 utils.appointmentOverlapCheck(myStartDateTime,myEndDateTime);
