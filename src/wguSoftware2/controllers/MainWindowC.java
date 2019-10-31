@@ -27,7 +27,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -373,7 +376,7 @@ public class MainWindowC {
          appointment within 15 minutes of the user’s log-in.
         */
 
-         sql_stm = "SELECT * FROM appointment WHERE DATE_ADD(start, INTERVAL 15 MINUTE) >= NOW();";
+         sql_stm = "SELECT * FROM appointment WHERE NOW() BETWEEN start - INTERVAL 15 minute AND start";
          System.out.println(sql_stm);
          this.curr_db.dbConnect();
          con = this.curr_db.getCon();
@@ -387,7 +390,7 @@ public class MainWindowC {
              Alert alert = new Alert(Alert.AlertType.INFORMATION);
              alert.setTitle("Appointment Reminder!");
              alert.setHeaderText("You have an appointment at "+location+".\n" +
-                     "The appointment starts at "+ start.toString());
+                     "The appointment starts in less than 15 minutes.");
              alert.showAndWait();
 
          }
