@@ -3,7 +3,7 @@ package wguSoftware2.DAO;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
-import wguSoftware2.utils.Database_v3;
+import wguSoftware2.utils.DatabaseMain;
 
 import java.sql.*;
 import java.text.DateFormat;
@@ -19,7 +19,7 @@ import static java.time.ZoneOffset.UTC;
 public class CalendarViewMainDAO {
 
     private ResultSet rs = null;
-    private Database_v3 curr_db = null;
+    private DatabaseMain curr_db = null;
     private Customer_view_main cvm = null;
     private Active_User active_user = null;
     private  Customer_view_main customer_view_main = null;
@@ -35,7 +35,7 @@ public class CalendarViewMainDAO {
      *
      * @param curr_db the curr db
      */
-    public CalendarViewMainDAO(Database_v3 curr_db) {
+    public CalendarViewMainDAO(DatabaseMain curr_db) {
 
         this.curr_db = curr_db;
     }
@@ -46,7 +46,7 @@ public class CalendarViewMainDAO {
      * @param curr_db the curr db
      * @param au      the au
      */
-    public CalendarViewMainDAO(Database_v3 curr_db,Active_User au) {
+    public CalendarViewMainDAO(DatabaseMain curr_db, Active_User au) {
 
         this.curr_db = curr_db;
         this.active_user = au;
@@ -71,7 +71,7 @@ public class CalendarViewMainDAO {
                 String title = avm.getTitle();
                 String description = avm.getDescription();
                 String location = avm.getLocation();
-                String contact = avm.getCustomerName();
+                String contact = avm.getContact();
                 String apt_type = avm.getAppointment_type();
                 Timestamp start_time_ts = avm.getStart_date_time().getUTCTimeStamp();
                 Timestamp end_time_ts = avm.getEnd_date_time().getUTCTimeStamp();
@@ -260,7 +260,7 @@ public class CalendarViewMainDAO {
         String title = avm.getTitle();
         String description = avm.getDescription();
         String location = avm.getLocation();
-        String contact = avm.getCustomerName();
+        String contact = avm.getContact();
         String apt_type = avm.getAppointment_type();
 
         Timestamp start_time_ts_utc = avm.getStart_date_time().getUTCTimeStamp();

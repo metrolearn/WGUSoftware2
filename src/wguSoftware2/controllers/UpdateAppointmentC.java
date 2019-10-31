@@ -11,7 +11,7 @@ import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.models.MyDateTime;
-import wguSoftware2.utils.Database_v3;
+import wguSoftware2.utils.DatabaseMain;
 import wguSoftware2.utils.Utils;
 
 import java.sql.SQLException;
@@ -19,7 +19,6 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.TimeZone;
 
 /**
  * The type Update appointment c.
@@ -63,7 +62,7 @@ public class UpdateAppointmentC {
     @FXML
     private Button updt_apt_btn = null;
     @FXML
-    private Database_v3 curr_db;
+    private DatabaseMain curr_db;
     @FXML
     private Active_User active_user;
     @FXML
@@ -83,7 +82,7 @@ public class UpdateAppointmentC {
      * @throws SQLException           the sql exception
      * @throws ClassNotFoundException the class not found exception
      */
-    public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) throws SQLException, ClassNotFoundException {
+    public void initialize(DatabaseMain curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) throws SQLException, ClassNotFoundException {
 
         this.curr_db = curr_db;
         this.obv_customer_list = obv_customer_list;

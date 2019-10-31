@@ -5,7 +5,7 @@ import java.sql.*;
 /**
  * The type Database v 3.
  */
-public class Database_v3 {
+public class DatabaseMain {
 
 
     private String JDBC_DRIVER = null;
@@ -25,7 +25,7 @@ public class Database_v3 {
      * @param DBUSER  the dbuser
      * @param DBPASS  the dbpass
      */
-    public Database_v3(String DB_IP, String DB_NAME, String DBUSER, String DBPASS) {
+    public DatabaseMain(String DB_IP, String DB_NAME, String DBUSER, String DBPASS) {
         this.JDBC_DRIVER = "com.mysql.jdbc.Driver";
         this.DB_IP = DB_IP;
         this.DB_NAME = DB_NAME;

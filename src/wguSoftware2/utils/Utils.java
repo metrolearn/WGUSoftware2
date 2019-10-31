@@ -1,7 +1,5 @@
 package wguSoftware2.utils;
 
-import com.mysql.jdbc.MultiHostMySQLConnection;
-import javafx.scene.control.Alert;
 import wguSoftware2.models.MyDateTime;
 
 import java.sql.*;
@@ -19,7 +17,7 @@ public class Utils {
      * The constant CLOSE_HOURS.
      */
     public static final int CLOSE_HOURS = 17;
-    private Database_v3 db = null;
+    private DatabaseMain db = null;
     private Connection con = null;
 
     /**
@@ -29,7 +27,7 @@ public class Utils {
      * @throws ClassNotFoundException the class not found exception
      */
     public Utils() throws SQLException, ClassNotFoundException {
-         db = new Database_v3(
+         db = new DatabaseMain(
                 "52.206.157.109",
                 "U05mJi",
                 "U05mJi",

@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.GeoIP;
 import wguSoftware2.utils.Converters;
-import wguSoftware2.utils.Database_v3;
+import wguSoftware2.utils.DatabaseMain;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,7 +24,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
@@ -69,7 +68,7 @@ public class LoginWindowC {
     private Label welcome_lbl;
 
     @FXML
-    private Database_v3 curr_db;
+    private DatabaseMain curr_db;
 
     private Active_User ac;
 
@@ -122,7 +121,7 @@ public class LoginWindowC {
     @FXML
     public
         // This method is called by the FXMLLoader when initialization is complete
-    void initialize(Database_v3 d, GeoIP g, URL main_resource) throws IOException {
+    void initialize(DatabaseMain d, GeoIP g, URL main_resource) throws IOException {
 
         this.g = g;
         this.curr_db = d;

@@ -1,6 +1,6 @@
 package wguSoftware2.models;
 
-import wguSoftware2.utils.Database;
+import wguSoftware2.utils.DatabaseUserLoad;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +22,7 @@ public class Customer_view_main {
 
     private Country country;
 
-    private Database dbc = null;
+    private DatabaseUserLoad dbc = null;
     private String sql_stm = null;
     private ResultSet rs = null;
 

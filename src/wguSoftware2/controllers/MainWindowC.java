@@ -19,7 +19,7 @@ import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer;
 import wguSoftware2.models.Customer_view_main;
-import wguSoftware2.utils.Database_v3;
+import wguSoftware2.utils.DatabaseMain;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,11 +27,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * The type Main window c.
@@ -162,7 +162,7 @@ public class MainWindowC {
     private List<Customer_view_main> all_customers = null;
     private List<Appoinment_view_main> all_apts = null;
     private ObservableList<Appoinment_view_main> obv_apt_list = null;
-    private Database_v3 curr_db;
+    private DatabaseMain curr_db;
     private Active_User active_user;
     private CustomerViewMainDAO cvmDAO;
     private CalendarViewMainDAO avmDAO;
@@ -262,11 +262,11 @@ public class MainWindowC {
      * @throws ClassNotFoundException the class not found exception
      */
     @FXML
-    void initialize(Database_v3 curr_db, Active_User active_user) throws SQLException, ClassNotFoundException {
+    void initialize(DatabaseMain curr_db, Active_User active_user) throws SQLException, ClassNotFoundException {
         this.curr_db = curr_db;
         this.active_user = active_user;
-        this.cvmDAO = new CustomerViewMainDAO(curr_db,active_user.getActive_user_name());
-        this.avmDAO = new CalendarViewMainDAO(curr_db,active_user);
+        this.cvmDAO = new CustomerViewMainDAO(curr_db, active_user.getActive_user_name());
+        this.avmDAO = new CalendarViewMainDAO(curr_db, active_user);
         this.Art_All_filter_rad.setSelected(true);
         this.curr_tz_lbl.setText(this.active_user.getCurrent_location());
 
@@ -280,7 +280,7 @@ public class MainWindowC {
 
         List<Customer_view_main> cvm_list = new ArrayList<>();
 
-        while(rs.next()) {
+        while (rs.next()) {
             Integer customer_id = rs.getInt(1);
             String customer_name = rs.getString(2);
             String address = rs.getString(3);
@@ -308,23 +308,23 @@ public class MainWindowC {
 
         List<Appoinment_view_main> avm_list = new ArrayList<>();
 
-        while (rs.next()){
-           Integer appointmentId = rs.getInt("appointmentId");
-           String customerName = rs.getString("customerName");
-           String title = rs.getString("title");
-           String description = rs.getString("description");
-           String location = rs.getString("location");
-           Timestamp start = rs.getTimestamp("start");
-           Timestamp end = rs.getTimestamp("end");
-           String url = rs.getString("url");
-           String apt_type = rs.getString("type");
-           Integer customer_id = rs.getInt("customerId");
+        while (rs.next()) {
+            Integer appointmentId = rs.getInt("appointmentId");
+            String customerName = rs.getString("customerName");
+            String title = rs.getString("title");
+            String description = rs.getString("description");
+            String location = rs.getString("location");
+            Timestamp start = rs.getTimestamp("start");
+            Timestamp end = rs.getTimestamp("end");
+            String url = rs.getString("url");
+            String apt_type = rs.getString("type");
+            Integer customer_id = rs.getInt("customerId");
 
-           Appoinment_view_main avm = new Appoinment_view_main(active_user,customer_id,appointmentId,customerName,description,title,location,start,end,url,apt_type);
-           avm_list.add(avm);
+            Appoinment_view_main avm = new Appoinment_view_main(active_user, customer_id, appointmentId, customerName, description, title, location, start, end, url, apt_type);
+            avm_list.add(avm);
 
 
-       }
+        }
 
         this.all_apts = avm_list;
         this.obv_apt_list = FXCollections.observableArrayList(this.all_apts);
@@ -342,7 +342,6 @@ public class MainWindowC {
         List<String> zoneList = new ArrayList<>(availableZoneIds);
         Collections.sort(zoneList);
         ObservableList<String> stringObservableList = FXCollections.observableArrayList(zoneList);
-
 
 
         this.timezone_picker.setItems(stringObservableList);
@@ -364,7 +363,7 @@ public class MainWindowC {
 
         timezone_picker.getSelectionModel()
                 .selectedItemProperty()
-                .addListener( (ObservableValue<? extends String> observable, String oldValue, String newValue)
+                .addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)
                         -> this.FILTER_BY_TZ()
                 );
 
@@ -376,26 +375,24 @@ public class MainWindowC {
          appointment within 15 minutes of the user’s log-in.
         */
 
-         sql_stm = "SELECT * FROM appointment WHERE NOW() BETWEEN start - INTERVAL 15 minute AND start";
-         System.out.println(sql_stm);
-         this.curr_db.dbConnect();
-         con = this.curr_db.getCon();
-         ps = con.prepareStatement(sql_stm, Statement.RETURN_GENERATED_KEYS);
-         rs = this.curr_db.dbExecuteQuery(ps);
+        sql_stm = "SELECT * FROM appointment WHERE NOW() BETWEEN start - INTERVAL 15 minute AND start";
+        System.out.println(sql_stm);
+        this.curr_db.dbConnect();
+        con = this.curr_db.getCon();
+        ps = con.prepareStatement(sql_stm, Statement.RETURN_GENERATED_KEYS);
+        rs = this.curr_db.dbExecuteQuery(ps);
 
-         while (rs.next()){
-             String location = rs.getString("location");
-             Timestamp start = rs.getTimestamp("start");
+        while (rs.next()) {
+            String location = rs.getString("location");
+            Timestamp start = rs.getTimestamp("start");
 
-             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-             alert.setTitle("Appointment Reminder!");
-             alert.setHeaderText("You have an appointment at "+location+".\n" +
-                     "The appointment starts in less than 15 minutes.");
-             alert.showAndWait();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Appointment Reminder!");
+            alert.setHeaderText("You have an appointment at " + location + ".\n" +
+                    "The appointment starts in less than 15 minutes.");
+            alert.showAndWait();
 
-         }
-
-
+        }
 
 
     }
@@ -424,7 +421,7 @@ public class MainWindowC {
         Customer_view_main selectedCVM = null;
         selectedCVM = customer_tbl.getSelectionModel().getSelectedItem();
         addAppointmentC.setSelectedCVM(selectedCVM);
-        if(selectedCVM == null){
+        if (selectedCVM == null) {
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information Dialog");
@@ -433,7 +430,7 @@ public class MainWindowC {
                     "press the add button.");
             alert.showAndWait();
 
-        }else {
+        } else {
             addAppointmentStage.setScene(addAptScene);
             addAppointmentC.setStage(addAppointmentStage);
             addAppointmentStage.showAndWait();
@@ -476,11 +473,6 @@ public class MainWindowC {
             apt_tbl.setItems(obv_apt_list);
             apt_tbl.refresh();
 
-//            obv_customer_list.remove(selectedItem);
-//            selectedItem = updateCustomerC.get_cvm();
-//            obv_customer_list.add(selectedItem);
-//            customer_tbl.setItems(obv_customer_list);
-//            customer_tbl.refresh();
 
         } catch (Exception e) {
             System.out.println(e);
@@ -514,8 +506,8 @@ public class MainWindowC {
      */
     public void FILTER_BY_MONTH() {
 
-        for (Appoinment_view_main avm: obv_apt_list) {
-           avm.setDateViewString(avm.getStart_date_time().getStartMonth());
+        for (Appoinment_view_main avm : obv_apt_list) {
+            avm.setDateViewString(avm.getStart_date_time().getStartMonth());
         }
         apt_tbl.refresh();
         this.Art_Wk_filter_rad.setSelected(false);
@@ -528,7 +520,7 @@ public class MainWindowC {
      */
     public void FILTER_BY_WEEK() {
 
-        for (Appoinment_view_main avm: obv_apt_list) {
+        for (Appoinment_view_main avm : obv_apt_list) {
             avm.setDateViewString(avm.getStart_date_time().getStartDayOfWeek());
         }
         apt_tbl.refresh();
@@ -542,7 +534,7 @@ public class MainWindowC {
      */
     public void FILTER_BY_ALL() {
 
-        for (Appoinment_view_main avm: obv_apt_list) {
+        for (Appoinment_view_main avm : obv_apt_list) {
             avm.setDateViewString(avm.getStart_date_time().getSimpleDateMenuStringZDT());
         }
         apt_tbl.refresh();
@@ -554,12 +546,13 @@ public class MainWindowC {
     /**
      * Filter by tz.
      */
-    public void FILTER_BY_TZ(){
+    public void FILTER_BY_TZ() {
 
         ZoneId zid = ZoneId.of(timezone_picker.getValue());
 
-        for (Appoinment_view_main avm: obv_apt_list) {
-            avm.getStart_date_time().setMenuZone(zid);;
+        for (Appoinment_view_main avm : obv_apt_list) {
+            avm.getStart_date_time().setMenuZone(zid);
+            ;
             avm.getEnd_date_time().setMenuZone(zid);
             avm.setStartTimeViewStr(avm.getStart_date_time().getSimpleDateMenuStringByTZ());
             avm.setEndTimeViewStr(avm.getEnd_date_time().getSimpleDateMenuStringByTZ());
@@ -580,12 +573,12 @@ public class MainWindowC {
      */
     public void on_dst_cbx_action(ActionEvent actionEvent) {
 
-        for (Appoinment_view_main avm: obv_apt_list) {
+        for (Appoinment_view_main avm : obv_apt_list) {
 
-            if(!dst_cbx.isSelected()) {
+            if (!dst_cbx.isSelected()) {
                 avm.setStartTimeViewStr(avm.getStart_date_time().getSimpleTimeMenuZDTNoDST());
                 avm.setEndTimeViewStr(avm.getEnd_date_time().getSimpleTimeMenuZDTNoDST());
-            }else {
+            } else {
                 avm.setStartTimeViewStr(avm.getStart_date_time().getSimpleTimeMenuZDTMinusDST());
                 avm.setEndTimeViewStr(avm.getEnd_date_time().getSimpleTimeMenuZDTMinusDST());
             }
@@ -625,7 +618,7 @@ public class MainWindowC {
         }
 
 
-        for(int i = 0; i< items.size(); i++){
+        for (int i = 0; i < items.size(); i++) {
             outFile.println(items.get(i).toString());
         }
         outFile.close();
@@ -636,31 +629,38 @@ public class MainWindowC {
      *
      * @param actionEvent the action event
      */
-    public void saveReportAppsByMonth(ActionEvent actionEvent) {
+    public void saveReportAppsByMonth(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 
         ObservableList<Object> temp = FXCollections.observableArrayList();
 
 
-        FILTER_BY_MONTH();
 
         String line1 = "###################################################";
-        String line2 = "######### Appointments By Month Report ############";
+        String line2 = "######### Appointments Types by Month Report ######";
         temp.add(line1);
         temp.add(line2);
         temp.add("\n");
 
+        String sql_stmt = "SELECT MONTHNAME(start) as 'Month', count(appointmentId) as count , appointment.type from appointment GROUP BY MONTHNAME(start)";
+        this.curr_db.dbConnect();
+        Connection con = this.curr_db.getCon();
+        PreparedStatement ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs = ps.executeQuery();
 
-
-        for (Appoinment_view_main avm:apt_tbl.getItems()) {
-            String buffer = avm.getDateViewStr() +": "+avm;
+        temp.add("Month, count, type");
+        String buffer ="";
+        while (rs.next()){
+            buffer += rs.getString(1);
+            buffer += ", ";
+            buffer += rs.getString(2);
+            buffer += ", ";
+            buffer += rs.getString(3);
             temp.add(buffer);
-
+            buffer = "";
         }
 
 
-
-        directoryChooser("AppointmentsByMonth.txt", temp);
-        FILTER_BY_ALL();
+        directoryChooser("AppointmentsTypeByMonth.txt", temp);
 
     }
 
@@ -669,12 +669,39 @@ public class MainWindowC {
      *
      * @param actionEvent the action event
      */
-    public void saveReportAppsByConsultant(ActionEvent actionEvent) {
+    public void saveReportAppsByConsultant(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 
+        ObservableList<Object> temp = FXCollections.observableArrayList();
 
+        String line1 = "###################################################";
+        String line2 = "####### Report Schedule By Consultant #########";
 
+        temp.add(line1);
+        temp.add(line2);
+        temp.add("\n");
+
+        String sql_stmt = "SELECT contact as Consultant, LOCALTIMESTAMP(start) as \"Appointment Start Time\" , appointment.type as \"Appointment Type\" from appointment GROUP BY start, contact order by contact";
+        this.curr_db.dbConnect();
+        Connection con = this.curr_db.getCon();
+        PreparedStatement ps = con.prepareStatement(sql_stmt, Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs = ps.executeQuery();
+
+        temp.add("Consultant, Appointment Start Time, Appointment Type");
+        String buffer ="";
+        while (rs.next()){
+            buffer += rs.getString(1);
+            buffer += ", ";
+            buffer += rs.getString(2);
+            buffer += ", ";
+            buffer += rs.getString(3);
+            temp.add(buffer);
+            buffer = "";
+        }
+
+        directoryChooser("ReportScheduleByConsultant.txt", temp);
 
     }
+
 
     /**
      * Save report all apps.
@@ -696,7 +723,7 @@ public class MainWindowC {
         for (Object o : apt_tbl.getItems()) {
             String avmStr;
             avmStr = o.toString();
-            String str = "Appointment ** " +nth.toString()+ " **: "+avmStr;
+            String str = "Appointment ** " + nth.toString() + " **: " + avmStr;
             temp.add(str);
             nth += 1;
         }

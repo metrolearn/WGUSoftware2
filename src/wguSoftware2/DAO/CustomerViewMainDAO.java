@@ -1,7 +1,7 @@
 package wguSoftware2.DAO;
 
 import wguSoftware2.models.*;
-import wguSoftware2.utils.Database_v3;
+import wguSoftware2.utils.DatabaseMain;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 public class CustomerViewMainDAO {
 
     private ResultSet rs = null;
-    private Database_v3 curr_db = null;
+    private DatabaseMain curr_db = null;
     private Customer_view_main cvm = null;
     private String active_user_name = null;
 
@@ -31,7 +31,7 @@ public class CustomerViewMainDAO {
      * @param curr_db          the curr db
      * @param active_user_name the active user name
      */
-    public CustomerViewMainDAO(Database_v3 curr_db, String active_user_name) {
+    public CustomerViewMainDAO(DatabaseMain curr_db, String active_user_name) {
         this.curr_db = curr_db;
         this.active_user_name = active_user_name;
         this.activate_customer = false;

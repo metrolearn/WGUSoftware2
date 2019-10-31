@@ -5,13 +5,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
-import wguSoftware2.utils.Database_v3;
+import wguSoftware2.utils.DatabaseMain;
 
 import java.sql.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.TimeZone;
-import java.util.function.BooleanSupplier;
 
 /**
  * The type Appoinment view main.
@@ -143,7 +142,7 @@ public class Appoinment_view_main {
 
 
                     try {
-                        Database_v3 db = new Database_v3(
+                        DatabaseMain db = new DatabaseMain(
                                 "52.206.157.109",
                                 "U05mJi",
                                 "U05mJi",

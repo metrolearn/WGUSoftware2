@@ -19,7 +19,7 @@ import java.util.Properties;
 /**
  * The type Database.
  */
-public class Database {
+public class DatabaseUserLoad {
 
     private String database_driver = "com.mysql.jdbc.Driver";
     private String database_url = "jdbc:mysql://";
@@ -41,8 +41,8 @@ public class Database {
      * @param password      the password
      * @throws SQLException the sql exception
      */
-    public Database(String database_ip, String database_name, String username,
-                    String password) throws SQLException {
+    public DatabaseUserLoad(String database_ip, String database_name, String username,
+                            String password) throws SQLException {
         this.database_name = database_name;
         this.database_url += database_ip + "/" + database_name;
 

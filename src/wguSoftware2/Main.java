@@ -8,8 +8,8 @@ import javafx.stage.Stage;
 import wguSoftware2.controllers.LoginWindowC;
 import wguSoftware2.models.GeoIP;
 import wguSoftware2.utils.Converters;
-import wguSoftware2.utils.Database;
-import wguSoftware2.utils.Database_v3;
+import wguSoftware2.utils.DatabaseUserLoad;
+import wguSoftware2.utils.DatabaseMain;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +22,7 @@ import java.sql.SQLException;
 public class Main extends Application {
 
 
-    private Database_v3 d;
+    private DatabaseMain d;
     private GeoIP g;
     private Converters c;
 
@@ -30,7 +30,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException, Exception {
 
         g = new GeoIP();
-        d = new Database_v3(
+        d = new DatabaseMain(
                 "52.206.157.109",
                 "U05mJi",
                 "U05mJi",
@@ -60,8 +60,8 @@ public class Main extends Application {
 
     }
 
-    private Database init_database() throws SQLException {
-        return new Database(
+    private DatabaseUserLoad init_database() throws SQLException {
+        return new DatabaseUserLoad(
                 "52.206.157.109",
                 "U05mJi",
                 "U05mJi",
@@ -69,7 +69,7 @@ public class Main extends Application {
         );
     }
 
-    private void load_users(Database d) {
+    private void load_users(DatabaseUserLoad d) {
         if (!d.getInit_users_loaded()) {
             d.seed_user_names_into_db();
         }

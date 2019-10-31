@@ -50,9 +50,9 @@
       <ChoiceBox fx:id="timezone_picker" layoutX="952.0" layoutY="284.0" prefHeight="31.0" prefWidth="187.0" />
       <Label fx:id="curr_tz_lbl" layoutX="477.0" layoutY="28.0" prefHeight="21.0" prefWidth="663.0" text="Current Time Zone and Location" />
       <CheckBox fx:id="dst_cbx" layoutX="744.0" layoutY="289.0" mnemonicParsing="false" onAction="#on_dst_cbx_action" text="Day Light Savings TIme" />
-      <Button layoutX="214.0" layoutY="816.0" mnemonicParsing="false" onAction="#saveReportAppsByMonth" text="Appointments by month" />
-      <Button layoutX="414.0" layoutY="816.0" mnemonicParsing="false" onAction="#saveReportAppsByConsultant" text="Appointments by Consultant" />
-      <Button layoutX="640.0" layoutY="816.0" mnemonicParsing="false" onAction="#saveReportAllApps" text="All Appointments" />
+      <Button layoutX="505.0" layoutY="816.0" mnemonicParsing="false" onAction="#saveReportAppsByMonth" text="Appointment Types by Month" />
+      <Button layoutX="744.0" layoutY="816.0" mnemonicParsing="false" onAction="#saveReportAppsByConsultant" text="Report Schedule By Consultant" />
+      <Button layoutX="978.0" layoutY="816.0" mnemonicParsing="false" onAction="#saveReportAllApps" text="All Appointments" />
       <Label layoutX="49.0" layoutY="821.0" text="Export Reports:" />
     </children>
 </AnchorPane>

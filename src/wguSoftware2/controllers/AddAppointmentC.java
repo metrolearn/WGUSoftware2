@@ -15,7 +15,7 @@ import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.models.MyDateTime;
 import wguSoftware2.utils.Utils;
-import wguSoftware2.utils.Database_v3;
+import wguSoftware2.utils.DatabaseMain;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -104,7 +104,7 @@ public class AddAppointmentC {
     @FXML
     private Active_User active_user = null;
     @FXML
-    private Database_v3 curr_db = null;
+    private DatabaseMain curr_db = null;
     private Utils utils = null;
 
     /**
@@ -183,7 +183,7 @@ public class AddAppointmentC {
      * @throws SQLException           the sql exception
      * @throws ClassNotFoundException the class not found exception
      */
-    public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) throws SQLException, ClassNotFoundException {
+    public void initialize(DatabaseMain curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) throws SQLException, ClassNotFoundException {
 
         this.active_user = active_user;
         this.curr_db = curr_db;
