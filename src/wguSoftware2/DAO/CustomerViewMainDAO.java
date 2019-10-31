@@ -7,6 +7,9 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
+/**
+ * The type Customer view main dao.
+ */
 public class CustomerViewMainDAO {
 
     private ResultSet rs = null;
@@ -22,12 +25,26 @@ public class CustomerViewMainDAO {
 
     private Timestamp sql_create_now_ts = null;
 
+    /**
+     * Instantiates a new Customer view main dao.
+     *
+     * @param curr_db          the curr db
+     * @param active_user_name the active user name
+     */
     public CustomerViewMainDAO(Database_v3 curr_db, String active_user_name) {
         this.curr_db = curr_db;
         this.active_user_name = active_user_name;
         this.activate_customer = false;
     }
 
+    /**
+     * Create customer view main.
+     *
+     * @param customer_view_main the customer view main
+     * @return the customer view main
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Customer_view_main create(Customer_view_main customer_view_main) throws SQLException, ClassNotFoundException {
 
         String customer_name = customer_view_main.getName();
@@ -243,27 +260,6 @@ public class CustomerViewMainDAO {
         activate_customer();
     }
 
-    private void update_customer_to_db(Integer customer_id, String customer_name) throws SQLException, ClassNotFoundException {
-        Connection con;
-        PreparedStatement ps;
-        ResultSet rs;// check if customer already exists .
-        String sql_customer_update = "update customer\n" +
-                "set customerName = ?, addressId = ?, lastUpdate = ?, lastUpdateBy =? where customerId = ?\n";
-
-        this.curr_db.dbConnect();
-        con = this.curr_db.getCon();
-        ps = con.prepareStatement(sql_customer_update,Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1,customer_name);
-        ps.setInt(2,address_id);
-        ps.setTimestamp(3,sql_create_now_ts);
-        ps.setString(4,active_user_name);
-        ps.setInt(5,customer_id);
-        rs = curr_db.dbExecuteUpdate(ps);
-
-
-    }
-
-
     private boolean customer_exists(String customer_name) throws SQLException, ClassNotFoundException {
         boolean r_val = false;
         Connection con;
@@ -338,23 +334,14 @@ public class CustomerViewMainDAO {
         }
     }
 
-    public boolean deactivate_customer(Integer customer_id) throws SQLException, ClassNotFoundException {
-        boolean r_val = false;
-        Connection con;
-        PreparedStatement ps;
-        ResultSet rs;
-        String sql_deactivate_customer = "UPDATE customer SET active = false WHERE customerId = ?;";
-
-        this.curr_db.dbConnect();
-        con = this.curr_db.getCon();
-        ps = con.prepareStatement(sql_deactivate_customer,Statement.RETURN_GENERATED_KEYS);
-        ps.setInt(1, customer_id);
-        rs = curr_db.dbExecuteUpdate(ps);
-
-        return rs.next();
-    }
-
-
+    /**
+     * Update customer view main.
+     *
+     * @param customer_view_main the customer view main
+     * @return the customer view main
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Customer_view_main update(Customer_view_main customer_view_main) throws SQLException, ClassNotFoundException {
 
         String customer_name = customer_view_main.getName();
@@ -376,16 +363,73 @@ public class CustomerViewMainDAO {
                 customer_id, customer_name, address, alt_address, city_name, zip, country_name, phone);
         return cvm;
 
+    }
+
+    private void update_customer_to_db(Integer customer_id, String customer_name) throws SQLException, ClassNotFoundException {
+        Connection con;
+        PreparedStatement ps;
+        ResultSet rs;// check if customer already exists .
+        String sql_customer_update = "update customer\n" +
+                "set customerName = ?, addressId = ?, lastUpdate = ?, lastUpdateBy =? where customerId = ?\n";
+
+        this.curr_db.dbConnect();
+        con = this.curr_db.getCon();
+        ps = con.prepareStatement(sql_customer_update,Statement.RETURN_GENERATED_KEYS);
+        ps.setString(1,customer_name);
+        ps.setInt(2,address_id);
+        ps.setTimestamp(3,sql_create_now_ts);
+        ps.setString(4,active_user_name);
+        ps.setInt(5,customer_id);
+        rs = curr_db.dbExecuteUpdate(ps);
 
     }
 
-
+    /**
+     * Delete boolean.
+     *
+     * @param selectedItem the selected item
+     * @return the boolean
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Boolean delete(Customer_view_main selectedItem) throws SQLException, ClassNotFoundException {
 
         return deactivate_customer(selectedItem.getId());
 
     }
 
+    /**
+     * Deactivate customer boolean.
+     *
+     * @param customer_id the customer id
+     * @return the boolean
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
+    public boolean deactivate_customer(Integer customer_id) throws SQLException, ClassNotFoundException {
+        boolean r_val = false;
+        Connection con;
+        PreparedStatement ps;
+        ResultSet rs;
+        String sql_deactivate_customer = "UPDATE customer SET active = false WHERE customerId = ?;";
+
+        this.curr_db.dbConnect();
+        con = this.curr_db.getCon();
+        ps = con.prepareStatement(sql_deactivate_customer,Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, customer_id);
+        rs = curr_db.dbExecuteUpdate(ps);
+
+        return rs.next();
+    }
+
+    /**
+     * Read customer view main.
+     *
+     * @param selectedItem the selected item
+     * @return the customer view main
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Customer_view_main read(Customer_view_main selectedItem) throws SQLException, ClassNotFoundException {
         boolean r_val = false;
         Connection con;
@@ -404,7 +448,6 @@ public class CustomerViewMainDAO {
 
         rs = ps.executeQuery();
 
-
             if (rs.next()) {
                 this.cvm = new Customer_view_main(rs.getInt("customerId"));
                 this.cvm.setName(rs.getString("customerName"));
@@ -415,11 +458,7 @@ public class CustomerViewMainDAO {
                 this.cvm.setCity_name(rs.getString("city"));
                 this.cvm.setCountry_name(rs.getString("country"));
 
-
             }
-
-
-
 
         return this.cvm;
 
@@ -427,29 +466,3 @@ public class CustomerViewMainDAO {
 
 }
 
-
-//    private void exe_sql_create(String sql_smt) throws SQLException {
-//        execute_sql_stmt(sql_smt);
-//        set_last_insert_obj_id();
-//    }
-
-//    @FXML
-//    private void set_last_insert_obj_id() throws SQLException {
-//        this.sql_smt = "SELECT LAST_INSERT_ID()";
-//        while (this.rs.next())
-//            this.object_id_buffer = this.rs.getInt(1);
-//    }
-
-//    @FXML
-//    private void execute_sql_stmt(String sql_smt) {
-//        ResultSet resultSet = null;
-////        try {
-////            resultSet = curr_db.get_mysql_resultSet(sql_smt);
-////        } catch (SQLException e) {
-////            e.printStackTrace();
-////        }
-////        this.rs = resultSet;
-////    }
-//
-//        }
-//        }

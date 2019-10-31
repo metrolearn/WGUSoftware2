@@ -6,13 +6,28 @@ import wguSoftware2.models.MyDateTime;
 
 import java.sql.*;
 
+/**
+ * The type Utils.
+ */
 public class Utils {
 
+    /**
+     * The constant OPEN_HOURS.
+     */
     public static final int OPEN_HOURS = 9;
+    /**
+     * The constant CLOSE_HOURS.
+     */
     public static final int CLOSE_HOURS = 17;
     private Database_v3 db = null;
     private Connection con = null;
 
+    /**
+     * Instantiates a new Utils.
+     *
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Utils() throws SQLException, ClassNotFoundException {
          db = new Database_v3(
                 "52.206.157.109",
@@ -23,6 +38,13 @@ public class Utils {
 
     }
 
+    /**
+     * Time check error.
+     *
+     * @param start the start
+     * @param end   the end
+     * @throws Error the error
+     */
     public void timeCheckError(MyDateTime start, MyDateTime end) throws Error {
         if (start.getLocal24hour() < OPEN_HOURS) {
 
@@ -35,6 +57,15 @@ public class Utils {
          }
     }
 
+    /**
+     * Appointment overlap check.
+     *
+     * @param myStartDateTime the my start date time
+     * @param myEndDateTime   the my end date time
+     * @throws SQLException             the sql exception
+     * @throws ClassNotFoundException   the class not found exception
+     * @throws IllegalArgumentException the illegal argument exception
+     */
     public void appointmentOverlapCheck(MyDateTime myStartDateTime, MyDateTime myEndDateTime) throws SQLException, ClassNotFoundException, IllegalArgumentException{
 
 

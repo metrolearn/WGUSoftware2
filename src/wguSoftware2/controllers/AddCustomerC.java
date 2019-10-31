@@ -22,8 +22,14 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The type Add customer c.
+ */
 public class AddCustomerC {
 
+    /**
+     * The Blank lbl.
+     */
     public Label blank_lbl;
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -66,6 +72,13 @@ public class AddCustomerC {
     private Boolean update;
     private Integer cvmIndex;
 
+    /**
+     * Initialize.
+     *
+     * @param curr_db           the curr db
+     * @param active_user       the active user
+     * @param obv_customer_list the obv customer list
+     */
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize(Database_v3 curr_db, Active_User active_user, List<Customer_view_main> obv_customer_list) {
@@ -78,11 +91,22 @@ public class AddCustomerC {
 
     }
 
+    /**
+     * Sets stage.
+     *
+     * @param addCustomerStage the add customer stage
+     */
     public void setStage(Stage addCustomerStage) {
         this.stage = addCustomerStage;
 
     }
 
+    /**
+     * Add customer.
+     *
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     @FXML
     void add_customer() throws SQLException, ClassNotFoundException {
 
@@ -98,9 +122,6 @@ public class AddCustomerC {
             if(!phoneNumberCheck(phone_txt)){
                 throw new Error("Bad Phone Number");
             }
-
-
-
 
             this.cvm = new Customer_view_main(
                     name_txt,
@@ -157,9 +178,15 @@ public class AddCustomerC {
 
             alert.showAndWait();
 
-
         }
 
+    }
+
+    private String testForBlankString(TextField inputStr) {
+        if(inputStr.getText().equals("")){
+            throw new NullPointerException("No fields can be blank");
+        }else
+            return inputStr.getText();
     }
 
     private Boolean phoneNumberCheck(String phone_txt) {
@@ -174,14 +201,11 @@ public class AddCustomerC {
         return rval;
     }
 
-
-    private String testForBlankString(TextField inputStr) {
-        if(inputStr.getText().equals("")){
-            throw new NullPointerException("No fields can be blank");
-        }else
-            return inputStr.getText();
-    }
-
+    /**
+     * Gets cvm.
+     *
+     * @return the cvm
+     */
     public Customer_view_main get_cvm() {
         return this.cvm;
     }

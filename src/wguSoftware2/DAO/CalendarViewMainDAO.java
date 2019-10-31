@@ -13,6 +13,9 @@ import java.util.ArrayList;
 
 import static java.time.ZoneOffset.UTC;
 
+/**
+ * The type Calendar view main dao.
+ */
 public class CalendarViewMainDAO {
 
     private ResultSet rs = null;
@@ -27,11 +30,22 @@ public class CalendarViewMainDAO {
     private Integer customer_id = null;
     private boolean activate_customer = Boolean.parseBoolean(null);
 
+    /**
+     * Instantiates a new Calendar view main dao.
+     *
+     * @param curr_db the curr db
+     */
     public CalendarViewMainDAO(Database_v3 curr_db) {
 
         this.curr_db = curr_db;
     }
 
+    /**
+     * Instantiates a new Calendar view main dao.
+     *
+     * @param curr_db the curr db
+     * @param au      the au
+     */
     public CalendarViewMainDAO(Database_v3 curr_db,Active_User au) {
 
         this.curr_db = curr_db;
@@ -39,6 +53,16 @@ public class CalendarViewMainDAO {
     }
 
 
+    /**
+     * Create appoinment view main.
+     *
+     * @param avm         the avm
+     * @param active_user the active user
+     * @param selectedCVM the selected cvm
+     * @return the appoinment view main
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Appoinment_view_main create(Appoinment_view_main avm, Active_User active_user, Customer_view_main selectedCVM) throws SQLException, ClassNotFoundException {
 
             this.active_user = active_user;
@@ -99,6 +123,13 @@ public class CalendarViewMainDAO {
 
     }
 
+    /**
+     * Delete.
+     *
+     * @param selectedItem the selected item
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public void delete(Appoinment_view_main selectedItem) throws SQLException, ClassNotFoundException {
 
         String sql_stmt = "DELETE FROM appointment WHERE appointmentId = ?";
@@ -111,6 +142,14 @@ public class CalendarViewMainDAO {
 
     }
 
+    /**
+     * Gets appointment type and contact.
+     *
+     * @param apt_id the apt id
+     * @return the appointment type and contact
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public ArrayList<String> getAppointmentTypeAndContact(Integer apt_id) throws SQLException, ClassNotFoundException {
         ArrayList<String> r_val = new ArrayList<>();
         Connection con;
@@ -136,6 +175,16 @@ public class CalendarViewMainDAO {
     }
 
 
+    /**
+     * Update appoinment view main.
+     *
+     * @param avm         the avm
+     * @param active_user the active user
+     * @param selectedCVM the selected cvm
+     * @return the appoinment view main
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Appoinment_view_main update(Appoinment_view_main avm, Active_User active_user, Customer_view_main selectedCVM) throws SQLException, ClassNotFoundException {
 
         this.active_user = active_user;
@@ -195,6 +244,15 @@ public class CalendarViewMainDAO {
         return avm;
     }
 
+    /**
+     * Update appoinment view main.
+     *
+     * @param avm         the avm
+     * @param active_user the active user
+     * @return the appoinment view main
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Appoinment_view_main update(Appoinment_view_main avm, Active_User active_user) throws SQLException, ClassNotFoundException {
 
         this.active_user = active_user;
@@ -254,6 +312,13 @@ public class CalendarViewMainDAO {
 
     }
 
+    /**
+     * Gets next appointment id.
+     *
+     * @return the next appointment id
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Integer getNextAppointmentID() throws SQLException, ClassNotFoundException {
         this.curr_db.dbConnect();
         Connection con = this.curr_db.getCon();

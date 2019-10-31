@@ -5,9 +5,18 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * The type Converters.
+ */
 public class Converters {
 
 
+    /**
+     * Ldt to mysql dt str string.
+     *
+     * @param ldt the ldt
+     * @return the string
+     */
     public String ldt_to_mysql_dt_str(ZonedDateTime ldt){
         /*
          * Mysql example of datetime : "2019-08-06 23:45:23"
@@ -19,6 +28,12 @@ public class Converters {
         return ldt_str;
     }
 
+    /**
+     * Get fxml file name string.
+     *
+     * @param url the url
+     * @return the string
+     */
     public String get_fxml_file_name(URL url){
         String s = null;
         String r_val = null;

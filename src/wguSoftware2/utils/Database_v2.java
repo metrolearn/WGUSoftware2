@@ -19,7 +19,13 @@ public class Database_v2 {
     private static final String connStr = "jdbc:oracle:thin:HR/HR@localhost:1521/xe";
 
 
-    //Connect to DB
+    /**
+     * Db connect.
+     *
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
+//Connect to DB
     public static void dbConnect() throws SQLException, ClassNotFoundException {
         //Setting Oracle JDBC Driver
         try {
@@ -42,7 +48,12 @@ public class Database_v2 {
         }
     }
 
-    //Close Connection
+    /**
+     * Db disconnect.
+     *
+     * @throws SQLException the sql exception
+     */
+//Close Connection
     public static void dbDisconnect() throws SQLException {
         try {
             if (conn != null && !conn.isClosed()) {
@@ -53,7 +64,15 @@ public class Database_v2 {
         }
     }
 
-    //DB Execute Query Operation
+    /**
+     * Db execute query result set.
+     *
+     * @param queryStmt the query stmt
+     * @return the result set
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
+//DB Execute Query Operation
     public static ResultSet dbExecuteQuery(String queryStmt) throws SQLException, ClassNotFoundException {
         //Declare statement, resultSet and CachedResultSet as null
         Statement stmt = null;
@@ -94,7 +113,14 @@ public class Database_v2 {
         return crs;
     }
 
-    //DB Execute Update (For Update/Insert/Delete) Operation
+    /**
+     * Db execute update.
+     *
+     * @param sqlStmt the sql stmt
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
+//DB Execute Update (For Update/Insert/Delete) Operation
     public static void dbExecuteUpdate(String sqlStmt) throws SQLException, ClassNotFoundException {
         //Declare statement as null
         Statement stmt = null;

@@ -37,8 +37,9 @@ public class Customer {
     /**
      * Instantiates a new Customer.
      *
-     * @param customer_name_str
-     * @param active_user_name
+     * @param customer_name_str the customer name str
+     * @param active_user_name  the active user name
+     * @param address_id        the address id
      */
     public Customer(String customer_name_str, String active_user_name, Integer address_id) {
         this.converter = new Converters();
@@ -288,6 +289,11 @@ public class Customer {
     }
 
 
+    /**
+     * Gets address db create str.
+     *
+     * @return the address db create str
+     */
     public String get_address_db_create_str() {
         String customer_name = this.customer_name;
         String address_id = String.valueOf(this.address_id);

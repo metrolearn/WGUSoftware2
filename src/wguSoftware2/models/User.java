@@ -30,19 +30,21 @@ public class User {
     private Integer userID;
     private String username;
     private String password;
+    /**
+     * The Active.
+     */
     boolean active;
     private ZonedDateTime create_date_time;
     private ZonedDateTime last_update_date_time;
     private Converters c = new Converters();
 
 
-
     /**
      * Instantiates a new User.
      *
-     * @param user_count
-     * @param username the username
-     * @param password the password
+     * @param user_count the user count
+     * @param username   the username
+     * @param password   the password
      */
     public User(Integer user_count, String username, String password) {
         this.userID = user_count;
@@ -56,6 +58,12 @@ public class User {
 
     }
 
+    /**
+     * Instantiates a new User.
+     *
+     * @param name     the name
+     * @param password the password
+     */
     public User(String name, String password) {
 
         this.username = name;
@@ -63,10 +71,20 @@ public class User {
 
     }
 
+    /**
+     * Gets c.
+     *
+     * @return the c
+     */
     public Converters getC() {
         return c;
     }
 
+    /**
+     * Sets c.
+     *
+     * @param c the c
+     */
     public void setC(Converters c) {
         this.c = c;
     }
@@ -220,15 +238,15 @@ public class User {
     /**
      * Create user db entry boolean.
      *
-     * @param userId
-     * @param userName
-     * @param usr_password
-     * @param usr_active
-     * @param createDate
-     * @param createdBy
-     * @param lastUpdate
-     * @param lastUpdateBy
-     * @return sql
+     * @param userId       the user id
+     * @param userName     the user name
+     * @param usr_password the usr password
+     * @param usr_active   the usr active
+     * @param createDate   the create date
+     * @param createdBy    the created by
+     * @param lastUpdate   the last update
+     * @param lastUpdateBy the last update by
+     * @return sql string
      */
     public String create_user_db_entry_string(final String userId, final String userName, final String usr_password,
                                               final String usr_active, final String createDate, final String createdBy,
@@ -239,7 +257,6 @@ public class User {
                 + lastUpdate + ", " + lastUpdateBy + ") VALUES (?,?,?,?,?,?,?,?)";
         return sql;
     }
-
 
 
     /**
@@ -288,6 +305,11 @@ public class User {
         return "SELECT COUNT(userId) AS users FROM user;";
     }
 
+    /**
+     * Create user db entry str string.
+     *
+     * @return the string
+     */
     public String  create_user_db_entry_str() {
 
         String userid_ = String.valueOf(this.userID);

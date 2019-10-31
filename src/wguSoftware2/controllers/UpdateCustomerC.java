@@ -17,6 +17,9 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The type Update customer c.
+ */
 public class UpdateCustomerC {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
@@ -61,6 +64,13 @@ public class UpdateCustomerC {
     private Integer cvmIndex;
     private Integer customer_id;
 
+    /**
+     * Initialize.
+     *
+     * @param curr_db           the curr db
+     * @param active_user       the active user
+     * @param obv_customer_list the obv customer list
+     */
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize(Database_v3 curr_db, Active_User active_user, List<Customer_view_main> obv_customer_list) {
@@ -72,16 +82,33 @@ public class UpdateCustomerC {
 
     }
 
+    /**
+     * Sets stage.
+     *
+     * @param addCustomerStage the add customer stage
+     */
     public void setStage(Stage addCustomerStage) {
         this.stage = addCustomerStage;
 
     }
 
+    /**
+     * Gets cvm.
+     *
+     * @return the cvm
+     */
     public Customer_view_main get_cvm() {
         this.cvm.setId(this.customer_id)    ;
         return this.cvm;
     }
 
+    /**
+     * Sets fields.
+     *
+     * @param selectedItem the selected item
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public void set_fields(Customer_view_main selectedItem) throws SQLException, ClassNotFoundException {
 
         this.cvm = this.cvmDAO.read(selectedItem);
@@ -96,6 +123,14 @@ public class UpdateCustomerC {
 
     }
 
+    /**
+     * Update customer customer view main.
+     *
+     * @param actionEvent the action event
+     * @return the customer view main
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Customer_view_main update_customer(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         try {
             String name_txt = testForBlankString(this.name_txt);
@@ -170,8 +205,6 @@ public class UpdateCustomerC {
         return  this.cvm;
 
     }
-
-
 
     private String testForBlankString(TextField inputStr) {
         if(inputStr.getText().equals("")){

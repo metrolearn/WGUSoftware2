@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 import wguSoftware2.DAO.CalendarViewMainDAO;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
@@ -22,7 +21,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
+/**
+ * The type Update appointment c.
+ */
 public class UpdateAppointmentC {
+    /**
+     * The Customer txt.
+     */
     @FXML
     public TextField customer_txt;
     @FXML
@@ -69,6 +74,15 @@ public class UpdateAppointmentC {
     private Integer apt_id = null;
     private Utils utils =null;
 
+    /**
+     * Initialize.
+     *
+     * @param curr_db           the curr db
+     * @param active_user       the active user
+     * @param obv_customer_list the obv customer list
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) throws SQLException, ClassNotFoundException {
 
         this.curr_db = curr_db;
@@ -79,6 +93,13 @@ public class UpdateAppointmentC {
 
     }
 
+    /**
+     * Sets fields.
+     *
+     * @param selectedItem the selected item
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public void set_fields(Appoinment_view_main selectedItem) throws SQLException, ClassNotFoundException {
 
         this.avm = selectedItem;
@@ -152,18 +173,36 @@ public class UpdateAppointmentC {
 
     }
 
+    /**
+     * Sets stage.
+     *
+     * @param addCustomerStage the add customer stage
+     */
     public void setStage(Stage addCustomerStage) {
 
         this.curr_stage = addCustomerStage;
 
     }
 
+    /**
+     * Gets avm.
+     *
+     * @return the avm
+     */
     public Appoinment_view_main get_avm() {
 
         return this.avm;
 
     }
 
+    /**
+     * Updt apt appoinment view main.
+     *
+     * @param actionEvent the action event
+     * @return the appoinment view main
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Appoinment_view_main UPDT_APT(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 
 //        Integer apt_id = this.apt_id;
@@ -266,8 +305,9 @@ public class UpdateAppointmentC {
     }
 
 
-
-
+    /**
+     * On contact change.
+     */
     public void on_contact_change(){
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -280,7 +320,6 @@ public class UpdateAppointmentC {
 
     }
 
-    @NotNull
     private String getTimeDateInputStr(String start_hour_str, String start_min_str, String startPmString) {
         String startTime = start_hour_str + ":" + start_min_str + " " + startPmString;
         String date = date_pkr.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyy"));
@@ -288,7 +327,6 @@ public class UpdateAppointmentC {
         return startInput;
     }
 
-    @NotNull
     private String appendZero(String input) {
         if(Integer.parseInt(input) < 10){
             if(input.length() == 1)

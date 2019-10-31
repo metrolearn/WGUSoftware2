@@ -1,6 +1,10 @@
 package wguSoftware2.utils;
 import com.sun.rowset.CachedRowSetImpl;
 import java.sql.*;
+
+/**
+ * The type Database v 3.
+ */
 public class Database_v3 {
 
 
@@ -13,6 +17,14 @@ public class Database_v3 {
     private String DB_URL = null;
     private Connection con = null;
 
+    /**
+     * Instantiates a new Database v 3.
+     *
+     * @param DB_IP   the db ip
+     * @param DB_NAME the db name
+     * @param DBUSER  the dbuser
+     * @param DBPASS  the dbpass
+     */
     public Database_v3(String DB_IP, String DB_NAME, String DBUSER, String DBPASS) {
         this.JDBC_DRIVER = "com.mysql.jdbc.Driver";
         this.DB_IP = DB_IP;
@@ -30,6 +42,12 @@ public class Database_v3 {
     //private static final String connStr = "jdbc:oracle:thin:HR/HR@localhost:1521/xe";
     //Connect to DB
 
+    /**
+     * Db connect.
+     *
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public void dbConnect() throws SQLException, ClassNotFoundException {
         //Setting Oracle JDBC Driver
         try {
@@ -52,7 +70,12 @@ public class Database_v3 {
         }
     }
 
-    //Close Connection
+    /**
+     * Db disconnect.
+     *
+     * @throws SQLException the sql exception
+     */
+//Close Connection
     public  void dbDisconnect() throws SQLException {
         try {
             if (this.con != null && !this.con.isClosed()) {
@@ -63,6 +86,14 @@ public class Database_v3 {
         }
     }
 
+    /**
+     * Db execute query result set.
+     *
+     * @param ps_Stmt the ps stmt
+     * @return the result set
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public  ResultSet dbExecuteQuery(PreparedStatement ps_Stmt) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = null;
         CachedRowSetImpl crs = null;
@@ -86,7 +117,14 @@ public class Database_v3 {
         return crs;
     }
 
-    //DB Execute Update (For Update/Insert/Delete) Operation
+    /**
+     * Db execute update result set.
+     *
+     * @param ps_Stmt the ps stmt
+     * @return the result set
+     * @throws SQLException the sql exception
+     */
+//DB Execute Update (For Update/Insert/Delete) Operation
     public ResultSet dbExecuteUpdate(PreparedStatement ps_Stmt) throws SQLException {
         ResultSet resultSet = null;
         CachedRowSetImpl crs = null;
@@ -111,6 +149,11 @@ public class Database_v3 {
         return crs;
     }
 
+    /**
+     * Gets con.
+     *
+     * @return the con
+     */
     public Connection getCon() {
         return con;
     }

@@ -41,6 +41,14 @@ public class Address {
     private Converters converter;
     private Active_User active_user;
 
+    /**
+     * Instantiates a new Address.
+     *
+     * @param address     the address
+     * @param alt_address the alt address
+     * @param city_id     the city id
+     * @param zip         the zip
+     */
     public Address(String address, String alt_address, Integer city_id, String zip) {
 
         this.address = address;
@@ -50,22 +58,33 @@ public class Address {
 
     }
 
+    /**
+     * Gets active user.
+     *
+     * @return the active user
+     */
     public Active_User getActive_user() {
         return active_user;
     }
 
+    /**
+     * Sets active user.
+     *
+     * @param active_user the active user
+     */
     public void setActive_user(Active_User active_user) {
         this.active_user = active_user;
     }
 
     /**
      * Instantiates a new Address.
-     * @param address_str
-     * @param alt_address_str
-     * @param city_id
-     * @param zip_code_str
-     * @param phone_str
-     * @param active_user
+     *
+     * @param address_str     the address str
+     * @param alt_address_str the alt address str
+     * @param city_id         the city id
+     * @param zip_code_str    the zip code str
+     * @param phone_str       the phone str
+     * @param active_user     the active user
      */
     public Address(String address_str, String alt_address_str, Integer city_id, String zip_code_str, String phone_str,
                    Active_User active_user)
@@ -80,6 +99,15 @@ public class Address {
 
     }
 
+    /**
+     * Instantiates a new Address.
+     *
+     * @param address     the address
+     * @param alt_address the alt address
+     * @param zip_code    the zip code
+     * @param phone       the phone
+     * @param city_id     the city id
+     */
     public Address(String address, String alt_address, String zip_code, String phone, Integer city_id) {
 
 

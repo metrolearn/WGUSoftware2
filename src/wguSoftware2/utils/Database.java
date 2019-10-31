@@ -39,6 +39,7 @@ public class Database {
      * @param database_name the database name
      * @param username      the username
      * @param password      the password
+     * @throws SQLException the sql exception
      */
     public Database(String database_ip, String database_name, String username,
                     String password) throws SQLException {
@@ -110,6 +111,12 @@ public class Database {
         }
     }
 
+    /**
+     * Send mysql command.
+     *
+     * @param sql the sql
+     * @throws SQLException the sql exception
+     */
     public void send_mysql_command(String sql) throws SQLException {
         try {
             PreparedStatement statement = this.connection.prepareStatement(sql);
@@ -120,6 +127,13 @@ public class Database {
 
     }
 
+    /**
+     * Gets mysql result set.
+     *
+     * @param sql the sql
+     * @return the mysql result set
+     * @throws SQLException the sql exception
+     */
     public ResultSet get_mysql_resultSet(String sql) throws SQLException {
         PreparedStatement statement = null;
         try {
@@ -135,6 +149,13 @@ public class Database {
 
     }
 
+    /**
+     * Gets mysql result set and pk.
+     *
+     * @param sql the sql
+     * @return the mysql result set and pk
+     * @throws SQLException the sql exception
+     */
     public ResultSet get_mysql_resultSet_and_pk(String sql) throws SQLException {
         PreparedStatement statement = null;
         try {
@@ -148,6 +169,11 @@ public class Database {
 
     }
 
+    /**
+     * Seed user names into db boolean.
+     *
+     * @return the boolean
+     */
     public boolean seed_user_names_into_db() {
 
         String csvFile = "src/wguSoftware2/seed_data/username_list.csv";
@@ -206,6 +232,12 @@ public class Database {
         return init_users_loaded;
     }
 
+    /**
+     * Check cred in db active user.
+     *
+     * @return the active user
+     * @throws SQLException the sql exception
+     */
     public Active_User check_cred_in_db() throws SQLException {
 
         Active_User r_val = null;
@@ -246,6 +278,11 @@ public class Database {
         return r_val;
     }
 
+    /**
+     * Sets lc.
+     *
+     * @param lc the lc
+     */
     public void setLc(LoginWindowC lc) {
         this.lc = lc;
     }

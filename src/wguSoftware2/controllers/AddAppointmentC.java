@@ -9,7 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 import wguSoftware2.DAO.CalendarViewMainDAO;
 import wguSoftware2.models.Active_User;
 import wguSoftware2.models.Appoinment_view_main;
@@ -26,24 +25,54 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+/**
+ * The type Add appointment c.
+ */
 public class AddAppointmentC {
 
+    /**
+     * The Start hour cb.
+     */
     @FXML
     public ComboBox<String> start_hour_cb;
+    /**
+     * The Start min cb.
+     */
     @FXML
     public ComboBox<String> start_min_cb;
+    /**
+     * The End min cb.
+     */
     @FXML
     public ComboBox<String> end_min_cb;
+    /**
+     * The End hour cb.
+     */
     @FXML
     public ComboBox<String> end_hour_cb;
+    /**
+     * The Start date time lbl.
+     */
     @FXML
     public Label start_date_time_lbl;
+    /**
+     * The End date time lbl.
+     */
     @FXML
     public Label end_date_time_lbl;
+    /**
+     * The Blank lbl.
+     */
     @FXML
     public Label blank_lbl;
+    /**
+     * The Add apt btn.
+     */
     @FXML
     public Button add_apt_btn;
+    /**
+     * The Apt type cb.
+     */
     @FXML
     public ComboBox<String> apt_type_cb;
     @FXML
@@ -69,7 +98,7 @@ public class AddAppointmentC {
     @FXML
     private CalendarViewMainDAO calendarViewMainDAO = null;
     @FXML
-    Customer_view_main selectedCVM = null;
+    private Customer_view_main selectedCVM = null;
     @FXML
     private Appoinment_view_main apv = null;
     @FXML
@@ -78,6 +107,11 @@ public class AddAppointmentC {
     private Database_v3 curr_db = null;
     private Utils utils = null;
 
+    /**
+     * Gets avm.
+     *
+     * @return the avm
+     */
     @FXML
     public Appoinment_view_main get_avm() {
 
@@ -85,194 +119,70 @@ public class AddAppointmentC {
 
     }
 
-    public ComboBox<String> getStart_hour_cb() {
-        return start_hour_cb;
-    }
-
-    public void setStart_hour_cb(ComboBox<String> start_hour_cb) {
-        this.start_hour_cb = start_hour_cb;
-    }
-
-    public ComboBox<String> getStart_min_cb() {
-        return start_min_cb;
-    }
-
-    public void setStart_min_cb(ComboBox<String> start_min_cb) {
-        this.start_min_cb = start_min_cb;
-    }
-
-    public ComboBox<String> getEnd_min_cb() {
-        return end_min_cb;
-    }
-
-    public void setEnd_min_cb(ComboBox<String> end_min_cb) {
-        this.end_min_cb = end_min_cb;
-    }
-
-    public ComboBox<String> getEnd_hour_cb() {
-        return end_hour_cb;
-    }
-
-    public void setEnd_hour_cb(ComboBox<String> end_hour_cb) {
-        this.end_hour_cb = end_hour_cb;
-    }
-
-    public Label getStart_date_time_lbl() {
-        return start_date_time_lbl;
-    }
-
-    public void setStart_date_time_lbl(Label start_date_time_lbl) {
-        this.start_date_time_lbl = start_date_time_lbl;
-    }
-
-    public Label getEnd_date_time_lbl() {
-        return end_date_time_lbl;
-    }
-
-    public void setEnd_date_time_lbl(Label end_date_time_lbl) {
-        this.end_date_time_lbl = end_date_time_lbl;
-    }
-
-    public Label getBlank_lbl() {
-        return blank_lbl;
-    }
-
-    public void setBlank_lbl(Label blank_lbl) {
-        this.blank_lbl = blank_lbl;
-    }
-
-    public Button getAdd_apt_btn() {
-        return add_apt_btn;
-    }
-
-    public void setAdd_apt_btn(Button add_apt_btn) {
-        this.add_apt_btn = add_apt_btn;
-    }
-
-    public ComboBox<String> getApt_type_cb() {
-        return apt_type_cb;
-    }
-
-    public void setApt_type_cb(ComboBox<String> apt_type_cb) {
-        this.apt_type_cb = apt_type_cb;
-    }
-
+    /**
+     * Gets resources.
+     *
+     * @return the resources
+     */
     public ResourceBundle getResources() {
         return resources;
     }
 
+    /**
+     * Sets resources.
+     *
+     * @param resources the resources
+     */
     public void setResources(ResourceBundle resources) {
         this.resources = resources;
     }
 
+    /**
+     * Gets location.
+     *
+     * @return the location
+     */
     public URL getLocation() {
         return location;
     }
 
+    /**
+     * Sets location.
+     *
+     * @param location the location
+     */
     public void setLocation(URL location) {
         this.location = location;
     }
 
-    public TextField getTitle_txt() {
-        return title_txt;
-    }
-
-    public void setTitle_txt(TextField title_txt) {
-        this.title_txt = title_txt;
-    }
-
-    public TextField getContact_txt() {
-        return contact_txt;
-    }
-
-    public void setContact_txt(TextField contact_txt) {
-        this.contact_txt = contact_txt;
-    }
-
-    public DatePicker getDate_pkr() {
-        return date_pkr;
-    }
-
-    public void setDate_pkr(DatePicker date_pkr) {
-        this.date_pkr = date_pkr;
-    }
-
-    public RadioButton getStart_pm() {
-        return start_pm;
-    }
-
-    public void setStart_pm(RadioButton start_pm) {
-        this.start_pm = start_pm;
-    }
-
-    public MenuButton getStart_hour() {
-        return start_hour;
-    }
-
-    public void setStart_hour(MenuButton start_hour) {
-        this.start_hour = start_hour;
-    }
-
-    public RadioButton getEnd_pm() {
-        return end_pm;
-    }
-
-    public void setEnd_pm(RadioButton end_pm) {
-        this.end_pm = end_pm;
-    }
-
-    public TextField getDesc_txt() {
-        return desc_txt;
-    }
-
-    public void setDesc_txt(TextField desc_txt) {
-        this.desc_txt = desc_txt;
-    }
-
-    public TextField getLocation_txt() {
-        return location_txt;
-    }
-
-    public void setLocation_txt(TextField location_txt) {
-        this.location_txt = location_txt;
-    }
-
-    public CalendarViewMainDAO getCalendarViewMainDAO() {
-        return calendarViewMainDAO;
-    }
-
-    public void setCalendarViewMainDAO(CalendarViewMainDAO calendarViewMainDAO) {
-        this.calendarViewMainDAO = calendarViewMainDAO;
-    }
-
-    public Customer_view_main getSelectedCVM() {
-        return selectedCVM;
-    }
-
-    public Appoinment_view_main getApv() {
-        return apv;
-    }
-
-    public void setApv(Appoinment_view_main apv) {
-        this.apv = apv;
-    }
-
+    /**
+     * Gets active user.
+     *
+     * @return the active user
+     */
     public Active_User getActive_user() {
         return active_user;
     }
 
+    /**
+     * Sets active user.
+     *
+     * @param active_user the active user
+     */
     public void setActive_user(Active_User active_user) {
         this.active_user = active_user;
     }
 
-    public Database_v3 getCurr_db() {
-        return curr_db;
-    }
 
-    public void setCurr_db(Database_v3 curr_db) {
-        this.curr_db = curr_db;
-    }
-
+    /**
+     * Initialize.
+     *
+     * @param curr_db           the curr db
+     * @param active_user       the active user
+     * @param obv_customer_list the obv customer list
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public void initialize(Database_v3 curr_db, Active_User active_user, ObservableList<Customer_view_main> obv_customer_list) throws SQLException, ClassNotFoundException {
 
         this.active_user = active_user;
@@ -336,9 +246,21 @@ public class AddAppointmentC {
 
     }
 
+    /**
+     * Sets stage.
+     *
+     * @param addAppointmentStage the add appointment stage
+     */
     public void setStage(Stage addAppointmentStage) {
     }
 
+    /**
+     * Add apt.
+     *
+     * @param actionEvent the action event
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public void ADD_APT(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 
         String title = this.title_txt.getText();
@@ -354,7 +276,6 @@ public class AddAppointmentC {
         boolean start_pm = this.start_pm.isArmed();
         String startPmString = "AM";
         String endPmString = "AM";
-
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
             TimeZone tz = active_user.getTz();
@@ -385,7 +306,6 @@ public class AddAppointmentC {
             • scheduling an appointment outside business hours
          */
 
-
             try {
                 utils.timeCheckError(myStartDateTime,myEndDateTime);
                 utils.appointmentOverlapCheck(myStartDateTime,myEndDateTime);
@@ -402,8 +322,6 @@ public class AddAppointmentC {
                 this.apv = apv;
                 this.add_apt_btn.getScene().getWindow().hide();
             }
-
-
 
             catch (Error error) {
 
@@ -427,25 +345,8 @@ public class AddAppointmentC {
                 alert.showAndWait();
             }
 
-
         }
 
-
-
-
-
-
-
-
-    @NotNull
-    private String getTimeDateInputStr(String start_hour_str, String start_min_str, String startPmString) {
-        String startTime = start_hour_str + ":" + start_min_str + " " + startPmString;
-        String date = date_pkr.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyy"));
-        String startInput = date+" "+startTime;
-        return startInput;
-    }
-
-    @NotNull
     private String appendZero(String start_hour_str) {
         if(Integer.parseInt(start_hour_str) < 10){
             start_hour_str = "0"+start_hour_str;
@@ -453,6 +354,27 @@ public class AddAppointmentC {
         return start_hour_str;
     }
 
+    private String getTimeDateInputStr(String start_hour_str, String start_min_str, String startPmString) {
+        String startTime = start_hour_str + ":" + start_min_str + " " + startPmString;
+        String date = date_pkr.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyy"));
+        String startInput = date+" "+startTime;
+        return startInput;
+    }
+
+    /**
+     * Gets selected cvm.
+     *
+     * @return the selected cvm
+     */
+    public Customer_view_main getSelectedCVM() {
+        return selectedCVM;
+    }
+
+    /**
+     * Sets selected cvm.
+     *
+     * @param selectedCVM the selected cvm
+     */
     public void setSelectedCVM(Customer_view_main selectedCVM) {
 
         this.selectedCVM = selectedCVM;

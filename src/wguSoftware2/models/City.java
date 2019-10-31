@@ -32,12 +32,23 @@ public class City {
     private String update_by;
     private Converters converter;
 
+    /**
+     * Instantiates a new City.
+     *
+     * @param city_name  the city name
+     * @param country_id the country id
+     */
     public City(String city_name, Integer country_id) {
         this.city_name = city_name;
         this.country_id = country_id;
 
     }
 
+    /**
+     * Instantiates a new City.
+     *
+     * @param city_id the city id
+     */
     public City(Integer city_id) {
         this.city_id = city_id;
     }
@@ -87,9 +98,15 @@ public class City {
         return country_id;
     }
 
+    /**
+     * Gets country id str.
+     *
+     * @return the country id str
+     */
     public String getCountry_id_str() {
         return String.valueOf(country_id);
     }
+
     /**
      * Sets country id.
      *
@@ -157,6 +174,7 @@ public class City {
     /**
      * Create city db entry boolean.
      *
+     * @param country_id_parm the country id parm
      * @return the boolean
      */
     public String get_city_db_create_str(Integer country_id_parm) {
@@ -214,6 +232,11 @@ public class City {
         return r_val;
     }
 
+    /**
+     * Gets update by.
+     *
+     * @return the update by
+     */
     public String getUpdate_by() {
         return update_by;
     }

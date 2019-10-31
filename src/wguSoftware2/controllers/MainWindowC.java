@@ -30,43 +30,100 @@ import java.sql.*;
 import java.time.ZoneId;
 import java.util.*;
 
+/**
+ * The type Main window c.
+ */
 public class MainWindowC {
 
     private static final boolean TESTING = true;
+    /**
+     * The Apt id tbl cell.
+     */
     @FXML
     public TableColumn<Appoinment_view_main, String> APT_ID_Tbl_Cell;
+    /**
+     * The Apt date tbl cell.
+     */
     @FXML
     public TableColumn<Appoinment_view_main, String> APT_DATE_Tbl_Cell;
+    /**
+     * The Apt cust tbl cell.
+     */
     @FXML
     public TableColumn<Appoinment_view_main, String> APT_CUST_Tbl_Cell;
+    /**
+     * The Apt title tbl cell.
+     */
     @FXML
     public TableColumn<Appoinment_view_main, String> APT_TITLE_Tbl_Cell;
+    /**
+     * The Apt loc tbl cell.
+     */
     @FXML
     public TableColumn<Appoinment_view_main, String> APT_LOC_Tbl_Cell;
+    /**
+     * The Apt start tbl cell.
+     */
     @FXML
     public TableColumn<Appoinment_view_main, String> APT_START_Tbl_Cell;
+    /**
+     * The Apt end tbl cell.
+     */
     @FXML
     public TableColumn<Appoinment_view_main, String> APT_END_Tbl_Cell;
+    /**
+     * The Apt url tbl cell.
+     */
     @FXML
     public TableColumn<Appoinment_view_main, String> APT_URL_Tbl_Cell;
+    /**
+     * The Art update btn.
+     */
     @FXML
     public Button Art_Update_Btn;
+    /**
+     * The Art delete btn.
+     */
     @FXML
     public Button Art_Delete_Btn;
+    /**
+     * The Art add btn.
+     */
     @FXML
     public Button Art_Add_Btn;
+    /**
+     * The Art mnt filter rad.
+     */
     @FXML
     public RadioButton Art_Mnt_filter_rad;
+    /**
+     * The Art wk filter rad.
+     */
     @FXML
     public RadioButton Art_Wk_filter_rad;
+    /**
+     * The Art all filter rad.
+     */
     @FXML
     public RadioButton Art_All_filter_rad;
+    /**
+     * The Timezone picker.
+     */
     @FXML
     public ChoiceBox<String> timezone_picker;
+    /**
+     * The Art tz filter rad.
+     */
     @FXML
     public RadioButton Art_Tz_filter_rad;
+    /**
+     * The Curr tz lbl.
+     */
     @FXML
     public Label curr_tz_lbl;
+    /**
+     * The Dst cbx.
+     */
     @FXML
     public CheckBox dst_cbx;
     @FXML
@@ -109,6 +166,11 @@ public class MainWindowC {
 
     private Appoinment_view_main avm;
 
+    /**
+     * Crt add.
+     *
+     * @throws IOException the io exception
+     */
     @FXML
     void CRT_ADD() throws IOException {
         URL add_customer_window = getClass().getClassLoader().getResource("wguSoftware2/views/add_customer.fxml");
@@ -130,6 +192,12 @@ public class MainWindowC {
 
     }
 
+    /**
+     * Crt update.
+     *
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     @FXML
     void CRT_UPDATE() throws IOException, SQLException {
 
@@ -165,6 +233,12 @@ public class MainWindowC {
         return customer_tbl.getSelectionModel().getSelectedItem();
     }
 
+    /**
+     * Crt delete.
+     *
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     @FXML
     void CRT_DELETE() throws SQLException, ClassNotFoundException {
         Customer_view_main selectedItem = getSelectedCVM();
@@ -176,6 +250,14 @@ public class MainWindowC {
 
     }
 
+    /**
+     * Initialize.
+     *
+     * @param curr_db     the curr db
+     * @param active_user the active user
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     @FXML
     void initialize(Database_v3 curr_db, Active_User active_user) throws SQLException, ClassNotFoundException {
         this.curr_db = curr_db;
@@ -316,16 +398,14 @@ public class MainWindowC {
     }
 
 
-
-
-
-    private void updateMenuTimesByMenuSelection() {
-        for (Appoinment_view_main avm : all_apts) {
-            avm.getStart_date_time().setMenuZonedDateTime(active_user.getTz().toZoneId());
-            avm.getEnd_date_time().setMenuZonedDateTime(active_user.getTz().toZoneId());
-        }
-    }
-
+    /**
+     * Add apr.
+     *
+     * @param actionEvent the action event
+     * @throws IOException            the io exception
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public void ADD_APR(ActionEvent actionEvent) throws IOException, SQLException, ClassNotFoundException {
 
         URL add_customer_window = getClass().getClassLoader().getResource("wguSoftware2/views/add_appointment.fxml");
@@ -362,6 +442,11 @@ public class MainWindowC {
 
     }
 
+    /**
+     * Update apr.
+     *
+     * @param actionEvent the action event
+     */
     public void UPDATE_APR(ActionEvent actionEvent) {
 
         Appoinment_view_main avm = null;
@@ -404,6 +489,13 @@ public class MainWindowC {
         return apt_tbl.getSelectionModel().getSelectedItem();
     }
 
+    /**
+     * Delete apr.
+     *
+     * @param actionEvent the action event
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public void DELETE_APR(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 
         Appoinment_view_main selected_apt = getSelectedAVM();
@@ -414,6 +506,9 @@ public class MainWindowC {
 
     }
 
+    /**
+     * Filter by month.
+     */
     public void FILTER_BY_MONTH() {
 
         for (Appoinment_view_main avm: obv_apt_list) {
@@ -425,6 +520,9 @@ public class MainWindowC {
 
     }
 
+    /**
+     * Filter by week.
+     */
     public void FILTER_BY_WEEK() {
 
         for (Appoinment_view_main avm: obv_apt_list) {
@@ -436,6 +534,9 @@ public class MainWindowC {
 
     }
 
+    /**
+     * Filter by all.
+     */
     public void FILTER_BY_ALL() {
 
         for (Appoinment_view_main avm: obv_apt_list) {
@@ -447,6 +548,9 @@ public class MainWindowC {
 
     }
 
+    /**
+     * Filter by tz.
+     */
     public void FILTER_BY_TZ(){
 
         ZoneId zid = ZoneId.of(timezone_picker.getValue());
@@ -466,6 +570,11 @@ public class MainWindowC {
         this.Art_All_filter_rad.setSelected(false);
     }
 
+    /**
+     * On dst cbx action.
+     *
+     * @param actionEvent the action event
+     */
     public void on_dst_cbx_action(ActionEvent actionEvent) {
 
         for (Appoinment_view_main avm: obv_apt_list) {
@@ -485,6 +594,12 @@ public class MainWindowC {
 
     }
 
+    /**
+     * Directory chooser.
+     *
+     * @param defaultFileName the default file name
+     * @param items           the items
+     */
     public void directoryChooser(String defaultFileName, ObservableList<Object> items) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Choose location To Save Report");
@@ -512,6 +627,12 @@ public class MainWindowC {
         }
         outFile.close();
     }
+
+    /**
+     * Save report apps by month.
+     *
+     * @param actionEvent the action event
+     */
     public void saveReportAppsByMonth(ActionEvent actionEvent) {
 
         ObservableList<Object> temp = FXCollections.observableArrayList();
@@ -540,6 +661,11 @@ public class MainWindowC {
 
     }
 
+    /**
+     * Save report apps by consultant.
+     *
+     * @param actionEvent the action event
+     */
     public void saveReportAppsByConsultant(ActionEvent actionEvent) {
 
 
@@ -547,6 +673,11 @@ public class MainWindowC {
 
     }
 
+    /**
+     * Save report all apps.
+     *
+     * @param actionEvent the action event
+     */
     public void saveReportAllApps(ActionEvent actionEvent) {
 
         ObservableList<Object> temp = FXCollections.observableArrayList();

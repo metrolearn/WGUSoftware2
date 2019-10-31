@@ -28,6 +28,9 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+/**
+ * The type Login window c.
+ */
 public class LoginWindowC {
     private static final boolean TESTING = true;
     @FXML
@@ -70,13 +73,21 @@ public class LoginWindowC {
 
     private Active_User ac;
 
+    /**
+     * Instantiates a new Login window c.
+     */
     public LoginWindowC() {
 
         curr_db = null;
         this.c = new Converters();
     }
 
-
+    /**
+     * Lang chk bx clicked.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     */
     @FXML
     void lang_chk_bx_clicked(ActionEvent event) throws IOException {
 
@@ -96,12 +107,97 @@ public class LoginWindowC {
             this.lang_chk_bx.setText("Hablas Espanol");
             this.current_location_lbl.setText(g.getLoginLocationString());
 
-
         }
-
 
     }
 
+    /**
+     * Initialize.
+     *
+     * @param d             the d
+     * @param g             the g
+     * @param main_resource the main resource
+     * @throws IOException the io exception
+     */
+    @FXML
+    public
+        // This method is called by the FXMLLoader when initialization is complete
+    void initialize(Database_v3 d, GeoIP g, URL main_resource) throws IOException {
+
+        this.g = g;
+        this.curr_db = d;
+        this.main_window_url = main_resource;
+
+        assert user_txt_fld != null : "fx:id=\"user_txt_fld\" was not injected: check your FXML file 'login_v.fxml'.";
+        assert sign_in_btn != null : "fx:id=\"sign_in_btn\" was not injected: check your FXML file 'login_v.fxml'.";
+        assert password_txt_fld != null : "fx:id=\"password_txt_fld\" was not injected: check your FXML file 'login_v.fxml'.";
+        assert lang_chk_bx != null : "fx:id=\"lang_chk_bx\" was not injected: check your FXML file 'login_v.fxml'.";
+        assert current_location_lbl != null : "fx:id=\"current_location_lbl\" was not injected: check your FXML file 'login_v.fxml'.";
+
+        this.current_location_lbl.setText(g.getLoginLocationString());
+        if(TESTING){
+            this.testing();
+        }
+    }
+
+    /**
+     * Testing.
+     */
+    @FXML
+    public void testing(){
+
+        this.user_txt_fld.setText("test");
+        this.password_txt_fld.setText("test");
+
+    }
+
+    /**
+     * Gets user txt fld.
+     *
+     * @return the user txt fld
+     */
+    public TextField getUser_txt_fld() {
+        return user_txt_fld;
+    }
+
+    /**
+     * Gets password txt fld.
+     *
+     * @return the password txt fld
+     */
+    public PasswordField getPassword_txt_fld() {
+        return password_txt_fld;
+    }
+
+    /**
+     * Gets lang chk bx selected.
+     *
+     * @return the lang chk bx selected
+     */
+    public Boolean getLang_chk_bx_selected() {
+        return lang_chk_bx.isSelected();
+    }
+
+    /**
+     * Handle enter pressed.
+     *
+     * @param event the event
+     * @throws IOException            the io exception
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
+     */
+    @FXML
+    public void handleEnterPressed(KeyEvent event) throws IOException, SQLException, ClassNotFoundException {
+        if (event.getCode() == KeyCode.ENTER) this.sign_in();
+    }
+
+    /**
+     * Sign in.
+     *
+     * @throws SQLException           the sql exception
+     * @throws IOException            the io exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     @FXML
     void sign_in() throws SQLException, IOException, ClassNotFoundException {
         try {
@@ -146,7 +242,6 @@ public class LoginWindowC {
                 mainWindowStage.setScene(mainWindowScene);
                 mainWindowStage.showAndWait();
 
-
             }else {
 
                 // bad login.
@@ -161,58 +256,8 @@ public class LoginWindowC {
 
             }
 
-
-
-
         }
 
-
     }
 
-    @FXML
-    public
-        // This method is called by the FXMLLoader when initialization is complete
-    void initialize(Database_v3 d, GeoIP g, URL main_resource) throws IOException {
-
-        this.g = g;
-        this.curr_db = d;
-        this.main_window_url = main_resource;
-
-
-        assert user_txt_fld != null : "fx:id=\"user_txt_fld\" was not injected: check your FXML file 'login_v.fxml'.";
-        assert sign_in_btn != null : "fx:id=\"sign_in_btn\" was not injected: check your FXML file 'login_v.fxml'.";
-        assert password_txt_fld != null : "fx:id=\"password_txt_fld\" was not injected: check your FXML file 'login_v.fxml'.";
-        assert lang_chk_bx != null : "fx:id=\"lang_chk_bx\" was not injected: check your FXML file 'login_v.fxml'.";
-        assert current_location_lbl != null : "fx:id=\"current_location_lbl\" was not injected: check your FXML file 'login_v.fxml'.";
-
-        this.current_location_lbl.setText(g.getLoginLocationString());
-        if(TESTING){
-            this.testing();
-        }
-    }
-
-    public TextField getUser_txt_fld() {
-        return user_txt_fld;
-    }
-
-    public PasswordField getPassword_txt_fld() {
-        return password_txt_fld;
-    }
-
-    public Boolean getLang_chk_bx_selected() {
-        return lang_chk_bx.isSelected();
-    }
-
-    @FXML
-    public void handleEnterPressed(KeyEvent event) throws IOException, SQLException, ClassNotFoundException {
-        if (event.getCode() == KeyCode.ENTER) this.sign_in();
-    }
-
-    @FXML
-    public void testing(){
-
-        this.user_txt_fld.setText("test");
-        this.password_txt_fld.setText("test");
-
-    }
 }
