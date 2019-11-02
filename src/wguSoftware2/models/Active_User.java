@@ -171,13 +171,17 @@ public class Active_User {
         return Objects.hash(getActive_user_id(), getActive_user_name());
     }
 
+
     @Override
     public String toString() {
         return "Active_User{" +
-                "active_user_id='" + active_user_id + '\'' +
+                "active_user_id=" + active_user_id +
                 ", active_user_name='" + active_user_name + '\'' +
+                ", tz=" + tz +
+                ", menu_tz=" + menu_tz +
+                ", current_ip='" + current_ip + '\'' +
+                ", current_location='" + current_location + '\'' +
+                ", gp=" + gp +
                 '}';
     }
-
-
 }

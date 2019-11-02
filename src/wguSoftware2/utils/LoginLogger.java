@@ -1,41 +1,47 @@
 package wguSoftware2.utils;
 
+import wguSoftware2.models.Active_User;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
-public class LoginLogger {
 
-        private File file =null;
-        private String content = null;
-        private FileWriter fileWriter =null;
-        private
-        String content = "This is my content which would be appended " +
-                "at the end of the specified file";
-        //Specify the file name and path here
-         file =new File("C://myfile.txt");
+public class LoginLogger{
 
-        /* This logic is to create the file if the
-         * file is not already present
-         */
-        if(!file.exists()){
-            file.createNewFile();
+        private String filePath = null;
+        private String user = null;
+        private String bufferStr = null;
+        private Path files = null;
+        private Path path = null;
+        private Active_User ac = null;
+
+
+        public LoginLogger(Active_User ac, Boolean login) throws IOException {
+
+                String fileName = "userLog.txt";
+                File logFile = new File(fileName);
+                logFile.createNewFile();
+                String nowUTC = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toString();
+                String message;
+                if(login)
+                        message = "USER LOGIN "+nowUTC+": "+ac.toString();
+                else
+                        message = "USER LOGOFF "+nowUTC+": "+ac.toString();
+
+
+                FileWriter fileWriter = new FileWriter(logFile.getCanonicalFile(), true); //Set true for append mode
+                PrintWriter printWriter = new PrintWriter(fileWriter);
+                printWriter.println(message);  //New line
+                printWriter.close();
+
+
         }
 
-        //Here true is to append the content to file
-        this.f = new FileWriter(file,true);
-        //BufferedWriter writer give better performance
-        BufferedWriter bw = new BufferedWriter(fw);
-        bw.write(content);
-        //Closing BufferedWriter Stream
-        bw.close();
-
-        System.out.println("Data successfully appended at the end of file");
-
-    }catch(IOException ioe){
-        System.out.println("Exception occurred:");
-        ioe.printStackTrace();
-    }
 
 
 }

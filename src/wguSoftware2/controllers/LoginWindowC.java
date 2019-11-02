@@ -4,6 +4,7 @@
 
 package wguSoftware2.controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +18,7 @@ import wguSoftware2.models.Active_User;
 import wguSoftware2.models.GeoIP;
 import wguSoftware2.utils.Converters;
 import wguSoftware2.utils.DatabaseMain;
+import wguSoftware2.utils.LoginLogger;
 
 import java.io.IOException;
 import java.net.URL;
@@ -120,7 +122,7 @@ public class LoginWindowC {
      */
     @FXML
     public
-        // This method is called by the FXMLLoader when initialization is complete
+    // This method is called by the FXMLLoader when initialization is complete
     void initialize(DatabaseMain d, GeoIP g, URL main_resource) throws IOException {
 
         this.g = g;
@@ -134,7 +136,7 @@ public class LoginWindowC {
         assert current_location_lbl != null : "fx:id=\"current_location_lbl\" was not injected: check your FXML file 'login_v.fxml'.";
 
         this.current_location_lbl.setText(g.getLoginLocationString());
-        if(TESTING){
+        if (TESTING) {
             this.testing();
         }
     }
@@ -143,7 +145,7 @@ public class LoginWindowC {
      * Testing.
      */
     @FXML
-    public void testing(){
+    public void testing() {
 
         this.user_txt_fld.setText("test");
         this.password_txt_fld.setText("test");
@@ -214,34 +216,39 @@ public class LoginWindowC {
             System.out.println("Checking provided user and password in database.");
 //            Active_User active_user = curr_db.check_cred_in_db();
 
-              curr_db.dbConnect();
-              Connection con = curr_db.getCon();
-              PreparedStatement ps = con.prepareStatement(
-                      "SELECT * FROM user WHERE userName = ? AND password = ?;");
-              ps.setString(1, this.user_txt_fld.getText());
-              ps.setString(2,this.password_txt_fld.getText());
-              ResultSet rs = curr_db.dbExecuteQuery(ps);
+            curr_db.dbConnect();
+            Connection con = curr_db.getCon();
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT * FROM user WHERE userName = ? AND password = ?;");
+            ps.setString(1, this.user_txt_fld.getText());
+            ps.setString(2, this.password_txt_fld.getText());
+            ResultSet rs = curr_db.dbExecuteQuery(ps);
 
             if (rs.next()) {
 
                 // good login.
-                this.ac = new Active_User(rs.getInt(1),this.user_txt_fld.getText());
+                this.ac = new Active_User(rs.getInt(1), this.user_txt_fld.getText());
                 this.ac.setCurrent_location(this.g.getLoginLocationString());
                 this.ac.setGeoIp(this.g);
                 this.ac.setTz(TimeZone.getDefault());
-                System.out.println("Logging in "+ this.ac);
+                LoginLogger ll = new LoginLogger(this.ac, true);
+
+                System.out.println("Logging in " + this.ac);
                 FXMLLoader loader = new FXMLLoader(this.main_window_url);
                 Parent main_root;
                 main_root = loader.load();
                 MainWindowC mwc = loader.getController();
-                mwc.initialize(this.curr_db,this.ac);
+                mwc.initialize(this.curr_db, this.ac);
                 Stage mainWindowStage = new Stage();
                 mainWindowStage.setTitle("Main Window");
                 Scene mainWindowScene = new Scene(main_root);
                 mainWindowStage.setScene(mainWindowScene);
                 mainWindowStage.showAndWait();
+                System.out.println("Stage is closing, logging user logout.");
+                LoginLogger lo = new LoginLogger(this.ac,false);
 
-            }else {
+
+            } else {
 
                 // bad login.
 
@@ -258,5 +265,8 @@ public class LoginWindowC {
         }
 
     }
+
+
+
 
 }

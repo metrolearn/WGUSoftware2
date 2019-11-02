@@ -1,6 +1,8 @@
 package wguSoftware2;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,6 +13,7 @@ import wguSoftware2.utils.Converters;
 import wguSoftware2.utils.DatabaseUserLoad;
 import wguSoftware2.utils.DatabaseMain;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;

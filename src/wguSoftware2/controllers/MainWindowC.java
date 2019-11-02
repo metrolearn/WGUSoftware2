@@ -1,5 +1,6 @@
 package wguSoftware2.controllers;
 
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +21,7 @@ import wguSoftware2.models.Appoinment_view_main;
 import wguSoftware2.models.Customer;
 import wguSoftware2.models.Customer_view_main;
 import wguSoftware2.utils.DatabaseMain;
+import wguSoftware2.utils.LoginLogger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -732,4 +734,8 @@ public class MainWindowC {
 
 
     }
+
+
+
+
 }
