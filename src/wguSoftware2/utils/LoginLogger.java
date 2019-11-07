@@ -11,6 +11,9 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 
+/**
+ * The type Login logger.
+ */
 public class LoginLogger{
 
         private String filePath = null;
@@ -21,6 +24,13 @@ public class LoginLogger{
         private Active_User ac = null;
 
 
+        /**
+         * Instantiates a new Login logger.
+         *
+         * @param ac    the ac
+         * @param login the login
+         * @throws IOException the io exception
+         */
         public LoginLogger(Active_User ac, Boolean login) throws IOException {
 
                 String fileName = "userLog.txt";

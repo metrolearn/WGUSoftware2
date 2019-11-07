@@ -54,8 +54,8 @@ public class MyDateTime {
     /**
      * Instantiates a new My date time.
      *
-     * @param ts Timestamp
-     * @param ac Active user Constructor used while loading in appointments in MaineWindowC.java
+     * @param ts the ts
+     * @param ac the ac
      */
     public MyDateTime(Timestamp ts, Active_User ac) {
         this.ac = ac;

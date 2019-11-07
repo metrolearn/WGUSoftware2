@@ -630,6 +630,8 @@ public class MainWindowC {
      * Save report apps by month.
      *
      * @param actionEvent the action event
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
      */
     public void saveReportAppsByMonth(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 
@@ -670,6 +672,8 @@ public class MainWindowC {
      * Save report apps by consultant.
      *
      * @param actionEvent the action event
+     * @throws SQLException           the sql exception
+     * @throws ClassNotFoundException the class not found exception
      */
     public void saveReportAppsByConsultant(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 

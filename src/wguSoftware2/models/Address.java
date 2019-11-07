@@ -9,22 +9,6 @@ import java.util.Objects;
 
 /**
  * The type Address.
- * This class is intended to to abstract the following mysql db table.
- * CREATE TABLE `address` (
- * `addressId` int(10) NOT NULL,
- * `address` varchar(50) NOT NULL,
- * `address2` varchar(50) NOT NULL,
- * `cityId` int(10) NOT NULL,
- * `postalCode` varchar(10) NOT NULL,
- * `phone` varchar(20) NOT NULL,
- * `createDate` datetime NOT NULL,
- * `createdBy` varchar(40) NOT NULL,
- * `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- * `lastUpdateBy` varchar(40) NOT NULL,
- * PRIMARY KEY (`addressId`),
- * KEY `cityId` (`cityId`),
- * CONSTRAINT `address_ibfk_1` FOREIGN KEY (`cityId`) REFERENCES `city` (`cityId`)
- * ) ENGINE=InnoDB DEFAULT CHARSET=latin1
  */
 public class Address {
 
@@ -157,18 +141,18 @@ public class Address {
     }
 
     /**
-     * Gets address 2.
+     * Gets alt address.
      *
-     * @return the address 2
+     * @return the alt address
      */
     public String getAlt_address() {
         return alt_address;
     }
 
     /**
-     * Sets address 2.
+     * Sets alt address.
      *
-     * @param alt_address the address 2
+     * @param alt_address the alt address
      */
     public void setAlt_address(String alt_address) {
         this.alt_address = alt_address;
@@ -193,18 +177,18 @@ public class Address {
     }
 
     /**
-     * Gets postal code.
+     * Gets zip code.
      *
-     * @return the postal code
+     * @return the zip code
      */
     public String getZip_code() {
         return zip_code;
     }
 
     /**
-     * Sets postal code.
+     * Sets zip code.
      *
-     * @param zip_code the postal code
+     * @param zip_code the zip code
      */
     public void setZip_code(String zip_code) {
         this.zip_code = zip_code;
@@ -346,9 +330,9 @@ public class Address {
     }
 
     /**
-     * Create address db entry boolean.
+     * Gets address db create str.
      *
-     * @return the boolean
+     * @return the address db create str
      */
     public String  get_address_db_create_str() {
         String address = this.address;

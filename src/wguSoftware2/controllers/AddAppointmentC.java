@@ -100,7 +100,7 @@ public class AddAppointmentC {
     @FXML
     private Customer_view_main selectedCVM = null;
     @FXML
-    private Appoinment_view_main apv = null;
+    private Appoinment_view_main appoinment_view_main = null;
     @FXML
     private Active_User active_user = null;
     @FXML
@@ -115,7 +115,7 @@ public class AddAppointmentC {
     @FXML
     public Appoinment_view_main get_avm() {
 
-        return this.apv;
+        return this.appoinment_view_main;
 
     }
 
@@ -317,9 +317,10 @@ public class AddAppointmentC {
                                 description,title,location,startTS,endTS,"test",apt_type);
 
                 apv.create_hyperlink();
+                apv.setContact(contact);
 
                 apv = calendarViewMainDAO.create(apv,active_user,selectedCVM);
-                this.apv = apv;
+                this.appoinment_view_main = apv;
                 this.add_apt_btn.getScene().getWindow().hide();
             }
 

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * The type Database.
+ * The type Database user load.
  */
 public class DatabaseUserLoad {
 
@@ -33,7 +33,7 @@ public class DatabaseUserLoad {
     private LoginWindowC lc;
 
     /**
-     * Instantiates a new Database.
+     * Instantiates a new Database user load.
      *
      * @param database_ip   the database ip
      * @param database_name the database name

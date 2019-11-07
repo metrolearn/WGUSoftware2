@@ -7,20 +7,6 @@ import java.util.Objects;
 
 /**
  * The type Customer.
- * This class is intended to to abstract the following mysql db table.
- * TABLE `customer` (
- * `customerId` int(10) NOT NULL,
- * `customerName` varchar(45) NOT NULL,
- * `addressId` int(10) NOT NULL,
- * `active` tinyint(1) NOT NULL,
- * `createDate` datetime NOT NULL,
- * `createdBy` varchar(40) NOT NULL,
- * `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- * `lastUpdateBy` varchar(40) NOT NULL,
- * PRIMARY KEY (`customerId`),
- * KEY `addressId` (`addressId`),
- * CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`addressId`) REFERENCES `address` (`addressId`)
- * ) ENGINE=InnoDB DEFAULT CHARSET=latin1
  */
 public class Customer {
 

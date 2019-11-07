@@ -3,7 +3,7 @@ import com.sun.rowset.CachedRowSetImpl;
 import java.sql.*;
 
 /**
- * The type Database v 3.
+ * The type Database main.
  */
 public class DatabaseMain {
 
@@ -18,7 +18,7 @@ public class DatabaseMain {
     private Connection con = null;
 
     /**
-     * Instantiates a new Database v 3.
+     * Instantiates a new Database main.
      *
      * @param DB_IP   the db ip
      * @param DB_NAME the db name

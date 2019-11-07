@@ -4,7 +4,6 @@
 
 package wguSoftware2.controllers;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,8 +35,8 @@ public class LoginWindowC {
     private static final boolean TESTING = true;
     @FXML
     private GeoIP g;
-
-    private URL main_window_url;
+    private ResourceBundle rb = null;
+    private URL mainWindiwURI;
 
     @FXML
     private Converters c;
@@ -92,23 +91,23 @@ public class LoginWindowC {
     @FXML
     void lang_chk_bx_clicked(ActionEvent event) throws IOException {
 
-        if (lang_chk_bx.isSelected()) {
-            this.welcome_lbl.setText("Bienvenido");
-            this.user_txt_fld.setPromptText("Nombre de usuario");
-            this.password_txt_fld.setPromptText("Contraseña");
-            this.sign_in_btn.setText("Registrarse");
-            this.lang_chk_bx.setText("Un cheque para Inglés");
-            this.current_location_lbl.setText(g.getLoginLocationStringSpanish());
-        }
-        if (!lang_chk_bx.isSelected()) {
-            this.welcome_lbl.setText("Welcomeback!");
-            this.user_txt_fld.setPromptText("User");
-            this.password_txt_fld.setPromptText("Password");
-            this.sign_in_btn.setText("Sign in");
-            this.lang_chk_bx.setText("Hablas Espanol");
-            this.current_location_lbl.setText(g.getLoginLocationString());
-
-        }
+//        if (lang_chk_bx.isSelected()) {
+//            this.welcome_lbl.setText("Bienvenido!");
+//            this.user_txt_fld.setPromptText("Nombre de usuario");
+//            this.password_txt_fld.setPromptText("Contraseña");
+//            this.sign_in_btn.setText("Registrarse");
+//            this.lang_chk_bx.setText("Un cheque para Inglés");
+//            this.current_location_lbl.setText(g.getLoginLocationStringSpanish());
+//        }
+//        if (!lang_chk_bx.isSelected()) {
+//            this.welcome_lbl.setText("Welcome back!");
+//            this.user_txt_fld.setPromptText("User");
+//            this.password_txt_fld.setPromptText("Password");
+//            this.sign_in_btn.setText("Sign in");
+//            this.lang_chk_bx.setText("Hablas Espanol");
+//            this.current_location_lbl.setText(g.getLoginLocationString());
+//
+//        }
 
     }
 
@@ -117,23 +116,37 @@ public class LoginWindowC {
      *
      * @param d             the d
      * @param g             the g
-     * @param main_resource the main resource
+     * @param mainWindowURI the main resource
      * @throws IOException the io exception
      */
     @FXML
     public
     // This method is called by the FXMLLoader when initialization is complete
-    void initialize(DatabaseMain d, GeoIP g, URL main_resource) throws IOException {
+    void initialize(DatabaseMain d, GeoIP g, URL mainWindowURI, ResourceBundle rb) throws IOException {
 
         this.g = g;
         this.curr_db = d;
-        this.main_window_url = main_resource;
+        this.mainWindiwURI = mainWindowURI;
+        this.rb = rb;
 
         assert user_txt_fld != null : "fx:id=\"user_txt_fld\" was not injected: check your FXML file 'login_v.fxml'.";
         assert sign_in_btn != null : "fx:id=\"sign_in_btn\" was not injected: check your FXML file 'login_v.fxml'.";
         assert password_txt_fld != null : "fx:id=\"password_txt_fld\" was not injected: check your FXML file 'login_v.fxml'.";
         assert lang_chk_bx != null : "fx:id=\"lang_chk_bx\" was not injected: check your FXML file 'login_v.fxml'.";
         assert current_location_lbl != null : "fx:id=\"current_location_lbl\" was not injected: check your FXML file 'login_v.fxml'.";
+
+
+        this.welcome_lbl.setText(rb.getString("welcomeLbl"));
+        this.user_txt_fld.setPromptText(rb.getString("userTxtFld"));
+        this.password_txt_fld.setPromptText(rb.getString("passwordTxtFld"));
+        this.sign_in_btn.setText(rb.getString("signInBtn"));
+        String languageTag = rb.getLocale().toLanguageTag();
+        if(languageTag.equals("en")){
+            this.current_location_lbl.setText(g.getLoginLocationString());
+        }else
+            this.current_location_lbl.setText(g.getLoginLocationStringSpanish());
+
+
 
         this.current_location_lbl.setText(g.getLoginLocationString());
         if (TESTING) {
@@ -234,7 +247,7 @@ public class LoginWindowC {
                 LoginLogger ll = new LoginLogger(this.ac, true);
 
                 System.out.println("Logging in " + this.ac);
-                FXMLLoader loader = new FXMLLoader(this.main_window_url);
+                FXMLLoader loader = new FXMLLoader(this.mainWindiwURI);
                 Parent main_root;
                 main_root = loader.load();
                 MainWindowC mwc = loader.getController();
@@ -245,18 +258,18 @@ public class LoginWindowC {
                 mainWindowStage.setScene(mainWindowScene);
                 mainWindowStage.showAndWait();
                 System.out.println("Stage is closing, logging user logout.");
-                LoginLogger lo = new LoginLogger(this.ac,false);
+                LoginLogger lo = new LoginLogger(this.ac, false);
 
 
             } else {
 
                 // bad login.
 
-                String bad_user_pass_str = "Bad username or password.";
+                String bad_user_pass_str = rb.getString("errorBadUserPassStr");
                 System.out.println(bad_user_pass_str);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle(bad_user_pass_str);
-                alert.setHeaderText("Try again!");
+                alert.setHeaderText(rb.getString("badHeaderStr"));
                 alert.setContentText(bad_user_pass_str);
                 alert.showAndWait();
 
@@ -265,8 +278,6 @@ public class LoginWindowC {
         }
 
     }
-
-
 
 
 }

@@ -7,19 +7,6 @@ import java.util.Objects;
 
 /**
  * The type City.
- * This class is intended to to abstract the following mysql db table.
- * TABLE `city` (
- * `cityId` int(10) NOT NULL,
- * `city` varchar(50) NOT NULL,
- * `countryId` int(10) NOT NULL,
- * `createDate` datetime NOT NULL,
- * `createdBy` varchar(40) NOT NULL,
- * `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- * `lastUpdateBy` varchar(40) NOT NULL,
- * PRIMARY KEY (`cityId`),
- * KEY `countryId` (`countryId`),
- * CONSTRAINT `city_ibfk_1` FOREIGN KEY (`countryId`) REFERENCES `country` (`countryId`)
- * ) ENGINE=InnoDB DEFAULT CHARSET=latin1
  */
 public class City {
 
@@ -72,18 +59,18 @@ public class City {
     }
 
     /**
-     * Gets city str.
+     * Gets city name.
      *
-     * @return the city str
+     * @return the city name
      */
     public String getCity_name() {
         return city_name;
     }
 
     /**
-     * Sets city str.
+     * Sets city name.
      *
-     * @param city_name the city str
+     * @param city_name the city name
      */
     public void setCity_name(String city_name) {
         this.city_name = city_name;
@@ -153,18 +140,18 @@ public class City {
     }
 
     /**
-     * Gets last update by.
+     * Gets created by.
      *
-     * @return the last update by
+     * @return the created by
      */
     public String getCreated_by() {
         return created_by;
     }
 
     /**
-     * Sets last update by.
+     * Sets created by.
      *
-     * @param created_by the last update by
+     * @param created_by the created by
      */
     public void setCreated_by(String created_by) {
         this.created_by = created_by;
@@ -172,10 +159,10 @@ public class City {
 
 
     /**
-     * Create city db entry boolean.
+     * Gets city db create str.
      *
      * @param country_id_parm the country id parm
-     * @return the boolean
+     * @return the city db create str
      */
     public String get_city_db_create_str(Integer country_id_parm) {
 

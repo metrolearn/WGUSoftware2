@@ -12,18 +12,6 @@ import wguSoftware2.utils.Converters;
 
 /**
  * The type User.
- * This class is intended to to abstract the following mysql db table.
- * TABLE `user` (
- * `userId` int(11) NOT NULL,
- * `userName` varchar(50) NOT NULL,
- * `password` varchar(50) NOT NULL,
- * `active` tinyint(4) NOT NULL,
- * `createDate` datetime NOT NULL,
- * `createdBy` varchar(40) NOT NULL,
- * `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- * `lastUpdateBy` varchar(40) NOT NULL,
- * PRIMARY KEY (`userId`)
- * ) ENGINE=InnoDB DEFAULT CHARSET=latin1
  */
 public class User {
 
@@ -236,7 +224,7 @@ public class User {
     }
 
     /**
-     * Create user db entry boolean.
+     * Create user db entry string string.
      *
      * @param userId       the user id
      * @param userName     the user name
@@ -246,7 +234,7 @@ public class User {
      * @param createdBy    the created by
      * @param lastUpdate   the last update
      * @param lastUpdateBy the last update by
-     * @return sql string
+     * @return the string
      */
     public String create_user_db_entry_string(final String userId, final String userName, final String usr_password,
                                               final String usr_active, final String createDate, final String createdBy,
@@ -260,9 +248,9 @@ public class User {
 
 
     /**
-     * Read user db entry boolean.
+     * Gets user password select db str.
      *
-     * @return the boolean
+     * @return the user password select db str
      */
     public String get_user_password_select_db_str() {
         String user_name = this.username;

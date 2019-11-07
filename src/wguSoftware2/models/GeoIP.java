@@ -23,13 +23,13 @@ public class GeoIP {
   private String longitude;
   private String metro_code;
 
-    /**
-     * Instantiates a new Geo ip.
-     *
-     * @throws IOException          the io exception
-     * @throws InterruptedException the interrupted exception
-     */
-    public GeoIP() throws IOException, InterruptedException {
+  /**
+   * Instantiates a new Geo ip.
+   *
+   * @throws IOException          the io exception
+   * @throws InterruptedException the interrupted exception
+   */
+  public GeoIP() throws IOException, InterruptedException {
 
     String geoIPURL = "https://freegeoip.app/csv";
     URL url = new URL(geoIPURL);
@@ -92,122 +92,122 @@ public class GeoIP {
         '}';
   }
 
-    /**
-     * Get login location string string.
-     *
-     * @return the string
-     */
-    public String getLoginLocationString(){
+  /**
+   * Get login location string string.
+   *
+   * @return the string
+   */
+  public String getLoginLocationString(){
       return "Current Location: "+ this.city+", "+this.region_name +" IP: "+this.ip;
     }
 
-    /**
-     * Get login location string spanish string.
-     *
-     * @return the string
-     */
-    public String getLoginLocationStringSpanish(){
+  /**
+   * Get login location string spanish string.
+   *
+   * @return the string
+   */
+  public String getLoginLocationStringSpanish(){
     return "Ubicación actual: "+ this.city+", "+this.region_name +" IP: "+this.ip;
 
 
   }
 
-    /**
-     * Gets ip.
-     *
-     * @return the ip
-     */
-    public String getIp() {
+  /**
+   * Gets ip.
+   *
+   * @return the ip
+   */
+  public String getIp() {
     return ip;
   }
 
-    /**
-     * Gets country code.
-     *
-     * @return the country code
-     */
-    public String getCountry_code() {
+  /**
+   * Gets country code.
+   *
+   * @return the country code
+   */
+  public String getCountry_code() {
     return country_code;
   }
 
-    /**
-     * Gets country name.
-     *
-     * @return the country name
-     */
-    public String getCountry_name() {
+  /**
+   * Gets country name.
+   *
+   * @return the country name
+   */
+  public String getCountry_name() {
     return country_name;
   }
 
-    /**
-     * Gets region code.
-     *
-     * @return the region code
-     */
-    public String getRegion_code() {
+  /**
+   * Gets region code.
+   *
+   * @return the region code
+   */
+  public String getRegion_code() {
     return region_code;
   }
 
-    /**
-     * Gets region name.
-     *
-     * @return the region name
-     */
-    public String getRegion_name() {
+  /**
+   * Gets region name.
+   *
+   * @return the region name
+   */
+  public String getRegion_name() {
     return region_name;
   }
 
-    /**
-     * Gets city.
-     *
-     * @return the city
-     */
-    public String getCity() {
+  /**
+   * Gets city.
+   *
+   * @return the city
+   */
+  public String getCity() {
     return city;
   }
 
-    /**
-     * Gets zip code.
-     *
-     * @return the zip code
-     */
-    public String getZip_code() {
+  /**
+   * Gets zip code.
+   *
+   * @return the zip code
+   */
+  public String getZip_code() {
     return zip_code;
   }
 
-    /**
-     * Gets time zone.
-     *
-     * @return the time zone
-     */
-    public String getTime_zone() {
+  /**
+   * Gets time zone.
+   *
+   * @return the time zone
+   */
+  public String getTime_zone() {
     return time_zone;
   }
 
-    /**
-     * Gets latitude.
-     *
-     * @return the latitude
-     */
-    public String getLatitude() {
+  /**
+   * Gets latitude.
+   *
+   * @return the latitude
+   */
+  public String getLatitude() {
     return latitude;
   }
 
-    /**
-     * Gets longitude.
-     *
-     * @return the longitude
-     */
-    public String getLongitude() {
+  /**
+   * Gets longitude.
+   *
+   * @return the longitude
+   */
+  public String getLongitude() {
     return longitude;
   }
 
-    /**
-     * Gets metro code.
-     *
-     * @return the metro code
-     */
-    public String getMetro_code() {
+  /**
+   * Gets metro code.
+   *
+   * @return the metro code
+   */
+  public String getMetro_code() {
     return metro_code;
   }
 }

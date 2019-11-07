@@ -1,8 +1,6 @@
 package wguSoftware2;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,16 +11,19 @@ import wguSoftware2.utils.Converters;
 import wguSoftware2.utils.DatabaseUserLoad;
 import wguSoftware2.utils.DatabaseMain;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 /**
  * The type Main.
  */
 public class Main extends Application {
+    private static final String ENGLISH_RB_FILEPATH = "language_files/rb_es.properties";
+    private static final String NOR_RB_FILEPATH = "language_files/rb_no.properties";
 
 
     private DatabaseMain d;
@@ -48,13 +49,16 @@ public class Main extends Application {
 
         URL login_resource = getClass().getResource("views/login_v.fxml");
         System.out.println(c.get_fxml_file_name(login_resource));
-        URL main_resource = getClass().getResource("views/main_v.fxml");
-        System.out.println(c.get_fxml_file_name(main_resource));
-        FXMLLoader loader = new FXMLLoader(login_resource);
+        URL mainWindowURI = getClass().getResource("views/main_v.fxml");
+        System.out.println(c.get_fxml_file_name(mainWindowURI));
+        // TESTING ONLY!
+        //        Locale.setDefault(new Locale("es", "MX"));
+        ResourceBundle rb = ResourceBundle.getBundle("language_files/rb");
+        FXMLLoader loader = new FXMLLoader(login_resource, ResourceBundle.getBundle("language_files/rb"));
         Parent root = loader.load();
         LoginWindowC lc = loader.getController();
 //        d.setLc(lc);
-        lc.initialize(d, g, main_resource);
+        lc.initialize(d, g, mainWindowURI, rb);
         primaryStage.setTitle("");
         Scene mainScene = new Scene(root);
         primaryStage.setScene(mainScene);
