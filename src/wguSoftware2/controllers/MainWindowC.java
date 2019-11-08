@@ -397,17 +397,20 @@ public class MainWindowC {
 
         this.obv_apt_buffer_list = this.obv_apt_list;
 
-        for(Appoinment_view_main avm : obv_apt_buffer_list){
-         long minBetweenApts = ChronoUnit.MINUTES.between(LocalDateTime.now(), avm.getStart_date_time().getZonedLocalDateTime().toLocalDateTime());
-         long betweenTest = 15;
-         if(betweenTest >= Math.abs(minBetweenApts) ){
-             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-             alert.setTitle("Appointment Reminder!");
-             alert.setHeaderText("You have an appointment at " + avm.getLocation() + ".\n" +
-                     "The appointment starts in less than "+ minBetweenApts+" minutes.");
-             alert.showAndWait();
+        for(Appoinment_view_main avm : obv_apt_buffer_list) {
+            long minBetweenApts = ChronoUnit.MINUTES.between(LocalDateTime.now(), avm.getStart_date_time().getZonedLocalDateTime().toLocalDateTime());
+            long betweenTest = 15;
+            if (betweenTest >= Math.abs(minBetweenApts)) {
 
-         }
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+                    alert.setTitle("Appointment Reminder!");
+                    alert.setHeaderText("You have an appointment IN/AT " + avm.getLocation() + ".\n" +
+                            "The appointment starts in less than " + minBetweenApts + " minutes.");
+                    alert.showAndWait();
+
+
+            }
         }
 
 
