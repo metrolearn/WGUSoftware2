@@ -1,5 +1,6 @@
 package wguSoftware2.controllers;
 
+import com.sun.xml.internal.bind.v2.runtime.output.StAXExStreamWriterOutput;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -31,8 +32,10 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -390,19 +393,23 @@ public class MainWindowC {
         ps = con.prepareStatement(sql_stm, Statement.RETURN_GENERATED_KEYS);
         rs = this.curr_db.dbExecuteQuery(ps);
 
-        while (rs.next()) {
-            String location = rs.getString("location");
-            Timestamp start = rs.getTimestamp("start");
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Appointment Reminder!");
-            alert.setHeaderText("You have an appointment at " + location + ".\n" +
-                    "The appointment starts in less than 15 minutes.");
-            alert.showAndWait();
-
-        }
 
         this.obv_apt_buffer_list = this.obv_apt_list;
+
+        for(Appoinment_view_main avm : obv_apt_buffer_list){
+         long minBetweenApts = ChronoUnit.MINUTES.between(LocalDateTime.now(), avm.getStart_date_time().getZonedLocalDateTime().toLocalDateTime());
+         long betweenTest = 15;
+         if(betweenTest >= Math.abs(minBetweenApts) ){
+             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+             alert.setTitle("Appointment Reminder!");
+             alert.setHeaderText("You have an appointment at " + avm.getLocation() + ".\n" +
+                     "The appointment starts in less than "+ minBetweenApts+" minutes.");
+             alert.showAndWait();
+
+         }
+        }
+
 
 
     }
