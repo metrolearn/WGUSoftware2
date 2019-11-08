@@ -170,6 +170,14 @@ public class UpdateAppointmentC {
         contact_txt.setText(list.get(1));
         this.apt_id = selectedItem.getId();
 
+        if(selectedItem.getStart_date_time().getLocal24hour() >= 12){
+            this.start_pm.setSelected(true);
+        }
+
+        if(selectedItem.getEnd_date_time().getLocal24hour() >= 12){
+            this.end_pm.setSelected(true);
+        }
+
     }
 
     /**
@@ -266,6 +274,7 @@ public class UpdateAppointmentC {
                     apt_type);
             avm.create_hyperlink();
             this.avm = avm;
+            this.avm.setContact(contact);
 
             this.calendarViewMainDAO.update(this.avm, this.active_user);
 

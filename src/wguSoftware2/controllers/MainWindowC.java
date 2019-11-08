@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,11 +30,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * The type Main window c.
@@ -164,6 +168,8 @@ public class MainWindowC {
     private List<Customer_view_main> all_customers = null;
     private List<Appoinment_view_main> all_apts = null;
     private ObservableList<Appoinment_view_main> obv_apt_list = null;
+    private ObservableList<Appoinment_view_main> obv_apt_buffer_list = null;
+
     private DatabaseMain curr_db;
     private Active_User active_user;
     private CustomerViewMainDAO cvmDAO;
@@ -396,6 +402,8 @@ public class MainWindowC {
 
         }
 
+        this.obv_apt_buffer_list = this.obv_apt_list;
+
 
     }
 
@@ -508,12 +516,15 @@ public class MainWindowC {
      */
     public void FILTER_BY_MONTH() {
 
-        for (Appoinment_view_main avm : obv_apt_list) {
-            avm.setDateViewString(avm.getStart_date_time().getStartMonth());
-        }
-        apt_tbl.refresh();
+        FilteredList<Appoinment_view_main> items = new FilteredList<>(obv_apt_buffer_list);
+        apt_tbl.setItems(items);
+        Predicate<Appoinment_view_main> predicate = p -> p.getStart_date_time().getZonedLocalDateTime().getMonth() == LocalDate.now().getMonth();
+
+        items.setPredicate(predicate);
+        obv_apt_buffer_list = obv_apt_list;
         this.Art_Wk_filter_rad.setSelected(false);
         this.Art_All_filter_rad.setSelected(false);
+
 
     }
 
@@ -522,12 +533,17 @@ public class MainWindowC {
      */
     public void FILTER_BY_WEEK() {
 
-        for (Appoinment_view_main avm : obv_apt_list) {
-            avm.setDateViewString(avm.getStart_date_time().getStartDayOfWeek());
-        }
-        apt_tbl.refresh();
+
+
+        FilteredList<Appoinment_view_main> items = new FilteredList<>(obv_apt_buffer_list);
+        apt_tbl.setItems(items);
+        Predicate<Appoinment_view_main> predicate = p -> p.getStart_date_time().getZonedLocalDateTime().get(ChronoField.ALIGNED_WEEK_OF_MONTH) == LocalDate.now().get(ChronoField.ALIGNED_WEEK_OF_MONTH);
+
+        items.setPredicate(predicate);
+        obv_apt_buffer_list = obv_apt_list;
         this.Art_Mnt_filter_rad.setSelected(false);
         this.Art_All_filter_rad.setSelected(false);
+
 
     }
 
@@ -536,10 +552,9 @@ public class MainWindowC {
      */
     public void FILTER_BY_ALL() {
 
-        for (Appoinment_view_main avm : obv_apt_list) {
-            avm.setDateViewString(avm.getStart_date_time().getSimpleDateMenuStringZDT());
-        }
-        apt_tbl.refresh();
+        FilteredList<Appoinment_view_main> items = new FilteredList<>(obv_apt_buffer_list);
+        apt_tbl.setItems(items);
+        items.setPredicate(null);
         this.Art_Mnt_filter_rad.setSelected(false);
         this.Art_Wk_filter_rad.setSelected(false);
 
@@ -554,7 +569,6 @@ public class MainWindowC {
 
         for (Appoinment_view_main avm : obv_apt_list) {
             avm.getStart_date_time().setMenuZone(zid);
-            ;
             avm.getEnd_date_time().setMenuZone(zid);
             avm.setStartTimeViewStr(avm.getStart_date_time().getSimpleDateMenuStringByTZ());
             avm.setEndTimeViewStr(avm.getEnd_date_time().getSimpleDateMenuStringByTZ());
@@ -563,9 +577,7 @@ public class MainWindowC {
         apt_tbl.setItems(obv_apt_list);
         apt_tbl.refresh();
 
-        this.Art_Mnt_filter_rad.setSelected(false);
-        this.Art_Wk_filter_rad.setSelected(false);
-        this.Art_All_filter_rad.setSelected(false);
+
     }
 
     /**
@@ -576,6 +588,10 @@ public class MainWindowC {
     public void on_dst_cbx_action(ActionEvent actionEvent) {
 
         for (Appoinment_view_main avm : obv_apt_list) {
+
+            avm.setStartTimeViewStr(avm.getStart_date_time().getSimpleTimeMenuZDTMinusDST());
+            avm.setEndTimeViewStr(avm.getEnd_date_time().getSimpleTimeMenuZDTMinusDST());
+
 
             if (!dst_cbx.isSelected()) {
                 avm.setStartTimeViewStr(avm.getStart_date_time().getSimpleTimeMenuZDTNoDST());

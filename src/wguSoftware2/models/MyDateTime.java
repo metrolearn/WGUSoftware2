@@ -469,6 +469,36 @@ public class MyDateTime {
         return DateTimeFormatter.ofPattern("hh:mm").format(this.menuZonedDateTime);
     }
 
+
+    public Long getDst(){
+
+        TimeZone tz = this.ac.getTz();
+        ZoneId zoneId = tz.toZoneId();
+        ZoneRules rules = zoneId.getRules();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
+        LocalDate date = LocalDate.parse("11/01/2019", dateTimeFormatter);
+
+        ZonedDateTime result = date.atStartOfDay(zoneId);
+        return rules.getDaylightSavings(result.toInstant()).getSeconds();
+    }
+
+    public String addDST(){
+
+       return DateTimeFormatter.ofPattern("hh:mm a").
+                format(this.menuZonedDateTime.plus(3600, ChronoUnit.SECONDS));
+
+    }
+
+    public String minusDST(){
+
+        return DateTimeFormatter.ofPattern("hh:mm a").
+                format(this.menuZonedDateTime.minus(3600, ChronoUnit.SECONDS));
+
+    }
+
+
+
+
     /**
      * Gets simple time menu zdt minus dst.
      *
@@ -509,6 +539,8 @@ public class MyDateTime {
      * @return the simple date menu string by tz
      */
     public String getSimpleDateMenuStringByTZ() {
+
+
         return DateTimeFormatter.ofPattern("hh:mm a").
                 format(this.menuZonedDateTime.withZoneSameInstant(this.menuZone));
 

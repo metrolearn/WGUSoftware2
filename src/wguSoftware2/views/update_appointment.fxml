@@ -8,22 +8,22 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="470.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wguSoftware2.controllers.UpdateAppointmentC">
+<AnchorPane prefHeight="502.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wguSoftware2.controllers.UpdateAppointmentC">
    <children>
       <Label fx:id="blank_lbl" layoutX="9.0" layoutY="4.0" />
-      <TextField fx:id="title_txt" layoutX="227.0" layoutY="47.0" prefHeight="31.0" prefWidth="292.0" promptText="Title" />
-      <TextField fx:id="desc_txt" layoutX="227.0" layoutY="86.0" prefHeight="31.0" prefWidth="292.0" promptText="Description" />
-      <TextField fx:id="location_txt" layoutX="227.0" layoutY="126.0" prefHeight="31.0" prefWidth="292.0" promptText="Location" />
+      <TextField fx:id="title_txt" layoutX="221.0" layoutY="47.0" prefHeight="31.0" prefWidth="298.0" promptText="Title" />
+      <TextField fx:id="desc_txt" layoutX="221.0" layoutY="86.0" prefHeight="31.0" prefWidth="298.0" promptText="Description" />
+      <TextField fx:id="location_txt" layoutX="221.0" layoutY="126.0" prefHeight="31.0" prefWidth="298.0" promptText="Location" />
       <TextField fx:id="contact_txt" layoutX="222.0" layoutY="209.0" prefHeight="31.0" prefWidth="292.0" promptText="Enter Contact" />
       <ComboBox fx:id="apt_type_cb" layoutX="222.0" layoutY="249.0" prefHeight="31.0" prefWidth="292.0" />
       <DatePicker fx:id="date_pkr" layoutX="219.0" layoutY="288.0" prefHeight="31.0" prefWidth="298.0" promptText="Choose Date" />
-      <ComboBox fx:id="start_hour_cb" layoutX="220.0" layoutY="330.0" prefHeight="31.0" prefWidth="135.0" promptText="Start Hour" />
-      <ComboBox fx:id="start_min_cb" layoutX="368.0" layoutY="330.0" prefHeight="31.0" prefWidth="118.0" promptText="Start Min" />
-      <RadioButton fx:id="start_pm" layoutX="493.0" layoutY="335.0" mnemonicParsing="false" text="PM" />
-      <ComboBox fx:id="end_min_cb" layoutX="369.0" layoutY="370.0" prefHeight="31.0" prefWidth="112.0" promptText="End Min" />
-      <ComboBox fx:id="end_hour_cb" layoutX="219.0" layoutY="370.0" prefHeight="31.0" prefWidth="135.0" promptText="End Hour" />
-      <RadioButton fx:id="end_pm" layoutX="492.0" layoutY="372.0" mnemonicParsing="false" text="PM" />
-      <Button fx:id="updt_apt_btn" layoutX="222.0" layoutY="416.0" mnemonicParsing="false" onAction="#UPDT_APT" prefHeight="31.0" prefWidth="292.0" text="Update Appoinment" />
+      <ComboBox fx:id="start_hour_cb" layoutX="222.0" layoutY="368.0" prefHeight="31.0" prefWidth="135.0" promptText="Start Hour" />
+      <ComboBox fx:id="start_min_cb" layoutX="370.0" layoutY="368.0" prefHeight="31.0" prefWidth="118.0" promptText="Start Min" />
+      <RadioButton fx:id="start_pm" layoutX="495.0" layoutY="373.0" mnemonicParsing="false" text="PM" />
+      <ComboBox fx:id="end_min_cb" layoutX="374.0" layoutY="410.0" prefHeight="31.0" prefWidth="112.0" promptText="End Min" />
+      <ComboBox fx:id="end_hour_cb" layoutX="224.0" layoutY="410.0" prefHeight="31.0" prefWidth="135.0" promptText="End Hour" />
+      <RadioButton fx:id="end_pm" layoutX="497.0" layoutY="412.0" mnemonicParsing="false" text="PM" />
+      <Button fx:id="updt_apt_btn" layoutX="24.0" layoutY="451.0" mnemonicParsing="false" onAction="#UPDT_APT" prefHeight="31.0" prefWidth="530.0" text="Update Appoinment" />
       <Label layoutX="276.0" layoutY="14.0" prefHeight="21.0" prefWidth="168.0" text="Appointment update" />
       <Label layoutX="26.0" layoutY="49.0" text="Appoinment Title" />
       <Label layoutX="27.0" layoutY="88.0" text="Appoinment  Description" />
@@ -31,9 +31,10 @@
       <Label layoutX="28.0" layoutY="211.0" text="Appoinment Contact" />
       <Label layoutX="28.0" layoutY="251.0" text="Appoinment Type" />
       <Label layoutX="28.0" layoutY="290.0" text="Appoinment Date" />
-      <Label layoutX="28.0" layoutY="332.0" text="Appoinment Start Time" />
-      <Label layoutX="28.0" layoutY="372.0" text="Appoinment End Time" />
-      <TextField fx:id="customer_txt" layoutX="227.0" layoutY="166.0" prefHeight="31.0" prefWidth="292.0" promptText="Customer" />
+      <Label layoutX="30.0" layoutY="370.0" text="Appoinment Start Time" />
+      <Label layoutX="33.0" layoutY="412.0" text="Appoinment End Time" />
+      <TextField fx:id="customer_txt" layoutX="221.0" layoutY="166.0" prefHeight="31.0" prefWidth="298.0" promptText="Customer" />
       <Label layoutX="27.0" layoutY="171.0" text="Appoinment Customer" />
+      <Label layoutX="225.0" layoutY="334.0" text="Note: if PM is not selected it is a AM time" />
    </children>
 </AnchorPane>
